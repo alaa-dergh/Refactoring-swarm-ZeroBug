@@ -1,11 +1,263 @@
 [
-  {
-    "id": "9e82e9b0-9b43-4a78-af43-d5d5ef848a2f",
-    "timestamp": "2025-12-26T01:26:41.177789",
-    "agent": "System",
-    "model": "unknown",
-    "action": "STARTUP",
-    "details": "Target: ./sandbox",
-    "status": "INFO"
-  }
+    {
+        "id": "9e82e9b0-9b43-4a78-af43-d5d5ef848a2f",
+        "timestamp": "2025-12-26T01:26:41.177789",
+        "agent": "System",
+        "model": "unknown",
+        "action": "STARTUP",
+        "details": "Target: ./sandbox",
+        "status": "INFO"
+    },
+    {
+        "id": "a365ae2a-c445-4a87-984a-c125702891b9",
+        "timestamp": "2026-01-27T00:11:52.521218",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\n\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py\n\nCODE:\n\n...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 20, 'severity': 'medium', 'description': 'Incorrect calculation of square root', 'suggestion': \"Use the math library's sqrt function to calculate the square root\"}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'Unused import statement', 'suggestion': 'Remove unused import statements to improve ...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "6c30e414-209d-42d2-a97a-acb956021eb9",
+        "timestamp": "2026-01-27T00:11:53.832939",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\n\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py\n\nCODE:\n\n...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 20, 'severity': 'medium', 'description': 'Incorrect calculation of square root', 'suggestion': \"Use the math library's sqrt function to calculate the square root\"}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'Unused import statement', 'suggestion': 'Remove unused import statements to improve ...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "cc8fe981-5fca-45fb-afc1-3096c4bcaef0",
+        "timestamp": "2026-01-27T00:11:55.009395",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\n\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py\n\nCODE:\n\n...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 20, 'severity': 'medium', 'description': 'Incorrect calculation of square root', 'suggestion': \"Use the math library's sqrt function to calculate the square root\"}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'Unused import statement', 'suggestion': 'Remove unused import statements to improve ...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "1b8dd376-9d2c-427a-9cac-e4f5220814fa",
+        "timestamp": "2026-01-27T11:32:00.659879",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: The score must be between 0 and 10 (not 0-100).\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py\n\nCODE:\n\n...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error when denominator is zero', 'suggestion': 'Add a check to ensure denominator is not zero before division'}, {'line': 10, 'severity': 'medium', 'description': 'Incorrect calculation for subtraction', 'suggestion': 'Change the subtraction operator to correctly calculate the difference'}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': 'Missing docstring for the calculator function', 'suggestion': \"Add...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "364ad8c5-b1fd-429d-9b79-a2ee71a09ffb",
+        "timestamp": "2026-01-27T11:32:01.144735",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: The score must be between 0 and 10 (not 0-100).\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py\n\nCODE:\n\n...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error when denominator is zero', 'suggestion': 'Add a check to ensure denominator is not zero before division'}, {'line': 10, 'severity': 'medium', 'description': 'Incorrect calculation for subtraction', 'suggestion': 'Change the subtraction operator to correctly calculate the difference'}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': 'Missing docstring for the calculator function', 'suggestion': \"Add...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3dba2bbc-4c72-42f1-bb31-3b14ad5e1d0a",
+        "timestamp": "2026-01-27T11:32:01.639103",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: The score must be between 0 and 10 (not 0-100).\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py\n\nCODE:\n\n...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error when denominator is zero', 'suggestion': 'Add a check to ensure denominator is not zero before division'}, {'line': 10, 'severity': 'medium', 'description': 'Incorrect calculation for subtraction', 'suggestion': 'Change the subtraction operator to correctly calculate the difference'}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': 'Missing docstring for the calculator function', 'suggestion': \"Add...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7c077b37-fd41-4e70-b833-62f05d846b68",
+        "timestamp": "2026-01-27T11:46:29.673690",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: The score must be between 0 and 10 (not 0-100).\n\nFile name: buggy_calculator.py\n\nIMPORTANT:\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Ba...",
+            "output_response": "{'bugs': [{'line': 0, 'severity': 'high', 'description': 'No code provided to analyze', 'suggestion': 'Provide the code for analysis'}], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': [], 'score': 0}...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "19b8ca79-e362-40cb-b28b-d0a06bda0cde",
+        "timestamp": "2026-01-27T11:46:30.164605",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: The score must be between 0 and 10 (not 0-100).\n\nFile name: buggy_list_ops.py\n\nIMPORTANT:\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Base...",
+            "output_response": "{'bugs': [{'line': 0, 'severity': 'high', 'description': 'No code provided to analyze', 'suggestion': 'Provide the code for analysis'}], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': [], 'score': 0}...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "714ea521-90d7-4d4b-bb7a-530ceae9d6cb",
+        "timestamp": "2026-01-27T11:46:30.682080",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: The score must be between 0 and 10 (not 0-100).\n\nFile name: buggy_string_utils.py\n\nIMPORTANT:\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- ...",
+            "output_response": "{'bugs': [{'line': 0, 'severity': 'high', 'description': 'No code provided to analyze', 'suggestion': 'Provide the code for analysis'}], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': [], 'score': 0}...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "56f42d51-202a-49fb-a617-489c70cbe586",
+        "timestamp": "2026-01-27T11:50:38.793231",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: \n- The score must be between 0 and 10 (not 0-100).\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Base your analysis strictly on the given co...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 10, 'severity': 'medium', 'description': 'Potential TypeError when non-numeric input is provided', 'suggestion': 'Add input validation to ensure only numeric values are accepted'}], 'quality_issues': [{'line': 3, 'severity': 'low', 'description': \"Variable 'result' is not descriptive\", 'suggestion': \"Rename 'result'...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "402a156e-0c4a-4e37-9ead-b68aa2628e8f",
+        "timestamp": "2026-01-27T11:50:39.262192",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: \n- The score must be between 0 and 10 (not 0-100).\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Base your analysis strictly on the given co...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 10, 'severity': 'medium', 'description': 'Potential TypeError when non-numeric input is provided', 'suggestion': 'Add input validation to ensure only numeric values are accepted'}], 'quality_issues': [{'line': 3, 'severity': 'low', 'description': \"Variable 'result' is not descriptive\", 'suggestion': \"Rename 'result'...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "cda3daf5-a2f5-4fda-942d-e65ad3a30571",
+        "timestamp": "2026-01-27T11:50:39.724582",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: \n- The score must be between 0 and 10 (not 0-100).\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Base your analysis strictly on the given co...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 10, 'severity': 'medium', 'description': 'Potential TypeError when non-numeric input is provided', 'suggestion': 'Add input validation to ensure only numeric values are accepted'}], 'quality_issues': [{'line': 3, 'severity': 'low', 'description': \"Variable 'result' is not descriptive\", 'suggestion': \"Rename 'result'...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "97e29e94-20a4-4c44-bc9a-10e192328eb3",
+        "timestamp": "2026-01-27T12:06:27.669812",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: \n- The score must be between 0 and 10 (not 0-100).\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Base your analysis strictly on the given co...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 10, 'severity': 'medium', 'description': 'Potential TypeError when non-numeric input is provided', 'suggestion': 'Add input validation to ensure only numeric values are accepted'}], 'quality_issues': [{'line': 3, 'severity': 'low', 'description': \"Variable 'result' is not descriptive\", 'suggestion': \"Rename 'result'...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b4be9793-15d0-4e26-befe-ec846700e6ca",
+        "timestamp": "2026-01-27T12:06:28.111535",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: \n- The score must be between 0 and 10 (not 0-100).\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Base your analysis strictly on the given co...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 10, 'severity': 'medium', 'description': 'Potential TypeError when non-numeric input is provided', 'suggestion': 'Add input validation to ensure only numeric values are accepted'}], 'quality_issues': [{'line': 3, 'severity': 'low', 'description': \"Variable 'result' is not descriptive\", 'suggestion': \"Rename 'result'...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "420592ca-eaca-4fb2-8dc9-7eb567abb36f",
+        "timestamp": "2026-01-27T12:06:28.583157",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score (must be a number between 0 and 10, where 10 is perfect code)\n\nEach issue must contain: line, severity, description, suggestion.\nIMPORTANT: \n- The score must be between 0 and 10 (not 0-100).\n- Only report bugs that ACTUALLY exist in this file\n- Do NOT reuse issues from other files\n- Base your analysis strictly on the given co...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing division'}, {'line': 10, 'severity': 'medium', 'description': 'Potential TypeError when non-numeric input is provided', 'suggestion': 'Add input validation to ensure only numeric values are accepted'}], 'quality_issues': [{'line': 3, 'severity': 'low', 'description': \"Variable 'result' is not descriptive\", 'suggestion': \"Rename 'result'...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2d5d9aaf-1452-4a42-9ea4-28e95f37eb6e",
+        "timestamp": "2026-01-27T12:15:38.775757",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: 'NoneType' object is not iterable",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "fe0ed57a-7014-4cf7-9dea-77ad9f2114ba",
+        "timestamp": "2026-01-27T12:15:45.264522",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: 'NoneType' object is not iterable",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e981f027-db34-434c-989c-686d46f07cd3",
+        "timestamp": "2026-01-27T12:15:51.835041",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: 'NoneType' object is not iterable",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    }
 ]

@@ -120,7 +120,7 @@ class Auditor:
     def __init__(self):
         self.name = "Auditor"
         self.llm = llm
-        self.llm_cache = {}  # ⚡ cache pour éviter quota
+        
 
     def build_prompt(self, file_path: str, code: str, additional_context="") -> str:
         base = f"""
@@ -131,10 +131,14 @@ Analyze the following Python file and return ONLY valid JSON with:
 - quality_issues
 - style_issues
 - refactoring_plan
-- score
+- score (must be a number between 0 and 10, where 10 is perfect code)
 
 Each issue must contain: line, severity, description, suggestion.
-
+IMPORTANT: 
+- The score must be between 0 and 10 (not 0-100).
+- Only report bugs that ACTUALLY exist in this file
+- Do NOT reuse issues from other files
+- Base your analysis strictly on the given code
 File: {file_path}
 
 CODE:
@@ -225,17 +229,15 @@ CODE:
         # ----------------------------
         # Appel LLM OpenRouter (direct)
         # ----------------------------
-        code_hash = hash(code)
-        if code_hash in self.llm_cache:
-            llm_result = self.llm_cache[code_hash]
-        else:
-            try:
+        import hashlib
+
+        try:
                 response = self.llm.invoke(self.build_prompt(file_path, code, additional_context))
                 raw_text = " ".join(response.content) if isinstance(response.content, list) else str(response.content)
                 print("RAW LLM RESPONSE:", raw_text[:500], "...")  # DEBUG
                 llm_result = safe_parse_json(raw_text)
                 self.llm_cache[code_hash] = llm_result
-            except Exception as e:
+        except Exception as e:
                 reason = f"LLM failed: {e}"
                 return self.create_fallback_analysis(file_path, reason, code, pylint_res)
 

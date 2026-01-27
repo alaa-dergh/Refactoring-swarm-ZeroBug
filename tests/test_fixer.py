@@ -1,10 +1,12 @@
 import sys
 import os
-import json
-from dotenv import load_dotenv
+import json  
+# --- Add project root to path ---
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
-# --- 1️⃣ Ajouter src/ au path ---
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../src")))
+from dotenv import load_dotenv
+from src.agents.fixer_agent import Fixer
+from src.utils.file_manager import PyFileTool
 
 from src.agents.fixer_agent import Fixer
 from src.utils.file_manager import PyFileTool

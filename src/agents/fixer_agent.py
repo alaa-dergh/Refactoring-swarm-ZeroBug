@@ -156,10 +156,17 @@ DETAILED ISSUES:
         prompt += """
 
 REQUIREMENTS:
+
 1. Return ONLY valid JSON with this structure:
 {
-  "fixed_code": "the complete corrected Python code here",
-  "changes_made": ["list of changes you applied"],
+  "fixed_code": "def example():\\n    return 42",
+CRITICAL: In the JSON, use \\n for newlines, \\t for tabs. Do NOT use literal line breaks in the "fixed_code" string.
+The fixed_code must be a single-line string with escaped newlines.
+
+Example of CORRECT format:
+{
+  "fixed_code": "def divide(a, b):\\n    if b == 0:\\n        raise ValueError('Division by zero')\\n    return a / b",
+  "changes_made": ["Added zero check"],
   "confidence": 0.95
 }
 

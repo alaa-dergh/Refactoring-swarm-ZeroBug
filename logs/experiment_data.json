@@ -259,5 +259,211 @@
             "issues_found": 0
         },
         "status": "SUCCESS"
+    },
+    {
+        "id": "1f2ac7fa-3a4d-4df2-ad52-0d155ee744d2",
+        "timestamp": "2026-01-27T23:20:37.052404",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: 'Auditor' object has no attribute 'llm_cache'",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "1714b835-3fc5-4aec-8fd8-207bd8b3a069",
+        "timestamp": "2026-01-27T23:21:06.376271",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: 'Auditor' object has no attribute 'llm_cache'",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "abe86cdf-f390-4ff8-8ae4-e1a3b8d722b7",
+        "timestamp": "2026-01-27T23:21:34.399004",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: 'Auditor' object has no attribute 'llm_cache'",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5993727c-917b-41af-97ee-12fd3625929c",
+        "timestamp": "2026-01-27T23:26:11.534305",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\n\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_av...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before performing the division'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use an immutable default argument, such as None, and initialize the list inside the function'}, {'line': 9, 'severity': 'critical', 'description': 'Syntax error: missing colon', 'suggestion': 'Add a colon at the end of the for...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f8e7f91d-9862-4138-9120-245220f1b930",
+        "timestamp": "2026-01-27T23:26:25.406393",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\n\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py\n\nCODE:\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for num in numbers:\n        if num > max_val\n            max_val = num  # Bug: Missin...",
+            "output_response": "{'bugs': [{'line': 6, 'severity': 'high', 'description': 'Missing colon after if statement', 'suggestion': 'Add a colon at the end of the if statement'}, {'line': 10, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as default argument and initialize the list inside the function'}, {'line': 13, 'severity': 'high', 'description': 'No bounds checking for list index', 'suggestion': 'Add a check to ensure the index is within the bounds of the list'}], 'quality_i...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "49e0a0c7-75bb-44fe-b5cf-30f3560a17dd",
+        "timestamp": "2026-01-27T23:26:48.902864",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\n\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py\n\nCODE:\n# File: buggy_string_utils.py\n\ndef reverse_string(s):\n    return s[::-1]\n\ndef capitalize_words(text):\n    words = text.split()\n    result = []\n    for word in w...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Missing closing parenthesis in the capitalize_words function', 'suggestion': 'Add a closing parenthesis after word.capitalize()'}, {'line': 13, 'severity': 'high', 'description': 'Missing colon after function definition', 'suggestion': 'Add a colon after the function definition count_vowels(text)'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'The function reverse_string does not handle None or non-string inputs', '...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "852e1021-c335-48a9-8433-2e79f5c4f83f",
+        "timestamp": "2026-01-27T23:28:23.769237",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero error', 'suggestion': 'Add a check to ensure the divisor is not zero before performing the division'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use an immutable default argument, such as None, and initialize the list inside the function'}, {'line': 9, 'severity': 'high', 'description': 'Syntax error: missing colon', 'suggestion': 'Add a colon at the end of the for loop decl...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f8b25f62-8f56-4fce-aaaa-9d4b754f4641",
+        "timestamp": "2026-01-27T23:28:44.719830",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py\n\nCODE:\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for num in numbers:\n        if num > ma...",
+            "output_response": "{'bugs': [{'line': 6, 'severity': 'high', 'description': 'Missing colon after if statement', 'suggestion': 'Add a colon at the end of the if statement'}, {'line': 10, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as default argument and initialize the list inside the function'}, {'line': 13, 'severity': 'high', 'description': 'No bounds checking for list index', 'suggestion': 'Add a check to ensure the index is within the bounds of the list'}], 'quality_i...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "123c0a4d-507e-4296-a49b-7823b61ddf52",
+        "timestamp": "2026-01-27T23:29:20.822292",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py\n\nCODE:\n# File: buggy_string_utils.py\n\ndef reverse_string(s):\n    return s[::-1]\n\ndef capitalize_words(text):\n    words = ...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Missing closing parenthesis in the capitalize_words function', 'suggestion': 'Add a closing parenthesis after word.capitalize()'}, {'line': 13, 'severity': 'high', 'description': 'Missing colon after function definition', 'suggestion': 'Add a colon after the function definition count_vowels(text)'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'The function reverse_string does not handle None or non-string inputs', '...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "db716083-7884-456b-b993-bcd5f3746df7",
+        "timestamp": "2026-01-27T23:30:44.541100",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs f...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before performing the division'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use an immutable default argument, such as None, and initialize the list inside the function'}, {'line': 9, 'severity': 'critical', 'description': 'Syntax error: missing colon', 'suggestion': 'Add a colon at the end of the for...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "a35e07d2-d4b7-4b0f-9e4f-74a15fd34a45",
+        "timestamp": "2026-01-27T23:31:20.059966",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py\n\nCODE:\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val...",
+            "output_response": "{'bugs': [{'line': 6, 'severity': 'high', 'description': 'Missing colon after if statement', 'suggestion': 'Add a colon at the end of the if statement'}, {'line': 10, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as default argument and initialize the list inside the function'}, {'line': 13, 'severity': 'high', 'description': 'No bounds checking for list index', 'suggestion': 'Add a check to ensure the index is within the bounds of the list'}], 'quality_i...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "447290a0-0d05-4cfb-b0f3-d1b602b2503d",
+        "timestamp": "2026-01-27T23:31:57.743603",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py\n\nCODE:\n# File: buggy_string_utils.py\n\ndef reverse_string(s):\n   ...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Missing closing parenthesis in the capitalize_words function', 'suggestion': 'Add a closing parenthesis after word.capitalize()'}, {'line': 13, 'severity': 'high', 'description': 'Missing colon after function definition', 'suggestion': 'Add a colon after the function definition count_vowels(text)'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'The function reverse_string does not handle None or non-string inputs', '...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "a22e596f-2aea-4b2b-9c39-b908c2c9e622",
+        "timestamp": "2026-01-27T23:42:59.553579",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\n# File: fixed_calculator.py\n# This file has been refactored to fix multiple bugs and issues\n\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The div...",
+            "error": "JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\n# File: fixed_calculator.py\n# This file has been refactored to fix multiple bugs and issues\n\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The div...",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "c54cd6f2-39a8-4a49-9502-011f53212b22",
+        "timestamp": "2026-01-27T23:48:18.629999",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"Divide two numbers.\\n\\n    Args:\\n        a (float): The dividend.\\n        b (float): The divisor.\\n\\n    Returns:\\n        float: The quotient.\\n\\n    Raises:\\n        ZeroDivisionError: If the divisor is zero.\\n    \"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\\'Division by zero\\')\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"Calculate the average of a list of numbers.\\n\\n    Args:\\n        numbers (list): A list of numbe...",
+            "changes_made": [
+                "Added zero check in divide function",
+                "Fixed mutable default argument in calculate_average function",
+                "Added check for empty input in calculate_average function",
+                "Replaced eval with safer method in process_data function",
+                "Added input validation in process_data function"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
     }
 ]

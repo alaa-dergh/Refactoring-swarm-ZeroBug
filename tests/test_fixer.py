@@ -1,188 +1,266 @@
+#!/usr/bin/env python3
+"""
+Test du Judge Agent avec AI
+Usage: python tests/test_judge.py
+"""
+
 import sys
 import os
-import json  
-# --- Add project root to path ---
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import json
+import time
+from pathlib import Path
+
+# Ajouter le répertoire racine au chemin Python
+sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from dotenv import load_dotenv
-from src.agents.fixer_agent import Fixer
+from src.agents.judge_agent import Judge
 from src.utils.file_manager import PyFileTool
 
-from src.agents.fixer_agent import Fixer
-from src.utils.file_manager import PyFileTool
-
-# --- 2️⃣ Charger .env pour la clé OpenRouter ---
-load_dotenv()
-
-# --- 3️⃣ Vérifier la clé API ---
-if not os.getenv("OPENROUTER_API_KEY"):
-    print("❌ ERREUR: OPENROUTER_API_KEY non trouvée dans .env")
-    exit(1)
-
-# --- 4️⃣ Chemins des dossiers ---
-script_dir = os.path.dirname(__file__)
-sandbox_dir = os.path.abspath(os.path.join(script_dir, "../sandbox"))
-output_dir = os.path.abspath(os.path.join(script_dir, "../sandbox/fixed"))
-audit_report_path = os.path.abspath(os.path.join(script_dir, "../logs/audit_report.json"))
-
-print("="*80)
-print("🔧 TEST DU FIXER AGENT")
-print("="*80)
-print(f"📁 Dossier sandbox: {sandbox_dir}")
-print(f"📁 Dossier output: {output_dir}")
-print(f"📄 Rapport d'audit: {audit_report_path}")
-print("="*80)
-
-# --- 5️⃣ Charger le rapport d'audit ---
-if not os.path.exists(audit_report_path):
-    print("\n⚠️ ATTENTION: Aucun rapport d'audit trouvé.")
-    print("💡 Vous devez d'abord exécuter test_auditor.py pour générer le rapport.")
-    print("\nCréation d'un rapport de test minimal...\n")
+def test_simple_ai_generation():
+    """Test simple de génération de tests avec AI."""
     
-    # Créer un rapport de test minimal
-    python_files = PyFileTool.list_python_files(sandbox_dir)
+    print("\n" + "="*80)
+    print("🤖 TEST DE GÉNÉRATION DE TESTS AVEC AI")
+    print("="*80)
+    
+    load_dotenv()
+    
+    # Obtenez une clé Google Gemini gratuite: https://makersuite.google.com/app/apikey
+    # Ajoutez dans .env: GOOGLE_API_KEY=votre_clé
+    
+    google_api_key = os.getenv("GOOGLE_API_KEY")
+    openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+    
+    if not google_api_key and not openrouter_api_key:
+        print("⚠️ Aucune clé API trouvée. Solutions gratuites:")
+        print("   1. Google Gemini (recommandé): https://makersuite.google.com/app/apikey")
+        print("   2. OpenRouter: https://openrouter.ai/")
+        print("\nPour continuer sans AI, des tests basiques seront générés.")
+    
+    try:
+        # Initialiser le Judge
+        judge = Judge()
+        
+        # Code de test simple
+        test_code = """
+def add(a, b):
+    '''Additionne deux nombres.'''
+    return a + b
+
+def divide(a, b):
+    '''Divise a par b.'''
+    return a / b
+
+def safe_divide(a, b):
+    '''Divise a par b avec vérification.'''
+    if b == 0:
+        raise ValueError("Division by zero")
+    return a / b
+"""
+        
+        # Sauvegarder dans un fichier temporaire
+        import tempfile
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', delete=False) as f:
+            f.write(test_code)
+            temp_file = f.name
+        
+        try:
+            print(f"📄 Fichier de test: {temp_file}")
+            
+            # Tester la génération de tests
+            if judge.llm:
+                print("✅ AI disponible, génération de tests avec AI...")
+                test_code, success = judge.generate_unit_tests_with_ai(test_code, temp_file)
+            else:
+                print("⚠️ AI non disponible, génération de tests basiques...")
+                test_code, success = judge.generate_fallback_tests(test_code, temp_file)
+            
+            if success:
+                print(f"✅ Tests générés avec succès!")
+                print(f"📝 Code de test généré (premières 20 lignes):")
+                lines = test_code.split('\n')
+                for i, line in enumerate(lines[:20], 1):
+                    print(f"  {i:2d}: {line}")
+                if len(lines) > 20:
+                    print(f"  ... ({len(lines)-20} lignes supplémentaires)")
+                
+                # Sauvegarder et exécuter
+                test_path = judge.save_test_file(test_code, temp_file)
+                print(f"\n💾 Tests sauvegardés: {test_path}")
+                
+                # Exécuter les tests
+                print("🚀 Exécution des tests...")
+                result = judge.run_tests(test_path, temp_file)
+                
+                print(f"\n📊 Résultat: {'✅ SUCCÈS' if result['success'] else '❌ ÉCHEC'}")
+                if result.get('stdout'):
+                    print(f"📋 Sortie des tests:")
+                    print(result['stdout'][:500])
+            else:
+                print("❌ Échec de la génération des tests")
+                
+        finally:
+            # Nettoyer
+            os.unlink(temp_file)
+            
+    except Exception as e:
+        print(f"❌ Erreur lors du test: {e}")
+        import traceback
+        traceback.print_exc()
+
+def test_on_fixed_files():
+    """Test sur les fichiers corrigés par le Fixer."""
+    
+    print("\n" + "="*80)
+    print("🔍 TEST SUR LES FICHIERS CORRIGÉS")
+    print("="*80)
+    
+    load_dotenv()
+    
+    # Chemin vers les fichiers corrigés
+    script_dir = os.path.dirname(__file__)
+    fixed_dir = os.path.abspath(os.path.join(script_dir, "../sandbox/fixed"))
+    
+    if not os.path.exists(fixed_dir):
+        print("❌ Aucun dossier 'fixed' trouvé.")
+        print("💡 Exécutez d'abord le Fixer: python tests/test_fixer.py (choisissez option 2)")
+        return
+    
+    # Lister les fichiers Python
+    python_files = PyFileTool.list_python_files(fixed_dir)
     
     if not python_files:
-        print("❌ Aucun fichier Python trouvé dans sandbox/")
-        exit(1)
+        print("❌ Aucun fichier Python trouvé dans 'fixed/'")
+        return
     
-    audit_results = []
-    for py_file in python_files:
-        audit_results.append({
-            "file_path": py_file,
-            "bugs": [
-                {
-                    "line": 1,
-                    "severity": "MEDIUM",
-                    "description": "Missing docstring",
-                    "suggestion": "Add module-level docstring"
-                }
-            ],
-            "quality_issues": [
-                {
-                    "line": 5,
-                    "severity": "LOW",
-                    "description": "Variable name too short",
-                    "suggestion": "Use descriptive variable names"
-                }
-            ],
-            "style_issues": [],
-            "refactoring_plan": [
-                "Add docstrings",
-                "Improve variable names",
-                "Add type hints"
-            ],
-            "score": 5.0
-        })
-else:
-    # Charger le vrai rapport d'audit
+    print(f"📁 Dossier: {fixed_dir}")
+    print(f"🔍 {len(python_files)} fichier(s) trouvé(s)")
+    
+    # Initialiser le Judge
     try:
-        with open(audit_report_path, 'r', encoding='utf-8') as f:
-            audit_data = json.load(f)
-            audit_results = audit_data.get("files", [])
+        judge = Judge()
         
-        print(f"✅ Rapport d'audit chargé: {len(audit_results)} fichier(s)\n")
-    except Exception as e:
-        print(f"❌ Erreur lors du chargement du rapport: {e}")
-        exit(1)
-
-# --- 6️⃣ Initialiser le Fixer ---
-fixer = Fixer(max_retries=3)
-
-# --- 7️⃣ Mode de test ---
-print("\nChoisissez le mode de test:")
-print("1. Corriger UN seul fichier (rapide)")
-print("2. Corriger TOUS les fichiers (complet)")
-choice = input("Votre choix (1 ou 2): ").strip()
-
-if choice == "1":
-    # --- MODE FICHIER UNIQUE ---
-    if not audit_results:
-        print("❌ Aucun fichier à corriger")
-        exit(1)
-    
-    # Prendre le premier fichier
-    first_audit = audit_results[0]
-    file_path = first_audit.get("file_path")
-    
-    print(f"\n🔍 Fichier sélectionné: {file_path}")
-    print(f"📊 Score actuel: {first_audit.get('score', 0)}/10")
-    print(f"🐛 Bugs: {len(first_audit.get('bugs', []))}")
-    print(f"⚠️ Quality issues: {len(first_audit.get('quality_issues', []))}")
-    
-    print("\n🔧 Début de la correction...\n")
-    
-    result = fixer.fix_file(file_path, first_audit, output_dir)
-    
-    # Afficher le résultat
-    print("\n" + "="*80)
-    print("RÉSULTAT DE LA CORRECTION")
-    print("="*80)
-    
-    if result["success"]:
-        print("✅ Correction réussie!")
-        print(f"📄 Fichier sauvegardé: {result['output_path']}")
-        print(f"🔄 Nombre d'itérations: {result.get('iterations', 1)}")
-        print(f"💯 Confiance: {result.get('confidence', 0)*100:.1f}%")
-        
-        if result.get("changes_made"):
-            print("\n📝 Changements appliqués:")
-            for i, change in enumerate(result["changes_made"], 1):
-                print(f"  {i}. {change}")
-    else:
-        print("❌ Échec de la correction")
-        print(f"Erreur: {result.get('error', 'Unknown')}")
-
-elif choice == "2":
-    # --- MODE COMPLET ---
-    if not audit_results:
-        print("❌ Aucun fichier à corriger")
-        exit(1)
-    
-    print(f"\n🚀 Correction de {len(audit_results)} fichier(s)...\n")
-    
-    results = fixer.fix_directory(audit_results, output_dir)
-    
-    # Générer le rapport
-    report = fixer.generate_fix_report(results)
-    
-    # Afficher le rapport
-    print("\n" + "="*80)
-    print("RAPPORT DE CORRECTION COMPLET")
-    print("="*80)
-    
-    summary = report["summary"]
-    print(f"📊 Fichiers traités: {summary['total_files']}")
-    print(f"✅ Corrections réussies: {summary['successful_fixes']}")
-    print(f"❌ Échecs: {summary['failed_fixes']}")
-    print(f"📈 Taux de réussite: {summary['success_rate']}")
-    print(f"🔧 Total de changements: {summary['total_changes']}")
-    print(f"💯 Confiance moyenne: {summary['average_confidence']*100:.1f}%")
-    
-    print("\n📋 Détails par fichier:")
-    for i, res in enumerate(results, 1):
-        status = "✅" if res.get("success", False) else "❌"
-        file_name = os.path.basename(res.get("file_path", "unknown"))
-        print(f"  {status} [{i}] {file_name}")
-        if res.get("success"):
-            confidence = res.get("confidence", 0)
-            changes = len(res.get("changes_made", []))
-            print(f"      💯 {confidence*100:.0f}% confiance | 🔧 {changes} changements")
+        if judge.llm:
+            print("🤖 Mode: Génération de tests avec AI")
         else:
-            error = res.get("error", "Unknown")[:50]
-            print(f"      ⚠️ {error}...")
-    
-    # Sauvegarder le rapport
-    report_path = os.path.join("logs", "fix_report.json")
-    os.makedirs("logs", exist_ok=True)
-    with open(report_path, 'w', encoding='utf-8') as f:
-        json.dump(report, f, indent=2, ensure_ascii=False)
-    
-    print(f"\n💾 Rapport complet sauvegardé: {report_path}")
+            print("⚠️ Mode: Génération de tests basiques (AI non disponible)")
+            print("💡 Pour activer l'AI, ajoutez une clé Google Gemini dans .env")
+        
+        results = []
+        
+        for i, file_path in enumerate(python_files, 1):
+            print(f"\n[{i}/{len(python_files)}] Traitement: {os.path.basename(file_path)}")
+            
+            try:
+                result = judge.evaluate_file(file_path)
+                results.append(result)
+                
+                status = "✅" if result.get('success') else "❌"
+                print(f"  {status} {'Tests passés' if result.get('success') else 'Tests échoués'}")
+                
+                if result.get('ai_used') is not None:
+                    print(f"  🤖 AI utilisée: {'OUI' if result['ai_used'] else 'NON'}")
+                
+            except Exception as e:
+                print(f"  ⚠️ Erreur: {e}")
+                results.append({
+                    "file": file_path,
+                    "success": False,
+                    "error": str(e)
+                })
+        
+        # Rapport
+        successful = sum(1 for r in results if r.get("success", False))
+        total = len(results)
+        
+        print(f"\n📊 RAPPORT FINAL:")
+        print(f"  📈 Total fichiers: {total}")
+        print(f"  ✅ Tests réussis: {successful}")
+        print(f"  ❌ Tests échoués: {total - successful}")
+        print(f"  🎯 Taux de réussite: {(successful/max(total, 1))*100:.1f}%")
+        
+        # Sauvegarder le rapport
+        os.makedirs("logs", exist_ok=True)
+        report_path = os.path.join("logs", "judge_test_results.json")
+        
+        report = {
+            "timestamp": time.strftime("%Y-%m-%d %H:%M:%S"),
+            "directory": fixed_dir,
+            "summary": {
+                "total_files": total,
+                "successful_tests": successful,
+                "failed_tests": total - successful,
+                "success_rate": f"{(successful/max(total, 1))*100:.1f}%"
+            },
+            "files": results
+        }
+        
+        with open(report_path, 'w', encoding='utf-8') as f:
+            json.dump(report, f, indent=2)
+        
+        print(f"\n💾 Rapport sauvegardé: {report_path}")
+        
+    except Exception as e:
+        print(f"❌ Erreur lors du test: {e}")
 
-else:
-    print("❌ Choix invalide")
+def main():
+    """Menu principal de test."""
+    
+    print("\n" + "="*80)
+    print("🧑‍⚖️ MENU DE TEST DU JUDGE AGENT")
+    print("="*80)
+    
+    load_dotenv()
+    
+    # Vérifier les clés API
+    google_api_key = os.getenv("GOOGLE_API_KEY")
+    openrouter_api_key = os.getenv("OPENROUTER_API_KEY")
+    
+    print("\n🔑 ÉTAT DES CLÉS API:")
+    if google_api_key:
+        print("  ✅ Google Gemini API: Configurée")
+    else:
+        print("  ❌ Google Gemini API: Non configurée")
+        print("     💡 Obtenez une clé gratuite: https://makersuite.google.com/app/apikey")
+    
+    if openrouter_api_key:
+        print("  ✅ OpenRouter API: Configurée")
+    else:
+        print("  ❌ OpenRouter API: Non configurée")
+        print("     💡 Créez un compte: https://openrouter.ai/")
+    
+    if not google_api_key and not openrouter_api_key:
+        print("\n⚠️ ATTENTION: Aucune clé API configurée!")
+        print("Le Judge fonctionnera en mode basique sans AI.")
+    
+    print("\n📋 OPTIONS DE TEST:")
+    print("1. Test simple de génération de tests avec AI")
+    print("2. Test sur les fichiers corrigés (dossier 'fixed/')")
+    print("3. Quitter")
+    
+    choice = input("\n👉 Votre choix (1-3): ").strip()
+    
+    if choice == "1":
+        test_simple_ai_generation()
+    elif choice == "2":
+        test_on_fixed_files()
+    elif choice == "3":
+        print("\n👋 Au revoir!")
+        return
+    else:
+        print("❌ Choix invalide")
+    
+    print("\n" + "="*80)
+    print("✨ TEST TERMINÉ!")
+    print("="*80)
 
-print("\n" + "="*80)
-print("✨ Test terminé!")
-print("="*80)
+if __name__ == "__main__":
+    try:
+        main()
+    except KeyboardInterrupt:
+        print("\n\n⏹️  Test interrompu par l'utilisateur")
+    except Exception as e:
+        print(f"\n❌ Erreur inattendue: {e}")
+        import traceback
+        traceback.print_exc()

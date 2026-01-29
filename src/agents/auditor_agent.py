@@ -5,6 +5,8 @@ import json
 import time
 from typing import List, Dict
 from dotenv import load_dotenv
+from src.utils.rate_limiter import RateLimiter, RateLimitConfig
+
 
 from src.utils.file_manager import PyFileTool
 from src.utils.logger import log_experiment, ActionType
@@ -117,10 +119,20 @@ class CodeAnalyzer:
 # Auditor
 # ================================
 class Auditor:
-    def __init__(self):
+    def __init__(self, rate_limiter=None):
         self.name = "Auditor"
         self.llm = llm
-        self.llm_cache = {}  # ⚡ cache pour éviter quota
+        self.llm_cache = {}  #  cache pour éviter quota
+
+        #adding rate limiter
+        self.rate_limiter = rate_limiter
+        if not self.rate_limiter:
+            config = RateLimitConfig(
+                requests_per_minute=20,
+                base_delay=3.0,
+                retry_attempts=3,
+            )
+            self.rate_limiter = RateLimiter(config)
 
     def build_prompt(self, file_path: str, code: str, additional_context="") -> str:
         base = f"""
@@ -230,7 +242,17 @@ CODE:
             llm_result = self.llm_cache[code_hash]
         else:
             try:
-                response = self.llm.invoke(self.build_prompt(file_path, code, additional_context))
+                #creating a function for api call??
+                def _call_llm():
+                    return self.llm.invoke(self.build_prompt(file_path, code, additional_context))
+                
+                #using rate limiter instead of direct call
+                #response = self.llm.invoke(self.build_prompt(file_path, code, additional_context))
+                response = self.rate_limiter.execute_with_rate_limit(
+                    _call_llm,
+                    agent_name=self.name
+                )
+
                 raw_text = " ".join(response.content) if isinstance(response.content, list) else str(response.content)
                 print("RAW LLM RESPONSE:", raw_text[:500], "...")  # DEBUG
                 llm_result = safe_parse_json(raw_text)
@@ -256,12 +278,14 @@ CODE:
 
         return report
 
+# The analyse directory method with rate limiting
+
     def analyze_directory(self, dir_path: str) -> List[Dict]:
         files = PyFileTool.list_python_files(dir_path)
         results = []
         for f in files:
             results.append(self.analyze_file(f))
-            time.sleep(3)  # ⚡ pause pour limiter le quota
+           # time.sleep(3)  no need with rate limiter
         return results
 
     def generate_report(self, analyses: List[Dict]) -> Dict:

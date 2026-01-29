@@ -1,3 +1,4 @@
+from logging import config
 import os
 import json
 import time
@@ -10,10 +11,18 @@ from src.agents.fixer_agent import Fixer
 from src.agents.judge_agent import Judge
 from src.utils.file_manager import PyFileTool
 from src.utils.logger import log_experiment, ActionType
+from src.utils.rate_limiter import RateLimiter, RateLimitConfig
+
+
+# modifications for rate_limiter done on class Orchestrator and adding l'affichage des statistiques a la fin du pipelie? on line: 114 
+
+
 
 # ================================
 # Orchestrator Agent
 # ================================
+
+
 class Orchestrator:
     """
     Agent Orchestrator : Coordonne le workflow complet du système.
@@ -31,34 +40,56 @@ class Orchestrator:
         self.fixer = None
         self.judge = None
         
+
+        #creating a UNIQUEE shared rate limiter for all agents:
+        config = RateLimitConfig(
+            requests_per_minute=20,
+            requests_per_hour=200,
+            base_delay=3.0,
+            retry_attempts=3,
+            exponential_base=2.0
+        ) 
+        self.rate_limiter = RateLimiter(config)
+        #done creating hehe
+
     def initialize_agents(self):
         """Initialize tous les agents."""
         print("🔧 Initialisation des agents...")
-        
+        #passing the rate limiter to ALL agents
         try:
-            self.auditor = Auditor()
+            #self.auditor = Auditor()
+            self.auditor = Auditor(rate_limiter=self.rate_limiter)  
             print("  ✅ Auditor initialisé")
         except Exception as e:
             print(f"  ⚠️ Erreur Auditor: {e}")
             self.auditor = None
         
         try:
-            self.fixer = Fixer()
+            self.fixer = Fixer(rate_limiter=self.rate_limiter)
             print("  ✅ Fixer initialisé")
         except Exception as e:
             print(f"  ⚠️ Erreur Fixer: {e}")
             self.fixer = None
         
         try:
-            self.judge = Judge()
+            self.judge = Judge(rate_limiter=self.rate_limiter)
             print("  ✅ Judge initialisé")
         except Exception as e:
             print(f"  ⚠️ Erreur Judge: {e}")
             self.judge = None
-        
+
+            #done passing
+            #displaying the status of rate limter
+            print("\n🛡️ Rate Limiter configuré:")
+            print(f"  • RPM Limit: {config.requests_per_minute}")
+            print(f"  • Base Delay: {config.base_delay}s")
+            print(f"  • Retry Attempts: {config.retry_attempts}")
+        #done displaying
+
         if not all([self.auditor, self.fixer, self.judge]):
             raise RuntimeError("Certains agents n'ont pas pu être initialisés")
     
+    #adding stats for some reason
     def run_full_pipeline(
         self, 
         input_dir: str,
@@ -80,6 +111,7 @@ class Orchestrator:
         start_time = time.time()
         
         print("\n" + "="*80)
+        self.rate_limiter.print_stats() #this one
         print("🚀 DÉMARRAGE DU PIPELINE COMPLET".center(80))
         print("="*80)
         

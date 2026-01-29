@@ -2108,5 +2108,488 @@
             "duration": 225.1923050880432
         },
         "status": "SUCCESS"
+    },
+    {
+        "id": "1a89dea3-0894-4172-a875-c68758ee1dfa",
+        "timestamp": "2026-01-29T11:45:08.040787",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: N...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before performing the division'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use an immutable default argument, such as None, and initialize the list inside the function'}, {'line': 9, 'severity': 'high', 'description': 'Missing colon', 'suggestion': 'Add a colon at the end of the for loop declaration'...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ee96e761-e117-4669-9329-407e7db8bf67",
+        "timestamp": "2026-01-29T11:46:05.309672",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_list_ops.py\n\nCODE:\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for num in numbers:\n        if num > m...",
+            "output_response": "{'bugs': [{'line': 6, 'severity': 'high', 'description': 'Syntax error: missing colon after if statement', 'suggestion': 'Add a colon at the end of the if statement: if num > max_val:'}, {'line': 10, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as default argument and initialize the list inside the function: def remove_duplicates(lst=None): if lst is None: lst = []'}, {'line': 13, 'severity': 'high', 'description': 'No bounds checking for list index', 's...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "698c77ac-41f3-4c57-bd5e-1b8274bf0482",
+        "timestamp": "2026-01-29T11:46:37.815797",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_string_utils.py\n\nCODE:\n# File: buggy_string_utils.py\n\ndef reverse_string(s):\n    return s[::-1]\n\ndef capitalize_words(text):\n    words =...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Missing closing parenthesis in the capitalize_words function', 'suggestion': 'Add a closing parenthesis after word.capitalize()'}, {'line': 13, 'severity': 'high', 'description': 'Missing colon after function definition', 'suggestion': 'Add a colon after the function definition count_vowels(text)'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'The function reverse_string does not handle None or non-string inputs', '...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3e060727-acc3-4604-ad2c-f3bb2980efa5",
+        "timestamp": "2026-01-29T11:47:06.043530",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"Divide two numbers.\"\"\"\n    if b == 0:\n        raise ValueError('Division by zero')\n ...",
+            "output_response": "{'bugs': [{'line': 17, 'severity': 'high', 'description': 'Division by zero error is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before calling the divide function'}, {'line': 24, 'severity': 'medium', 'description': 'Using eval can pose a security risk if the input data is not sanitized', 'suggestion': 'Consider using a safer alternative, such as ast.literal_eval or a parsing library'}], 'quality_issues': [{'line': 10, 'severity': 'low', 'description': 'The calculate...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b85cea9c-62ec-4646-b90a-28494d9b9ffa",
+        "timestamp": "2026-01-29T11:47:20.030699",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n    for n in numbers\n        total += n  # Bug: Missing ...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"Divide two numbers.\"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\\'Division by zero\\')\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"Calculate the average of a list of numbers.\"\"\"\\n    if numbers is None:\\n        numbers = []\\n    if len(numbers) == 0:\\n        raise ValueError(\\'Cannot calculate average of empty list\\')\\n    total = 0\\n    for n in numbers:\\n        total += n\\n    return total / len(numbers)\\n\\n\\ndef proce...",
+            "changes_made": [
+                "Added zero check in divide function",
+                "Fixed mutable default argument in calculate_average function",
+                "Added check for empty input in calculate_average function",
+                "Replaced eval with safer evaluation method in process_data function",
+                "Added docstrings to all functions"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "13fd7504-52d0-4765-8aef-20be4784586a",
+        "timestamp": "2026-01-29T11:47:33.003983",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_list_ops.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_list_ops.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for num in numbers:\n        if num > max_val\n            max_val = num  # Bug: Missing colon!\n    return max_val\n\ndef remove_duplicates(lst=[]):  # Bug: Mutable default!\n    return list(set(lst))\n\ndef safe_ge...",
+            "output_response": "{'fixed_code': \"def find_max(numbers):\\n    if not numbers:\\n        raise ValueError('List is empty')\\n    max_val = numbers[0]\\n    for num in numbers:\\n        if num > max_val:\\n            max_val = num\\n    return max_val\\n\\ndef remove_duplicates(lst=None):\\n    if lst is None:\\n        return []\\n    seen = dict()\\n    return [x for x in lst if not (x in seen or seen.__setitem__(x, True))]\\n\\ndef safe_get(lst, index):\\n    if index < len(lst):\\n        return lst[index]\\n    else:\\n      ...",
+            "changes_made": [
+                "Fixed syntax error in if statement",
+                "Replaced mutable default argument",
+                "Added bounds checking for list index",
+                "Refactored find_max to handle empty lists",
+                "Refactored remove_duplicates to preserve order"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_list_ops.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "20f46770-db14-4c65-b195-bab5af93d957",
+        "timestamp": "2026-01-29T11:48:08.649794",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_string_utils.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Code invalide après 3 tentatives: Syntax Error at line 9: unterminated string literal (detected at line 9)",
+            "error": "Code invalide après 3 tentatives: Syntax Error at line 9: unterminated string literal (detected at line 9)",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "08b5c6c6-e4a0-4de8-9182-7e21dc1144e0",
+        "timestamp": "2026-01-29T11:48:08.724362",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 203.93s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 3,
+            "files_fixed": 2,
+            "files_validated": 0,
+            "duration": 203.93011283874512
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2a5d80c1-cc69-45f1-a73e-90b12751bc66",
+        "timestamp": "2026-01-29T11:52:20.231401",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: N...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before performing the division'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use an immutable default argument, such as None, and initialize the list inside the function'}, {'line': 9, 'severity': 'critical', 'description': 'Syntax error: missing colon', 'suggestion': 'Add a colon at the end of the for...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "8f25abcb-24fd-4aeb-890a-105ba0c59ffa",
+        "timestamp": "2026-01-29T11:53:00.656287",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_list_ops.py\n\nCODE:\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for num in numbers:\n        if num > m...",
+            "output_response": "{'bugs': [{'line': 6, 'severity': 'high', 'description': 'Syntax error: missing colon after if statement', 'suggestion': 'Add a colon at the end of the if statement: if num > max_val:'}, {'line': 10, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as default argument and initialize the list inside the function: def remove_duplicates(lst=None): if lst is None: lst = []'}, {'line': 13, 'severity': 'high', 'description': 'No bounds checking for list index', 's...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "cf501f12-d717-4e3a-89fc-732908cb2f7f",
+        "timestamp": "2026-01-29T11:53:27.094033",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_string_utils.py\n\nCODE:\n# File: buggy_string_utils.py\n\ndef reverse_string(s):\n    return s[::-1]\n\ndef capitalize_words(text):\n    words =...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Missing closing parenthesis in the capitalize_words function', 'suggestion': 'Add a closing parenthesis after word.capitalize()'}, {'line': 13, 'severity': 'high', 'description': 'Missing colon after function definition', 'suggestion': 'Add a colon after the function definition count_vowels(text)'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'The function reverse_string does not handle None or non-string inputs', '...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e4359618-3b2b-45d2-8272-ef203d6690ac",
+        "timestamp": "2026-01-29T11:53:40.459898",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n    for n in numbers\n        total += n  # Bug: Missing ...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"Divide two numbers.\"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\\'Division by zero\\')\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"Calculate the average of a list of numbers.\"\"\"\\n    if numbers is None:\\n        numbers = []\\n    if len(numbers) == 0:\\n        raise ValueError(\\'Cannot calculate average of empty list\\')\\n    total = 0\\n    for n in numbers:\\n        total += n\\n    return total / len(numbers)\\n\\n\\ndef proce...",
+            "changes_made": [
+                "Added zero check in divide function",
+                "Fixed mutable default argument in calculate_average function",
+                "Added check for empty input in calculate_average function",
+                "Replaced eval with a safer method in process_data function",
+                "Added docstrings and improved code formatting"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7051488c-97d3-4f3e-8200-e1b5458c0a14",
+        "timestamp": "2026-01-29T11:53:52.930666",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_list_ops.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_list_ops.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for num in numbers:\n        if num > max_val\n            max_val = num  # Bug: Missing colon!\n    return max_val\n\ndef remove_duplicates(lst=[]):  # Bug: Mutable default!\n    return list(set(lst))\n\ndef safe_ge...",
+            "output_response": "{'fixed_code': \"def find_max(numbers):\\n    if not numbers:\\n        raise ValueError('List is empty')\\n    max_val = numbers[0]\\n    for num in numbers:\\n        if num > max_val:\\n            max_val = num\\n    return max_val\\n\\ndef remove_duplicates(lst=None):\\n    if lst is None:\\n        return []\\n    seen = dict()\\n    return [seen.setdefault(x, x) for x in lst if x not in seen]\\n\\ndef safe_get(lst, index):\\n    if index < len(lst):\\n        return lst[index]\\n    else:\\n        return No...",
+            "changes_made": [
+                "Fixed syntax error in if statement",
+                "Replaced mutable default argument",
+                "Added bounds checking for list index",
+                "Refactored find_max to handle empty lists",
+                "Refactored remove_duplicates to preserve order"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_list_ops.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bc52743d-734f-49f1-bca8-6b62b06a2fc2",
+        "timestamp": "2026-01-29T11:54:49.373039",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_string_utils.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Code invalide après 3 tentatives: Syntax Error at line 9: unterminated string literal (detected at line 9)",
+            "error": "Code invalide après 3 tentatives: Syntax Error at line 9: unterminated string literal (detected at line 9)",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "029fbe7e-4dcf-4e6c-a814-c16a8c5d3186",
+        "timestamp": "2026-01-29T11:56:00.658172",
+        "agent": "Judge",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_calculator.py\nITERATION: 2/2\n\nCODE TO TEST:\n```python\ndef divide(a, b):\n    \"\"\"Divide two numbers.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division by zero')\n    return a / b\n\n\ndef calculate_average(numbers=None):\n    \"\"\"Calculate the average of a list of numbers.\"\"\"\n    if numbers is None:\n     ...",
+            "output_response": "{'test_code': 'import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), \\'..\\')))\\n\\nfrom buggy_calculator import divide, calculate_average, process_data\\n\\n\\ndef test_divide_normal_case():\\n    \"\"\"Test division with valid inputs.\"\"\"\\n    assert divide(10, 2) == 5\\n    assert divide(9, 3) == 3\\n\\n\\ndef test_divide_with_zero():\\n    \"\"\"Test division by zero raises error.\"\"\"\\n    with pytest.raises(ZeroDivisionEr...",
+            "test_count": 7,
+            "iteration": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "0875642f-c7c7-4e2a-a7fb-27cf8c81e135",
+        "timestamp": "2026-01-29T11:56:03.497928",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_calculator.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\lenovo\\Desktop\\project\\Refactoring-swarm-ZeroBug\\.venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\lenovo\\Desktop\\project\\Refactoring-swarm-ZeroBug\\sandbox\\fixed\nplugins: anyio-4.12.1\ncollecting ... collected 0 items\n\n============================ no tests ran in 0.03s ============================\n",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "total": 0
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "f090451b-50e1-4147-a510-1d06790222d6",
+        "timestamp": "2026-01-29T11:56:24.131998",
+        "agent": "Judge",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_list_ops.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_list_ops.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef find_max(numbers):\n    if not numbers:\n        raise ValueError('List is empty')\n    max_val = numbers[0]\n    for num in numbers:\n        if num > max_val:\n            max_val = num\n    return max_val\n\ndef remove_duplicates(lst=None):\n    if lst is Non...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_list_ops import find_max, remove_duplicates, safe_get\\n\\n\\ndef test_find_max_normal_case():\\n    assert find_max([1, 2, 3, 4, 5]) == 5\\n    assert find_max([-1, -2, -3, -4, -5]) == -1\\n\\n\\ndef test_find_max_empty_list():\\n    with pytest.raises(ValueError, match='List is empty'):\\n        find_max([])\\n\\n\\ndef test_rem...",
+            "test_count": 6,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "23ea11bb-7db7-4f6a-ba5e-25ba9520f9d1",
+        "timestamp": "2026-01-29T11:56:25.746398",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_list_ops.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_list_ops.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_list_ops.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\lenovo\\Desktop\\project\\Refactoring-swarm-ZeroBug\\.venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\lenovo\\Desktop\\project\\Refactoring-swarm-ZeroBug\\sandbox\\fixed\nplugins: anyio-4.12.1\ncollecting ... collected 0 items\n\n============================ no tests ran in 0.02s ============================\n",
+            "passed": 0,
+            "failed": 0,
+            "errors": 0,
+            "total": 0
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "747a4f10-6cd2-4d8c-b6f9-6263497dcc4c",
+        "timestamp": "2026-01-29T11:56:25.817419",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 281.27s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 3,
+            "files_fixed": 2,
+            "files_validated": 0,
+            "duration": 281.26569867134094
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "105fcd8e-f11e-40a4-a8b3-1d43f930c52f",
+        "timestamp": "2026-01-29T12:36:27.924744",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: N...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before performing the division'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use an immutable default argument, such as None, and initialize the list inside the function'}, {'line': 9, 'severity': 'high', 'description': 'Missing colon', 'suggestion': 'Add a colon at the end of the for loop declaration'...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "dac84d63-40c8-4473-a377-1dbf84ae5560",
+        "timestamp": "2026-01-29T12:37:22.318925",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_list_ops.py\n\nCODE:\n# File: buggy_list_ops.py\n\ndef find_max(numbers):\n    max_val = numbers[0]\n    for num in numbers:\n        if num > m...",
+            "output_response": "{'bugs': [{'line': 6, 'severity': 'high', 'description': 'Syntax error: missing colon after if statement', 'suggestion': 'Add a colon at the end of the if statement: if num > max_val:'}, {'line': 10, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as default argument and initialize the list inside the function: def remove_duplicates(lst=None): if lst is None: lst = []'}, {'line': 13, 'severity': 'high', 'description': 'No bounds checking for list index', 's...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "8b3d1c49-655b-4eee-9228-3d80b1bfd9f2",
+        "timestamp": "2026-01-29T12:38:08.023798",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_string_utils.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_string_utils.py\n\nCODE:\n# File: buggy_string_utils.py\n\ndef reverse_string(s):\n    return s[::-1]\n\ndef capitalize_words(text):\n    words =...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': 'Missing closing parenthesis in the capitalize_words function', 'suggestion': 'Add a closing parenthesis after word.capitalize()'}, {'line': 13, 'severity': 'high', 'description': 'Missing colon after function definition', 'suggestion': 'Add a colon after the function definition count_vowels(text)'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'The function reverse_string does not handle None or non-string inputs', '...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "152bec87-f613-40b4-bd0d-b4858d606d7a",
+        "timestamp": "2026-01-29T12:38:28.801546",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"Divide two numbers.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division by z...",
+            "output_response": "{'bugs': [{'line': 17, 'severity': 'high', 'description': 'Division by zero possible', 'suggestion': 'Add a check to prevent division by zero or handle the ZeroDivisionError exception'}, {'line': 24, 'severity': 'medium', 'description': 'Potential code injection vulnerability', 'suggestion': 'Avoid using eval() and instead use a safer method to process data, such as using a parsing library or a whitelist of allowed functions'}], 'quality_issues': [{'line': 10, 'severity': 'low', 'description': '...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f6086896-14b8-45bb-8ed2-919f6b437423",
+        "timestamp": "2026-01-29T12:38:42.039401",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_list_ops.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: 'NoneType' object is not iterable",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4aa814e1-e089-4531-b952-98477d487df5",
+        "timestamp": "2026-01-29T12:39:22.797050",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_calculator.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abs...",
+            "output_response": "{'bugs': [{'line': 24, 'severity': 'high', 'description': 'The function calculate_average does not handle the case when the input is None correctly. It should raise an error instead of returning 0.', 'suggestion': 'Add a check at the beginning of the function to raise a ValueError if the input is None.'}, {'line': 30, 'severity': 'medium', 'description': 'The function process_data does not handle the case when the input is not a string. It should raise an error instead of failing silently.', 'su...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "a682cd80-a2cc-46d8-9505-fbc89c7723ca",
+        "timestamp": "2026-01-29T12:40:11.347277",
+        "agent": "Auditor",
+        "model": "OpenRouter",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_list_ops.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: -The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_list_ops.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspa...",
+            "output_response": "{'bugs': [{'line': 24, 'severity': 'high', 'description': 'The function remove_duplicates does not handle the case when the input is not a list or None.', 'suggestion': 'Add a check at the beginning of the function to raise a TypeError if the input is not a list or None.'}, {'line': 31, 'severity': 'high', 'description': 'The function safe_get does not handle the case when the input list is None.', 'suggestion': 'Add a check at the beginning of the function to raise a TypeError if the input list...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5dd7d2e0-c7ae-4543-9eec-1b1ce7509903",
+        "timestamp": "2026-01-29T12:41:55.380337",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\n# File: fixed_calculator.py\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n    \n    Args:\n        a (float): The dividend.\n        b (float): The divisor.\n    \n    Returns:\n    ...",
+            "error": "JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\n# File: fixed_calculator.py\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n    \n    Args:\n        a (float): The dividend.\n        b (float): The divisor.\n    \n    Returns:\n    ...",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "a8f9be37-93fd-4c48-ae10-d028bfd0e8e2",
+        "timestamp": "2026-01-29T12:43:03.195728",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_list_ops.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\ndef find_max(numbers):\n    \"\"\"\n    Returns the maximum value in a list of numbers.\n    \n    Args:\n        numbers (list): A list of numbers.\n    \n    Returns:\n        The maximum v...",
+            "error": "JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\ndef find_max(numbers):\n    \"\"\"\n    Returns the maximum value in a list of numbers.\n    \n    Args:\n        numbers (list): A list of numbers.\n    \n    Returns:\n        The maximum v...",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "e8e61a6e-37fa-4847-a8f2-c86dc2f4dd7f",
+        "timestamp": "2026-01-29T12:44:47.982936",
+        "agent": "Fixer",
+        "model": "meta-llama/llama-3.3-70b-instruct:free",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_string_utils.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\ndef reverse_string(s):\n    \\\"\\\"\\\"Reverses a given string.\\\"\\\"\\\"\n    if not isinstance(s, str):\n        raise TypeError('Input must be a string')\n    return s[::-1]\n\ndef capitalize_...",
+            "error": "JSON invalide: Invalid control character at: line 2 column 18 (char 19)\nTexte reçu: {\n  \"fixed_code\": \"\ndef reverse_string(s):\n    \\\"\\\"\\\"Reverses a given string.\\\"\\\"\\\"\n    if not isinstance(s, str):\n        raise TypeError('Input must be a string')\n    return s[::-1]\n\ndef capitalize_...",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "11088b3c-0af5-48bd-9c4e-f1c16d98db93",
+        "timestamp": "2026-01-29T12:44:48.011949",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 611.30s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 3,
+            "files_fixed": 0,
+            "files_validated": 0,
+            "duration": 611.3019120693207
+        },
+        "status": "SUCCESS"
     }
 ]

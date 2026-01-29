@@ -11,6 +11,7 @@ from src.utils.logger import log_experiment, ActionType
 from langchain_openai import ChatOpenAI
 from langchain_core.outputs import ChatGenerationChunk
 from langchain_core.messages import AIMessageChunk
+from src.utils.rate_limiter import RateLimiter, RateLimitConfig
 
 # ================================
 # Load API keys
@@ -97,12 +98,22 @@ class Judge:
     5. Log toutes les opérations
     """
     
-    def __init__(self, max_retries: int = 2):
+    def __init__(self, max_retries: int = 2, rate_limiter=None):
         self.name = "Judge"
         self.llm = llm
         self.max_retries = max_retries
         self.test_cache = {}  # Cache pour éviter regeneration
-        
+        #adding in the rate limiter
+        self.rate_limiter = rate_limiter
+        if not self.rate_limiter:
+            config = RateLimitConfig(
+                requests_per_minute=20,
+                base_delay=3.0,
+                retry_attempts=2
+            )
+            self.rate_limiter = RateLimiter(config)
+        #done adding in the rate limiter here
+
     def build_test_generation_prompt(
         self, 
         code: str, 
@@ -177,7 +188,7 @@ Return ONLY the JSON object, no markdown, no explanations.
 """
         
         return prompt
-    
+    #here modifying generate_unit_tests_with_ai to add in rate limiter
     def generate_unit_tests_with_ai(
         self, 
         code: str, 
@@ -207,7 +218,15 @@ Return ONLY the JSON object, no markdown, no explanations.
                 prompt = self.build_test_generation_prompt(code, file_path, iteration)
                 
                 # Appel LLM
-                response = self.llm.invoke(prompt)
+                # response = self.llm.invoke(prompt) replacing this line
+                def _call_llm():
+                    return self.llm.invoke(prompt)
+                
+                response= self.rate_limiter.execute_with_rate_limit(
+                    _call_llm,
+                    agent_name=self.name
+                )
+                #done replacing
                 
                 # Handle None or empty response
                 if response is None or response.content is None:

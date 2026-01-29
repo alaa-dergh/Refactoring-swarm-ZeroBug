@@ -10,6 +10,7 @@ from src.utils.logger import log_experiment, ActionType
 from langchain_openai import ChatOpenAI
 from langchain_core.outputs import ChatGenerationChunk
 from langchain_core.messages import AIMessageChunk
+from src.utils.rate_limiter import RateLimiter, RateLimitConfig
 
 # ================================
 # Load API key OpenRouter
@@ -87,13 +88,21 @@ class Fixer:
     4. Log toutes les opérations
     """
     
-    def __init__(self, max_retries: int = 3):
+    def __init__(self, max_retries: int = 3, rate_limiter=None):
         self.name = "Fixer"
         self.llm = llm
         self.max_retries = max_retries
         self.tools = FixerTools()
         self.llm_cache = {}  # Cache pour éviter quota
-        
+        self.rate_limiter = rate_limiter
+        if not self.rate_limiter:
+            config = RateLimitConfig(
+                requests_per_minute=20,
+                base_delay=3.0,
+                retry_attempts=3,
+            )
+            self.rate_limiter = RateLimiter(config)
+
     def build_fix_prompt(
         self, 
         file_path: str, 
@@ -108,7 +117,9 @@ class Fixer:
         quality_issues = audit_report.get("quality_issues", [])
         style_issues = audit_report.get("style_issues", [])
         refactoring_plan = audit_report.get("refactoring_plan", [])
-        
+   # ===============================
+   #the PROMPT PART 
+   # ===============================     
         prompt = f"""You are a senior Python developer specialized in code refactoring.
 
 Your mission: Fix the following Python file based on the audit report.
@@ -157,33 +168,49 @@ DETAILED ISSUES:
 
 REQUIREMENTS:
 
-1. Return ONLY valid JSON with this structure:
-{
-  "fixed_code": "def example():\\n    return 42",
-CRITICAL: In the JSON, use \\n for newlines, \\t for tabs. Do NOT use literal line breaks in the "fixed_code" string.
-The fixed_code must be a single-line string with escaped newlines.
+Step-by-step instructions for you:
 
-Example of CORRECT format:
+a) Fix all syntax errors first (missing colons, parentheses, indentation, etc.) to make the code parseable.
+b) Apply all bug fixes as suggested by the Auditor.
+c) Resolve critical quality issues if possible.
+d) Ensure PEP8 formatting, proper docstrings, and readability.
+
+Output format:
+
+Return a JSON object with the following structure:
+
 {
-  "fixed_code": "def divide(a, b):\\n    if b == 0:\\n        raise ValueError('Division by zero')\\n    return a / b",
-  "changes_made": ["Added zero check"],
-  "confidence": 0.95
+"fixed_code": "<valid Python code here>",
+"changes_made": ["List of changes applied, e.g., 'Added missing parenthesis', 'Fixed colon in function definition'"],
+"confidence": 0.95
 }
 
-2. The fixed_code must be:
-   - Syntactically valid Python
-   - All bugs fixed
-   - All critical issues resolved
-   - Well-formatted (PEP8)
-   - With proper docstrings
+The "fixed_code" field should be valid Python code.
 
-3. DO NOT include markdown backticks in the JSON response
-4. DO NOT add explanations outside the JSON
+You can use multi-line strings or escaped newlines (\n) depending on parser requirements.
 
-Return ONLY the JSON object.
+Do NOT include explanations outside the JSON.
+
+Do NOT use markdown backticks in the JSON.
+
+Do NOT add comments outside the "changes_made" list.
+
+Important notes:
+
+If the input code has syntax errors, fix them first before applying logical or semantic fixes.
+
+Only output valid JSON. Prioritize syntactically correct Python in "fixed_code".
+
+Keep the original functionality intact while applying the suggested fixes.
+
+Return ONLY the JSON object as specified.
 """
         
         return prompt
+
+
+        #finished prompt part
+        # ===============================
     
     def validate_fixed_code(self, code: str, file_path: str) -> Dict:
         """Valide que le code corrigé est syntaxiquement correct."""
@@ -238,6 +265,7 @@ Return ONLY the JSON object.
         previous_error = None
         
         # Boucle de retry
+        # here modifications for the rate limiter (just added in)
         for iteration in range(1, self.max_retries + 1):
             try:
                 # Vérifier le cache
@@ -257,7 +285,15 @@ Return ONLY the JSON object.
                     print(f"  🔧 Tentative {iteration}/{self.max_retries} pour {file_path}")
                     
                     # Appel LLM
-                    response = self.llm.invoke(prompt)
+                    # response = self.llm.invoke(prompt) replaced this line
+                    def _call_llm():
+                        return self.llm.invoke(prompt)
+                    
+                    response= self.rate_limiter.execute_with_rate_limit(
+                        _call_llm,
+                        agent_name=self.name
+                    )
+                    #done modifying
                     raw_text = " ".join(response.content) if isinstance(response.content, list) else str(response.content)
                     
                     # Parse JSON

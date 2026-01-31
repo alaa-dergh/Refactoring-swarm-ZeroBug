@@ -43,11 +43,11 @@ class Orchestrator:
 
         #creating a UNIQUEE shared rate limiter for all agents:
         config = RateLimitConfig(
-            requests_per_minute=20,
-            requests_per_hour=200,
-            base_delay=3.0,
+            requests_per_minute=20,  # ← Reduced from 20
+            requests_per_hour=200,   # ← Reduced from 200
+            base_delay=3.0,        # ← Increased from 3.0
             retry_attempts=3,
-            exponential_base=2.0
+             exponential_base=2.0
         ) 
         self.rate_limiter = RateLimiter(config)
         #done creating hehe

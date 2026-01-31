@@ -50,7 +50,7 @@ llm = None
 if OPENROUTER_API_KEY:
     try:
         llm = NonStreamingChatOpenAI(
-            model="meta-llama/llama-3.3-70b-instruct:free",
+            model="tngtech/deepseek-r1t2-chimera:free",
             api_key=OPENROUTER_API_KEY,
             temperature=0,
             base_url="https://openrouter.ai/api/v1",
@@ -269,7 +269,7 @@ Return ONLY the JSON object, no markdown, no explanations.
                 # Log
                 log_experiment(
                     agent_name=self.name,
-                    model_used="meta-llama/llama-3.3-70b-instruct:free",
+                    model_used="tngtech/deepseek-r1t2-chimera:free",
                     action=ActionType.ANALYSIS,
                     details={
                         "file_tested": file_path,

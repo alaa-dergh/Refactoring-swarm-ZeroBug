@@ -48,7 +48,7 @@ class NonStreamingChatOpenAI(ChatOpenAI):
         return super()._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
 
 llm = NonStreamingChatOpenAI(
-    model="meta-llama/llama-3.3-70b-instruct:free",
+    model="tngtech/deepseek-r1t2-chimera:free",
     api_key=OPENROUTER_API_KEY,
     temperature=0,
     base_url="https://openrouter.ai/api/v1",

@@ -46,7 +46,7 @@ class NonStreamingChatOpenAI(ChatOpenAI):
         return super()._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
 
 llm = NonStreamingChatOpenAI(
-    model="meta-llama/llama-3.3-70b-instruct:free",
+    model="tngtech/deepseek-r1t2-chimera:free",
     api_key=OPENROUTER_API_KEY,
     temperature=0,
     base_url="https://openrouter.ai/api/v1",
@@ -344,7 +344,7 @@ Return ONLY the JSON object as specified.
                 # Log succès
                 log_experiment(
                     agent_name=self.name,
-                    model_used="meta-llama/llama-3.3-70b-instruct:free",
+                    model_used="claude-3.5-sonnet",
                     action=ActionType.FIX,
                     details={
                         "file_fixed": file_path,
@@ -381,7 +381,7 @@ Return ONLY the JSON object as specified.
                     # Échec définitif
                     log_experiment(
                         agent_name=self.name,
-                        model_used="meta-llama/llama-3.3-70b-instruct:free",
+                        model_used="tngtech/deepseek-r1t2-chimera:free",
                         action=ActionType.FIX,
                         details={
                             "file_fixed": file_path,

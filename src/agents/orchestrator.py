@@ -1,4 +1,3 @@
-from logging import config
 import os
 import json
 import time
@@ -11,18 +10,10 @@ from src.agents.fixer_agent import Fixer
 from src.agents.judge_agent import Judge
 from src.utils.file_manager import PyFileTool
 from src.utils.logger import log_experiment, ActionType
-from src.utils.rate_limiter import RateLimiter, RateLimitConfig
-
-
-# modifications for rate_limiter done on class Orchestrator and adding l'affichage des statistiques a la fin du pipelie? on line: 114 
-
-
 
 # ================================
 # Orchestrator Agent
 # ================================
-
-
 class Orchestrator:
     """
     Agent Orchestrator : Coordonne le workflow complet du système.
@@ -40,56 +31,34 @@ class Orchestrator:
         self.fixer = None
         self.judge = None
         
-
-        #creating a UNIQUEE shared rate limiter for all agents:
-        config = RateLimitConfig(
-            requests_per_minute=20,
-            requests_per_hour=200,
-            base_delay=3.0,
-            retry_attempts=3,
-            exponential_base=2.0
-        ) 
-        self.rate_limiter = RateLimiter(config)
-        #done creating hehe
-
     def initialize_agents(self):
         """Initialize tous les agents."""
         print("🔧 Initialisation des agents...")
-        #passing the rate limiter to ALL agents
+        
         try:
-            #self.auditor = Auditor()
-            self.auditor = Auditor(rate_limiter=self.rate_limiter)  
+            self.auditor = Auditor()
             print("  ✅ Auditor initialisé")
         except Exception as e:
             print(f"  ⚠️ Erreur Auditor: {e}")
             self.auditor = None
         
         try:
-            self.fixer = Fixer(rate_limiter=self.rate_limiter)
+            self.fixer = Fixer()
             print("  ✅ Fixer initialisé")
         except Exception as e:
             print(f"  ⚠️ Erreur Fixer: {e}")
             self.fixer = None
         
         try:
-            self.judge = Judge(rate_limiter=self.rate_limiter)
+            self.judge = Judge()
             print("  ✅ Judge initialisé")
         except Exception as e:
             print(f"  ⚠️ Erreur Judge: {e}")
             self.judge = None
-
-            #done passing
-            #displaying the status of rate limter
-            print("\n🛡️ Rate Limiter configuré:")
-            print(f"  • RPM Limit: {config.requests_per_minute}")
-            print(f"  • Base Delay: {config.base_delay}s")
-            print(f"  • Retry Attempts: {config.retry_attempts}")
-        #done displaying
-
+        
         if not all([self.auditor, self.fixer, self.judge]):
             raise RuntimeError("Certains agents n'ont pas pu être initialisés")
     
-    #adding stats for some reason
     def run_full_pipeline(
         self, 
         input_dir: str,
@@ -111,11 +80,9 @@ class Orchestrator:
         start_time = time.time()
         
         print("\n" + "="*80)
-        self.rate_limiter.print_stats() #this one
         print("🚀 DÉMARRAGE DU PIPELINE COMPLET".center(80))
         print("="*80)
         
-        # Définir le dossier de sortie
         if output_dir is None:
             output_dir = os.path.join(input_dir, "fixed")
         
@@ -162,7 +129,6 @@ class Orchestrator:
             
             audit_duration = time.time() - audit_start
             
-            # Générer le rapport d'audit
             audit_report = self.auditor.generate_report(audit_results)
             
             results["auditor"] = {
@@ -179,7 +145,6 @@ class Orchestrator:
             print(f"  🐛 Bugs détectés: {audit_report['summary']['total_bugs']}")
             print(f"  ⚠️  Issues qualité: {audit_report['summary']['total_quality_issues']}")
             
-            # Sauvegarder le rapport d'audit
             os.makedirs("logs", exist_ok=True)
             audit_path = os.path.join("logs", "orchestrator_audit_report.json")
             with open(audit_path, 'w', encoding='utf-8') as f:
@@ -197,7 +162,6 @@ class Orchestrator:
             fix_results = self.fixer.fix_directory(audit_results, output_dir)
             fix_duration = time.time() - fix_start
             
-            # Générer le rapport de correction
             fix_report = self.fixer.generate_fix_report(fix_results)
             
             results["fixer"] = {
@@ -215,7 +179,6 @@ class Orchestrator:
             print(f"  ❌ Échecs: {fix_report['summary']['failed_fixes']}")
             print(f"  🎯 Taux de succès: {fix_report['summary']['success_rate']}")
             
-            # Sauvegarder le rapport de correction
             fix_path = os.path.join("logs", "orchestrator_fix_report.json")
             with open(fix_path, 'w', encoding='utf-8') as f:
                 json.dump(fix_report, f, indent=2, ensure_ascii=False)
@@ -231,7 +194,6 @@ class Orchestrator:
                 
                 judge_start = time.time()
                 
-                # Évaluer seulement les fichiers corrigés avec succès
                 successful_files = [
                     r["output_path"] for r in fix_results 
                     if r.get("success", False) and r.get("output_path")
@@ -252,7 +214,6 @@ class Orchestrator:
                     
                     judge_duration = time.time() - judge_start
                     
-                    # Générer le rapport d'évaluation
                     judge_report = self.judge.generate_evaluation_report(eval_results)
                     
                     results["judge"] = {
@@ -273,7 +234,6 @@ class Orchestrator:
                     print(f"  🎯 Taux de validation: {judge_report['summary']['success_rate']}")
                     print(f"  📝 Total tests: {judge_report['summary']['total_tests']} ({judge_report['summary']['tests_passed']} passés)")
                     
-                    # Sauvegarder le rapport de validation
                     judge_path = os.path.join("logs", "orchestrator_judge_report.json")
                     with open(judge_path, 'w', encoding='utf-8') as f:
                         json.dump(judge_report, f, indent=2, ensure_ascii=False)
@@ -292,7 +252,6 @@ class Orchestrator:
             
             self._print_final_summary(results)
             
-            # Log du pipeline complet
             log_experiment(
                 agent_name=self.name,
                 model_used="N/A",
@@ -310,7 +269,6 @@ class Orchestrator:
                 status="SUCCESS"
             )
             
-            # Sauvegarder le rapport final
             final_report_path = os.path.join("logs", "orchestrator_final_report.json")
             with open(final_report_path, 'w', encoding='utf-8') as f:
                 json.dump(results, f, indent=2, ensure_ascii=False)
@@ -391,7 +349,6 @@ class Orchestrator:
         audit_results = self.auditor.analyze_directory(input_dir)
         audit_report = self.auditor.generate_report(audit_results)
         
-        # Sauvegarder
         os.makedirs("logs", exist_ok=True)
         report_path = os.path.join("logs", "audit_only_report.json")
         with open(report_path, 'w', encoding='utf-8') as f:
@@ -407,16 +364,13 @@ class Orchestrator:
         if output_dir is None:
             output_dir = os.path.join(input_dir, "fixed")
         
-        # Audit
         self.auditor = Auditor()
         audit_results = self.auditor.analyze_directory(input_dir)
         
-        # Fix
         self.fixer = Fixer()
         fix_results = self.fixer.fix_directory(audit_results, output_dir)
         fix_report = self.fixer.generate_fix_report(fix_results)
         
-        # Sauvegarder
         os.makedirs("logs", exist_ok=True)
         report_path = os.path.join("logs", "fix_only_report.json")
         with open(report_path, 'w', encoding='utf-8') as f:
@@ -433,7 +387,6 @@ class Orchestrator:
         eval_results = self.judge.evaluate_directory(input_dir)
         judge_report = self.judge.generate_evaluation_report(eval_results)
         
-        # Sauvegarder
         os.makedirs("logs", exist_ok=True)
         report_path = os.path.join("logs", "validate_only_report.json")
         with open(report_path, 'w', encoding='utf-8') as f:

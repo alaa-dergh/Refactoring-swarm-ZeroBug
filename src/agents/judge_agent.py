@@ -8,57 +8,12 @@ from dotenv import load_dotenv
 
 from src.utils.file_manager import PyFileTool
 from src.utils.logger import log_experiment, ActionType
-from langchain_openai import ChatOpenAI
-from langchain_core.outputs import ChatGenerationChunk
-from langchain_core.messages import AIMessageChunk
-from src.utils.rate_limiter import RateLimiter, RateLimitConfig
+from src.utils.groq_wrapper import llm
 
 # ================================
-# Load API keys
+# Load environment
 # ================================
 load_dotenv()
-OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
-GOOGLE_API_KEY = os.getenv("GOOGLE_API_KEY")
-
-# ================================
-# LLM Wrapper non-streaming
-# ================================
-class NonStreamingChatOpenAI(ChatOpenAI):
-    """Wrapper qui force le non-streaming pour compatibilité outils."""
-
-    def _stream(self, messages, stop=None, run_manager=None, **kwargs):
-        kwargs.pop("stream", None)
-        kwargs["stream"] = False
-        result = self._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
-        message = result.generations[0].message
-        chunk = ChatGenerationChunk(
-            message=AIMessageChunk(
-                content=message.content,
-                additional_kwargs=message.additional_kwargs,
-                id=message.id if hasattr(message, 'id') else None,
-            )
-        )
-        yield chunk
-
-    def _generate(self, messages, stop=None, run_manager=None, **kwargs):
-        kwargs.pop("stream", None)
-        kwargs["stream"] = False
-        return super()._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
-
-# Initialize LLM (try OpenRouter first, fallback to None)
-llm = None
-if OPENROUTER_API_KEY:
-    try:
-        llm = NonStreamingChatOpenAI(
-            model="meta-llama/llama-3.3-70b-instruct:free",
-            api_key=OPENROUTER_API_KEY,
-            temperature=0,
-            base_url="https://openrouter.ai/api/v1",
-            streaming=False,
-            model_kwargs={},
-        )
-    except Exception as e:
-        print(f"⚠️ Erreur initialisation OpenRouter: {e}")
 
 # ================================
 # JSON parser robuste
@@ -89,30 +44,13 @@ def safe_parse_json(text: str) -> dict:
 class Judge:
     """
     Agent Judge : génère et exécute des tests unitaires pour valider le code.
-    
-    Stratégie (TDD):
-    1. Analyse le code à tester
-    2. Génère des tests unitaires avec AI (ou fallback basique)
-    3. Exécute les tests avec pytest
-    4. Retourne le résultat (succès/échec)
-    5. Log toutes les opérations
     """
     
-    def __init__(self, max_retries: int = 2, rate_limiter=None):
+    def __init__(self, max_retries: int = 2):
         self.name = "Judge"
         self.llm = llm
         self.max_retries = max_retries
-        self.test_cache = {}  # Cache pour éviter regeneration
-        #adding in the rate limiter
-        self.rate_limiter = rate_limiter
-        if not self.rate_limiter:
-            config = RateLimitConfig(
-                requests_per_minute=20,
-                base_delay=3.0,
-                retry_attempts=2
-            )
-            self.rate_limiter = RateLimiter(config)
-        #done adding in the rate limiter here
+        self.test_cache = {}
 
     def build_test_generation_prompt(
         self, 
@@ -157,55 +95,22 @@ CRITICAL:
 - Each test function should start with 'test_'
 - Use descriptive test names
 
-EXAMPLE OF GOOD TEST STRUCTURE:
-```python
-import pytest
-import sys
-import os
-
-# Add project root to path
-sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-
-from mymodule import divide, safe_divide
-
-def test_divide_normal_case():
-    \"\"\"Test division with valid inputs.\"\"\"
-    assert divide(10, 2) == 5
-    assert divide(9, 3) == 3
-
-def test_divide_with_zero():
-    \"\"\"Test division by zero raises error.\"\"\"
-    with pytest.raises(ZeroDivisionError):
-        divide(10, 0)
-
-def test_safe_divide_with_zero():
-    \"\"\"Test safe_divide handles zero correctly.\"\"\"
-    with pytest.raises(ValueError, match="Division by zero"):
-        safe_divide(10, 0)
-```
-
 Return ONLY the JSON object, no markdown, no explanations.
 """
         
         return prompt
-    #here modifying generate_unit_tests_with_ai to add in rate limiter
+    
     def generate_unit_tests_with_ai(
         self, 
         code: str, 
         file_path: str
     ) -> Tuple[str, bool]:
-        """
-        Génère des tests unitaires avec l'AI.
-        
-        Returns:
-            Tuple[test_code: str, success: bool]
-        """
+        """Génère des tests unitaires avec l'AI."""
         
         if not self.llm:
             print("  ⚠️ Aucune AI disponible, utilisation du fallback")
             return self.generate_fallback_tests(code, file_path)
         
-        # Check cache
         code_hash = hash(code + file_path)
         if code_hash in self.test_cache:
             print(f"  ⚡ Cache hit pour {file_path}")
@@ -217,28 +122,16 @@ Return ONLY the JSON object, no markdown, no explanations.
                 
                 prompt = self.build_test_generation_prompt(code, file_path, iteration)
                 
-                # Appel LLM
-                # response = self.llm.invoke(prompt) replacing this line
-                def _call_llm():
-                    return self.llm.invoke(prompt)
+                response = self.llm.invoke(prompt)
                 
-                response= self.rate_limiter.execute_with_rate_limit(
-                    _call_llm,
-                    agent_name=self.name
-                )
-                #done replacing
-                
-                # Handle None or empty response
                 if response is None or response.content is None:
                     raise ValueError("LLM returned None response")
                 
-                raw_text = " ".join(response.content) if isinstance(response.content, list) else str(response.content)
+                raw_text = response.content if hasattr(response, 'content') else str(response)
                 
-                # Check if we got empty content
                 if not raw_text or raw_text.strip() == "":
                     raise ValueError("LLM returned empty content")
                 
-                # Parse JSON
                 llm_result = safe_parse_json(raw_text)
                 
                 test_code = llm_result.get("test_code", "")
@@ -248,7 +141,6 @@ Return ONLY the JSON object, no markdown, no explanations.
                 if not test_code:
                     raise ValueError("Le LLM n'a pas retourné de code de test")
                 
-                # Valider syntaxe
                 try:
                     compile(test_code, "<test>", "exec")
                 except SyntaxError as e:
@@ -260,16 +152,13 @@ Return ONLY the JSON object, no markdown, no explanations.
                         print("  ⚠️ Échec génération AI, utilisation du fallback")
                         return self.generate_fallback_tests(code, file_path)
                 
-                # ✅ Tests valides
                 print(f"  ✅ {test_count} test(s) généré(s): {test_description}")
                 
-                # Cache
                 self.test_cache[code_hash] = test_code
                 
-                # Log
                 log_experiment(
                     agent_name=self.name,
-                    model_used="meta-llama/llama-3.3-70b-instruct:free",
+                    model_used="llama-3.3-70b-versatile",
                     action=ActionType.ANALYSIS,
                     details={
                         "file_tested": file_path,
@@ -292,7 +181,6 @@ Return ONLY the JSON object, no markdown, no explanations.
                     print("  ⚠️ Échec génération AI, utilisation du fallback")
                     return self.generate_fallback_tests(code, file_path)
         
-        # Should not reach here
         return self.generate_fallback_tests(code, file_path)
     
     def generate_fallback_tests(
@@ -300,36 +188,24 @@ Return ONLY the JSON object, no markdown, no explanations.
         code: str, 
         file_path: str
     ) -> Tuple[str, bool]:
-        """
-        Génère des tests basiques sans AI (fallback).
-        
-        Cette méthode extrait les fonctions du code et génère des tests simples.
-        """
+        """Génère des tests basiques sans AI (fallback)."""
         
         print(f"  🔧 Génération de tests basiques pour {file_path}")
         
-        # Extraire les noms de fonctions
         import re
         function_pattern = r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\('
         functions = re.findall(function_pattern, code)
-        
-        # Filtrer les fonctions privées et __init__
         functions = [f for f in functions if not f.startswith('_')]
         
         if not functions:
-            print("  ⚠️ Aucune fonction publique trouvée")
-            # Générer un test minimal
             test_code = f"""import pytest
 import sys
 import os
 
-# Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 def test_module_exists():
-    \"\"\"Test que le module peut être importé.\"\"\"
     try:
-        # Essayer d'importer le module
         import importlib.util
         spec = importlib.util.spec_from_file_location("test_module", r"{file_path}")
         module = importlib.util.module_from_spec(spec)
@@ -339,21 +215,17 @@ def test_module_exists():
         pytest.fail(f"Module import failed: {{e}}")
 """
         else:
-            # Générer des tests pour chaque fonction
             module_name = os.path.splitext(os.path.basename(file_path))[0]
             
             test_code = f"""import pytest
 import sys
 import os
 
-# Add project root to path
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-# Import the module to test
 try:
     from {module_name} import {', '.join(functions)}
 except ImportError:
-    # Fallback: direct import from file
     import importlib.util
     spec = importlib.util.spec_from_file_location("{module_name}", r"{file_path}")
     test_module = importlib.util.module_from_spec(spec)
@@ -362,32 +234,24 @@ except ImportError:
 
 """
             
-            # Générer un test basique pour chaque fonction
             for func in functions:
                 test_code += f"""
 def test_{func}_exists():
-    \"\"\"Test que la fonction {func} existe et est callable.\"\"\"
     assert callable({func}), "La fonction {func} devrait être callable"
 
 def test_{func}_basic():
-    \"\"\"Test basique de la fonction {func}.\"\"\"
     try:
-        # Essayer d'appeler avec des arguments par défaut ou None
-        # Ce test peut échouer, c'est normal - il sert à détecter les erreurs
         result = {func}()
-        assert result is not None or result is None  # Test trivial
+        assert result is not None or result is None
     except TypeError:
-        # Fonction nécessite des arguments
         pytest.skip("Fonction nécessite des arguments spécifiques")
     except Exception as e:
-        # Toute autre erreur
         pytest.fail(f"Erreur inattendue: {{type(e).__name__}}: {{e}}")
 
 """
         
         print(f"  ✅ {len(functions)} fonction(s) détectée(s), tests basiques générés")
         
-        # Log
         log_experiment(
             agent_name=self.name,
             model_used="fallback",
@@ -404,27 +268,15 @@ def test_{func}_basic():
         return test_code, True
     
     def save_test_file(self, test_code: str, original_file_path: str) -> str:
-        """
-        Sauvegarde le code de test dans un fichier.
+        """Sauvegarde le code de test dans un fichier."""
         
-        Args:
-            test_code: Code des tests
-            original_file_path: Chemin du fichier original
-            
-        Returns:
-            Chemin du fichier de test créé
-        """
-        
-        # Créer le dossier test_judge s'il n'existe pas
         test_dir = os.path.join(os.path.dirname(original_file_path), "test_judge")
         os.makedirs(test_dir, exist_ok=True)
         
-        # Nom du fichier de test
         original_name = os.path.basename(original_file_path)
         test_name = f"test_{original_name}"
         test_path = os.path.join(test_dir, test_name)
         
-        # Écrire le fichier avec UTF-8
         with open(test_path, 'w', encoding='utf-8', errors='replace') as f:
             f.write(test_code)
         
@@ -433,37 +285,40 @@ def test_{func}_basic():
         return test_path
     
     def run_tests(self, test_file_path: str, original_file_path: str) -> Dict:
-        """
-        Exécute les tests avec pytest.
-        
-        Args:
-            test_file_path: Chemin du fichier de test
-            original_file_path: Chemin du fichier original
-            
-        Returns:
-            Dict avec les résultats des tests
-        """
+        """Exécute les tests avec pytest."""
         
         print(f"  🚀 Exécution des tests...")
         
         try:
-            # Exécuter pytest
+            # ✅ CORRECTION MAJEURE: Utiliser le bon working directory
+            # On se place à la racine du projet, pas dans le dossier fixed
+            project_root = os.getcwd()
+            
+            # Debug: afficher la commande
+            cmd = ["pytest", test_file_path, "-v", "--tb=short"]
+            print(f"  🔍 Commande: {' '.join(cmd)}")
+            print(f"  🔍 Working dir: {project_root}")
+            
             result = subprocess.run(
-                ["pytest", test_file_path, "-v", "--tb=short"],
+                cmd,
                 capture_output=True,
                 text=True,
                 timeout=60,
-                cwd=os.path.dirname(os.path.dirname(test_file_path))  # Project root
+                cwd=project_root  # ← CORRECTION: Utiliser la racine du projet
             )
             
             stdout = result.stdout
             stderr = result.stderr
             returncode = result.returncode
             
-            # Parser les résultats
+            # Debug: afficher la sortie brute
+            if not stdout or stdout.strip() == "":
+                print(f"  ⚠️ Stdout vide!")
+                if stderr:
+                    print(f"  ⚠️ Stderr: {stderr[:200]}")
+            
             success = returncode == 0
             
-            # Compter les tests
             passed = stdout.count(" PASSED")
             failed = stdout.count(" FAILED")
             errors = stdout.count(" ERROR")
@@ -481,7 +336,6 @@ def test_{func}_basic():
                 "returncode": returncode
             }
             
-            # Log
             log_experiment(
                 agent_name=self.name,
                 model_used="pytest",
@@ -499,11 +353,14 @@ def test_{func}_basic():
                 status="SUCCESS" if success else "FAILURE"
             )
             
-            if success:
+            if success and passed > 0:
                 print(f"  ✅ Tests réussis: {passed}/{passed + failed + errors}")
-            else:
+            elif failed > 0:
                 print(f"  ❌ Tests échoués: {failed}/{passed + failed + errors}")
-                print(f"  ⚠️ Erreurs: {errors}")
+            else:
+                print(f"  ⚠️ Aucun test collecté (passed={passed}, failed={failed}, errors={errors})")
+                # Afficher plus de debug
+                print(f"  📄 Stdout (premiers 500 chars):\n{stdout[:500]}")
             
             return result_dict
             
@@ -562,29 +419,18 @@ def test_{func}_basic():
             }
     
     def evaluate_file(self, file_path: str) -> Dict:
-        """
-        Évalue un fichier : génère et exécute les tests.
-        
-        Args:
-            file_path: Chemin du fichier à évaluer
-            
-        Returns:
-            Dict avec les résultats de l'évaluation
-        """
+        """Évalue un fichier : génère et exécute les tests."""
         
         print(f"\n📋 Évaluation de {os.path.basename(file_path)}")
         
         try:
-            # Lire le code avec gestion d'encodage
             try:
                 with open(file_path, 'r', encoding='utf-8') as f:
                     code = f.read()
             except UnicodeDecodeError:
-                # Fallback to latin-1 if utf-8 fails
                 with open(file_path, 'r', encoding='latin-1') as f:
                     code = f.read()
             
-            # Générer les tests
             if self.llm:
                 test_code, success = self.generate_unit_tests_with_ai(code, file_path)
             else:
@@ -598,10 +444,7 @@ def test_{func}_basic():
                     "ai_used": self.llm is not None
                 }
             
-            # Sauvegarder les tests
             test_path = self.save_test_file(test_code, file_path)
-            
-            # Exécuter les tests
             test_result = self.run_tests(test_path, file_path)
             
             return {
@@ -645,18 +488,8 @@ def test_{func}_basic():
         dir_path: str,
         audit_results: Optional[List[Dict]] = None
     ) -> List[Dict]:
-        """
-        Évalue tous les fichiers d'un dossier.
+        """Évalue tous les fichiers d'un dossier."""
         
-        Args:
-            dir_path: Chemin du dossier
-            audit_results: Résultats d'audit optionnels (pour filtrer les fichiers)
-            
-        Returns:
-            Liste des résultats d'évaluation
-        """
-        
-        # Si audit_results fourni, tester seulement ces fichiers
         if audit_results:
             files = [r.get("file_path") for r in audit_results if r.get("file_path")]
         else:
@@ -673,10 +506,8 @@ def test_{func}_basic():
             result = self.evaluate_file(file_path)
             results.append(result)
             
-            # Pause pour éviter rate limiting
             if i < total_files:
-                print(f"  ⏸️  Pause de 15s pour éviter les rate limits...")
-                time.sleep(15)  # 15 secondes au lieu de 3
+                time.sleep(2)
         
         return results
     

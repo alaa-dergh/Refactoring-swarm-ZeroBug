@@ -63,4 +63,4 @@ y = 0
 try:
     print(divide(x, y))
 except ZeroDivisionError as e:
-    print(str(e))
+    print(e)

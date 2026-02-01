@@ -8,7 +8,7 @@ from dotenv import load_dotenv
 from src.utils.file_manager import PyFileTool
 from src.utils.fixer_tools import FixerTools
 from src.utils.logger import log_experiment, ActionType
-from src.utils.gemini_wrapper import llm  # Groq déguisé en Gemini
+from src.utils.groq_wrapper import llm  # Groq déguisé en Gemini
 
 # ================================
 # Load environment

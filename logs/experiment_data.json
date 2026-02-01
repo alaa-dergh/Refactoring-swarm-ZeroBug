@@ -6093,5 +6093,1381 @@
             "duration": 20.292131900787354
         },
         "status": "SUCCESS"
+    },
+    {
+        "id": "7e501cc5-106a-4e3e-b761-2623d183ce04",
+        "timestamp": "2026-02-01T19:34:46.787908",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Connection error.",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7c6c4517-6765-48a3-b03b-d2d4bc9397ab",
+        "timestamp": "2026-02-01T19:34:49.147280",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Connection error.",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "75a1e9b6-cae7-425f-9b6d-1a2b03b7a16e",
+        "timestamp": "2026-02-01T19:34:51.428155",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Connection error.",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "a290bf33-3ef2-48a8-a363-233bbb46232f",
+        "timestamp": "2026-02-01T19:34:54.010768",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Connection error.",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "129d5552-e364-4156-9ea4-0ffb1d546f8d",
+        "timestamp": "2026-02-01T21:37:50.338789",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as the default argument and initialize the list inside the function'}, {'line': 11, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 9, 'severity': 'critical...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "27812b6b-f7f1-4100-bf63-5dd1cbf81087",
+        "timestamp": "2026-02-01T21:37:53.062167",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\last.py\n\nCODE:\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n...",
+            "output_response": "{'bugs': [{'line': 1, 'severity': 'high', 'description': \"Import error: 'math' module has no attribute 'squarert'\", 'suggestion': \"Replace 'squarert' with 'sqrt' or remove the import if not used\"}, {'line': 3, 'severity': 'high', 'description': \"Attribute error: 'side' has no attribute 'sidee'\", 'suggestion': \"Replace 'sidee' with 'side' to fix the attribute error\"}], 'quality_issues': [{'line': 2, 'severity': 'medium', 'description': \"Function 'area_of_square' does not handle non-numeric input\"...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "9819e243-6bb9-40f7-8f14-9644f8ed842c",
+        "timestamp": "2026-02-01T21:37:56.346349",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_advanced.py\n\nCODE:\nimport os\nimport threading\nfrom typing import List, Dict\n\n\ndef calculate_ratio(a: float, b: float) -> float:\n   ...",
+            "output_response": "{'bugs': [{'line': 123, 'severity': 'high', 'description': 'The function increment_counter does not actually increment a counter because the counter variable is local to the function and is reset on each call.', 'suggestion': 'Make the counter variable a global or class variable to persist its value between function calls.'}, {'line': 145, 'severity': 'medium', 'description': \"The function get_user_age does not handle the case where the 'age' key is missing from the user_dict.\", 'suggestion': \"A...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b84001eb-2b3e-42ac-bc84-47b97b064144",
+        "timestamp": "2026-02-01T21:37:58.978842",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float...",
+            "output_response": "{'bugs': [{'line': 40, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before calling the divide function'}, {'line': 24, 'severity': 'medium', 'description': 'Using eval() can pose a security risk if the input data is not trusted', 'suggestion': 'Use a safer evaluation method, such as using a parsing library or writing a custom parser'}], 'quality_issues': [{'line': 17, 'severity': 'low', 'description': 'The calcula...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2bd60a35-9e53-4ca5-a462-127f43062a60",
+        "timestamp": "2026-02-01T21:38:01.662784",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_calculator.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.absp...",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'The test case does not check for potential exceptions in the calculate_average function.', 'suggestion': 'Add test cases to check for potential exceptions in the calculate_average function.'}, {'line': 21, 'severity': 'high', 'description': 'The test case does not check for potential exceptions in the process_data function.', 'suggestion': 'Add test cases to check for potential exceptions in the process_data function.'}], 'quality_issues...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "6c266a44-feee-48e9-a824-5e805b6f5369",
+        "timestamp": "2026-02-01T21:38:04.131971",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n    for n in numbers\n        total += n  # Bug: Missing ...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"\\n    Divide two numbers.\\n\\n    Args:\\n        a (float): The dividend.\\n        b (float): The divisor.\\n\\n    Returns:\\n        float: The quotient.\\n\\n    Raises:\\n        ZeroDivisionError: If the divisor is zero.\\n    \"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\"Cannot divide by zero\")\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"\\n    Calculate the average of a list of numbers.\\n\\n    Args:\\n        numbers (list): ...",
+            "changes_made": [
+                "Added zero check in divide function",
+                "Changed default argument to None in calculate_average function",
+                "Initialized list inside calculate_average function",
+                "Added check for empty list in calculate_average function",
+                "Replaced eval with safer method in process_data function",
+                "Added exception handling in process_data function",
+                "Added docstrings for all functions"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f46bc86d-cda9-4780-85d7-ab814303d2ca",
+        "timestamp": "2026-02-01T21:38:06.969287",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\last.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\last.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n```\n\nAUDIT REPORT:\n- Bugs found: 2\n- Quality issues: 2\n- Style issues: 2\n\nDETAILED ISSUES:\n\n🐛 BUGS (HIGH PRIORITY):\n  Line 1: Import error: 'math' module has no attribute 'squarert'\n  Suggestio...",
+            "output_response": "{'fixed_code': 'def area_of_square(side):\\n    \"\"\"\\n    Calculate the area of a square given its side length.\\n\\n    Args:\\n        side (float): The length of the side of the square.\\n\\n    Returns:\\n        float: The area of the square.\\n    \"\"\"\\n    if not isinstance(side, (int, float)):\\n        raise TypeError(\"Input must be a number\")\\n    if side < 0:\\n        raise ValueError(\"Side length cannot be negative\")\\n    return side * side\\n\\nsquare_area = area_of_square(5)\\nprint(square_area)...",
+            "changes_made": [
+                "Fixed import error",
+                "Fixed attribute error",
+                "Added input validation",
+                "Added error handling",
+                "Refactored print statement"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\last.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "72347f8d-03fe-4b2c-9eb5-4f171164cf35",
+        "timestamp": "2026-02-01T21:38:08.009545",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_calculator.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float): The divisor.\n\n    Returns:\n        float: The quotient.\n\n    Raises:\n        ZeroDivisionError: If the divisor is zero.\n    \"\"\"\n    if b == 0...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_calculator import divide, calculate_average, process_data\\n\\n\\ndef test_divide_valid_input():\\n    assert divide(10, 2) == 5\\n\\ndef test_divide_zero_divisor():\\n    with pytest.raises(ZeroDivisionError):\\n        divide(10, 0)\\n\\ndef test_calculate_average_valid_input():\\n    assert calculate_average([1, 2, 3, 4, 5]) =...",
+            "test_count": 6,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bf24fe42-8f63-411f-8e89-214fa2ca6dea",
+        "timestamp": "2026-02-01T21:38:10.770810",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_calculator.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 6 items\n\nsandbox/fixed/test_judge/test_buggy_calculator.py::test_divide_valid_input PASSED [ 16%]\nsandbox/fixed/test_ju",
+            "passed": 6,
+            "failed": 0,
+            "errors": 0,
+            "total": 6
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "0ce10b13-b1e0-4812-b021-d26c782c4b20",
+        "timestamp": "2026-02-01T21:38:11.730237",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\last.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float): The length of the side of the square.\n\n    Returns:\n        float: The area of the square.\n    \"\"\"\n    if not isinstance(side, (int, float)):...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom last import area_of_square\\n\\n\\ndef test_area_of_square_valid_input():\\n    assert area_of_square(5) == 25\\n\\ndef test_area_of_square_zero_input():\\n    assert area_of_square(0) == 0\\n\\ndef test_area_of_square_negative_input():\\n    with pytest.raises(ValueError):\\n        area_of_square(-5)\\n\\ndef test_area_of_square_non_nu...",
+            "test_count": 5,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "32c0869a-6630-4a3d-af6b-a9412deea989",
+        "timestamp": "2026-02-01T21:38:13.586352",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_last.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 5 items\n\nsandbox/fixed/test_judge/test_last.py::test_area_of_square_valid_input PASSED [ 20%]\nsandbox/fixed/test_judge/",
+            "passed": 5,
+            "failed": 0,
+            "errors": 0,
+            "total": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ffd3d63b-2778-4c1a-b21a-8c0688e9a056",
+        "timestamp": "2026-02-01T21:38:13.619334",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 29.17s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 2,
+            "files_fixed": 2,
+            "files_validated": 2,
+            "duration": 29.17116904258728
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "a78a3102-7db2-4244-bcc1-e1490c4902ae",
+        "timestamp": "2026-02-01T21:51:51.112090",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as the default argument and initialize the list inside the function'}, {'line': 11, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 9, 'severity': 'critical...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4ce25c28-3ef5-4cee-a481-c3c990524e20",
+        "timestamp": "2026-02-01T21:51:54.798196",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_file.py\n\nCODE:\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):...",
+            "output_response": "{'bugs': [{'line': 7, 'severity': 'high', 'description': 'Division possible par zéro', 'suggestion': \"Ajouter une vérification pour éviter la division par zéro, par exemple: if b == 0: raise ZeroDivisionError('Division par zéro')\"}, {'line': 13, 'severity': 'medium', 'description': 'Argument mutable par défaut', 'suggestion': \"Utiliser None comme valeur par défaut et initialiser la liste à l'intérieur de la fonction, par exemple: def calculate_average(numbers=None): if numbers is None: numbers =...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "59ccf82a-5c55-4b1b-a623-f791006606ac",
+        "timestamp": "2026-02-01T21:51:57.565865",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\last.py\n\nCODE:\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n...",
+            "output_response": "{'bugs': [{'line': 1, 'severity': 'high', 'description': \"Import error: 'math' module has no attribute 'squarert'\", 'suggestion': \"Replace 'squarert' with 'sqrt' or remove the import if not used\"}, {'line': 3, 'severity': 'high', 'description': \"Attribute error: 'side' has no attribute 'sidee'\", 'suggestion': \"Replace 'sidee' with 'side' to fix the attribute error\"}], 'quality_issues': [{'line': 2, 'severity': 'medium', 'description': \"Function 'area_of_square' does not handle non-numeric input\"...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4a19bdeb-e3ff-48e7-96ad-8211717d1851",
+        "timestamp": "2026-02-01T21:52:02.567828",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_advanced.py\n\nCODE:\nimport os\nimport threading\nfrom typing import List, Dict\n\n\ndef calculate_ratio(a: float, b: float) -> float:\n   ...",
+            "output_response": "{'bugs': [{'line': 123, 'severity': 'high', 'description': 'The function increment_counter does not actually increment a counter that can be accessed outside the function.', 'suggestion': 'Consider using a global variable or a class attribute to store the counter.'}, {'line': 145, 'severity': 'medium', 'description': \"The function get_user_age does not handle the case where the 'age' key is not present in the dictionary.\", 'suggestion': 'Consider adding a default value or raising an exception wh...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "a6121386-ff6b-4eb3-892d-00fbbfae9835",
+        "timestamp": "2026-02-01T21:52:05.452359",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float...",
+            "output_response": "{'bugs': [{'line': 40, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before calling the divide function'}, {'line': 24, 'severity': 'medium', 'description': 'Using eval can pose a security risk if not properly sanitized', 'suggestion': 'Consider using a safer alternative, such as ast.literal_eval or a parsing library'}], 'quality_issues': [{'line': 17, 'severity': 'low', 'description': 'The calculate_average functi...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "65ba717b-3c15-47d9-9858-bd4cfc27ad3d",
+        "timestamp": "2026-02-01T21:52:08.114239",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\last.py\n\nCODE:\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'low', 'description': \"The variable 'square_area' is not necessary and can be removed for simplicity\", 'suggestion': \"Remove the variable 'square_area' and directly print the result of the function call\"}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': \"The function name 'area_of_square' could be more concise\", 'suggestion': \"Consider renaming the function to 'square_area'\"}, {'line': 5, 'severity': 'low', 'description': 'The docstring could ...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4280767f-c1a2-42c7-b738-193e0ff49ee9",
+        "timestamp": "2026-02-01T21:52:10.777933",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_calculator.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.absp...",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'The test case does not check for potential exceptions in the calculate_average function.', 'suggestion': 'Add test cases to check for potential exceptions such as TypeError when the input is not a list.'}, {'line': 21, 'severity': 'high', 'description': 'The test case does not check for potential exceptions in the process_data function.', 'suggestion': 'Add test cases to check for potential exceptions such as SyntaxError when the input i...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "8ea7c21d-f0a0-433e-9ed3-8a8569d8d9e7",
+        "timestamp": "2026-02-01T21:52:13.338735",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_last.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os.path....",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'low', 'description': 'Potential issue with floating point precision in test_area_of_square_float_input', 'suggestion': 'Consider using a delta when comparing floating point numbers'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'Modifying sys.path can have unintended consequences', 'suggestion': 'Consider using a virtual environment or relative imports instead'}, {'line': 10, 'severity': 'low', 'description': 'Importing a module from a re...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "fbd25533-24b1-429c-b2f5-efc0dc975d51",
+        "timestamp": "2026-02-01T21:52:15.694984",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n    for n in numbers\n        total += n  # Bug: Missing ...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"\\n    Divide two numbers.\\n\\n    Args:\\n        a (float): The dividend.\\n        b (float): The divisor.\\n\\n    Returns:\\n        float: The quotient.\\n\\n    Raises:\\n        ZeroDivisionError: If the divisor is zero.\\n    \"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\"Cannot divide by zero\")\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"\\n    Calculate the average of a list of numbers.\\n\\n    Args:\\n        numbers (list): ...",
+            "changes_made": [
+                "Added zero check in divide function",
+                "Refactored calculate_average function to handle empty lists",
+                "Refactored process_data function to use a safer method",
+                "Added docstrings to functions",
+                "Fixed missing colon in for loop declaration"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "798db37f-79c0-440c-9593-87ea2a1dc9fa",
+        "timestamp": "2026-02-01T21:52:19.792514",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_file.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_file.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    # Bug 1: Pas de vérification division par zéro\n    return a / b\n\n\ndef calculate_average(numbers=[]):\n    \"\"\"Calcule la moyenne d'une ...",
+            "output_response": "{'fixed_code': 'def divide_numbers(a, b):\\n    \"\"\"Divise deux nombres.\"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\\'Division par zéro\\')\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"Calcule la moyenne d\\'une liste de nombres.\"\"\"\\n    if numbers is None:\\n        numbers = []\\n    if not numbers:\\n        return 0\\n    total = sum(numbers)\\n    return total / len(numbers)\\n\\n\\ndef get_user_status(username):\\n    \"\"\"Retourne le statut d\\'un utilisateur.\"\"\"\\n    if u...",
+            "changes_made": [
+                "Added zero check in divide_numbers",
+                "Changed calculate_average to avoid mutable default argument",
+                "Added else condition in get_user_status to avoid undefined variable",
+                "Added check for empty list in process_items",
+                "Replaced eval with safe_eval to avoid security issue"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_file.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "48753fb0-7855-4aa2-9568-1ddaea6e5514",
+        "timestamp": "2026-02-01T21:52:24.158603",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\last.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\last.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n```\n\nAUDIT REPORT:\n- Bugs found: 2\n- Quality issues: 2\n- Style issues: 2\n\nDETAILED ISSUES:\n\n🐛 BUGS (HIGH PRIORITY):\n  Line 1: Import error: 'math' module has no attribute 'squarert'\n  Suggestio...",
+            "output_response": "{'fixed_code': 'def area_of_square(side):\\n    \"\"\"\\n    Calculate the area of a square given its side length.\\n\\n    Args:\\n        side (float): The length of the side of the square.\\n\\n    Returns:\\n        float: The area of the square.\\n\\n    Raises:\\n        TypeError: If the input is not a number.\\n        ValueError: If the input is a negative number.\\n    \"\"\"\\n    if not isinstance(side, (int, float)):\\n        raise TypeError(\"Input must be a non-negative number\")\\n    if side < 0:\\n   ...",
+            "changes_made": [
+                "Removed unused import",
+                "Fixed attribute error",
+                "Added input validation"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\last.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "080dd0cf-2098-47c9-b692-3fe20d91245f",
+        "timestamp": "2026-02-01T21:52:25.112813",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_calculator.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float): The divisor.\n\n    Returns:\n        float: The quotient.\n\n    Raises:\n        ZeroDivisionError: If the divisor is zero.\n    \"\"\"\n    if b == 0...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_calculator import divide, calculate_average, process_data\\n\\n\\ndef test_divide_valid_numbers():\\n    assert divide(10, 2) == 5\\n\\ndef test_divide_by_zero():\\n    with pytest.raises(ZeroDivisionError):\\n        divide(10, 0)\\n\\ndef test_calculate_average_valid_list():\\n    assert calculate_average([1, 2, 3, 4, 5]) == 3\\...",
+            "test_count": 6,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "71d32292-22a5-4df5-ab28-806513760398",
+        "timestamp": "2026-02-01T21:52:27.291602",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_calculator.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 6 items\n\nsandbox/fixed/test_judge/test_buggy_calculator.py::test_divide_valid_numbers PASSED [ 16%]\nsandbox/fixed/test_",
+            "passed": 6,
+            "failed": 0,
+            "errors": 0,
+            "total": 6
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f2f7c6bb-d95e-45c8-8344-033c4192e31b",
+        "timestamp": "2026-02-01T21:52:28.920367",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_file.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division par zéro')\n    return a / b\n\n\ndef calculate_average(numbers=None):\n    \"\"\"Calcule la moyenne d'une liste de nombres.\"\"\"\n    if numbers is None:\n  ...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_file import divide_numbers, calculate_average, get_user_status, process_items, safe_eval\\n\\n\\ndef test_divide_numbers():\\n    assert divide_numbers(10, 2) == 5\\n\\ndef test_divide_numbers_by_zero():\\n    with pytest.raises(ZeroDivisionError):\\n        divide_numbers(10, 0)\\n\\ndef test_calculate_average():\\n    assert ca...",
+            "test_count": 11,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ff0c0218-1458-43f9-a256-0351fb1d5b2c",
+        "timestamp": "2026-02-01T21:52:31.401483",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_file.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 11 items\n\nsandbox/fixed/test_judge/test_buggy_file.py::test_divide_numbers PASSED  [  9%]\nsandbox/fixed/test_judge/test",
+            "passed": 11,
+            "failed": 0,
+            "errors": 0,
+            "total": 11
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "10f07253-f7ea-4b10-9aec-8f80d4947dea",
+        "timestamp": "2026-02-01T21:52:32.281482",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\last.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float): The length of the side of the square.\n\n    Returns:\n        float: The area of the square.\n\n    Raises:\n        TypeError: If the input is no...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom last import area_of_square\\n\\n\\ndef test_area_of_square_valid_input():\\n    assert area_of_square(5) == 25\\n\\ndef test_area_of_square_zero_input():\\n    assert area_of_square(0) == 0\\n\\ndef test_area_of_square_negative_input():\\n    with pytest.raises(ValueError):\\n        area_of_square(-5)\\n\\ndef test_area_of_square_non_nu...",
+            "test_count": 5,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "1e0799e5-780d-4813-ba82-b55e9633265a",
+        "timestamp": "2026-02-01T21:52:34.000432",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_last.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 5 items\n\nsandbox/fixed/test_judge/test_last.py::test_area_of_square_valid_input PASSED [ 20%]\nsandbox/fixed/test_judge/",
+            "passed": 5,
+            "failed": 0,
+            "errors": 0,
+            "total": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "1ccfb76f-7604-4346-a67b-a743aff1f458",
+        "timestamp": "2026-02-01T21:52:34.094970",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 49.36s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 3,
+            "files_fixed": 3,
+            "files_validated": 3,
+            "duration": 49.359147787094116
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f49c8439-ff76-46d7-a8c1-8da085eeba35",
+        "timestamp": "2026-02-01T22:09:49.382807",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Request timed out.",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bafb9068-4226-4d6f-a394-d1d339831689",
+        "timestamp": "2026-02-01T22:10:13.628649",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Request timed out.",
+            "issues_found": 4
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e9a4fe1c-cec3-4b27-bba9-fc5f66844dff",
+        "timestamp": "2026-02-01T22:10:38.804946",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\last.py\n\nCODE:\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n...",
+            "output_response": "{'bugs': [{'line': 1, 'severity': 'high', 'description': \"Import error: 'math' module has no attribute 'squarert'\", 'suggestion': \"Replace 'squarert' with 'sqrt' or remove the import if not used\"}, {'line': 3, 'severity': 'high', 'description': \"Attribute error: 'side' has no attribute 'sidee'\", 'suggestion': \"Replace 'sidee' with 'side' to fix the attribute error\"}], 'quality_issues': [{'line': 2, 'severity': 'medium', 'description': \"Function 'area_of_square' does not handle non-numeric input\"...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f4ee3811-7baa-442f-9235-eecb69e69419",
+        "timestamp": "2026-02-01T22:10:43.262525",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\test_file.py\n\nCODE:\n\"\"\"\nModule utilitaire - VERSION BUGGÉE\nContient 4 bugs de logique et sécurité\n\"\"\"\n\n\ndef get_user_role(username):\n    \"\"\"Ret...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': \"Variable 'role' is not defined if 'username' is not 'admin', which will raise a NameError.\", 'suggestion': \"Define 'role' with a default value or handle the case when 'username' is not 'admin'.\"}, {'line': 16, 'severity': 'medium', 'description': \"No check is performed to see if the list 'items' is empty, which will raise an IndexError.\", 'suggestion': \"Add a check to ensure 'items' is not empty before accessing its elements.\"}, {'line':...",
+            "issues_found": 4
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "98fd20dd-a706-4a7f-8c53-6289234ab847",
+        "timestamp": "2026-02-01T22:10:46.558929",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_advanced.py\n\nCODE:\nimport os\nimport threading\nfrom typing import List, Dict\n\n\ndef calculate_ratio(a: float, b: float) -> float:\n   ...",
+            "output_response": "{'bugs': [{'line': 123, 'severity': 'high', 'description': 'The function increment_counter does not actually increment a counter because the counter variable is local to the function and is reset on each call.', 'suggestion': 'Make the counter variable a global or class variable, or return the counter value and store it outside the function.'}, {'line': 145, 'severity': 'medium', 'description': \"The function get_user_age does not handle the case where the 'age' key is not present in the user_dic...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b16c18fc-f166-436a-aacb-595b153a45ef",
+        "timestamp": "2026-02-01T22:10:49.481041",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float...",
+            "output_response": "{'bugs': [{'line': 40, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before calling the divide function'}, {'line': 24, 'severity': 'medium', 'description': 'Potential ValueError if the input data is not a valid literal', 'suggestion': 'Add additional error handling to handle cases where the input data is not a valid literal'}], 'quality_issues': [{'line': 24, 'severity': 'low', 'description': 'The process_data fun...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b5f71b25-a04b-4fe2-a0d8-816eea40a78a",
+        "timestamp": "2026-02-01T22:10:52.256601",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_file.py\n\nCODE:\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division pa...",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'Division possible par zéro dans la fonction calculate_average', 'suggestion': 'Ajouter une vérification pour éviter la division par zéro'}, {'line': 46, 'severity': 'high', 'description': \"Division possible par zéro dans la fonction calculate_average lors de l'appel de la fonction sum\", 'suggestion': 'Ajouter une vérification pour éviter la division par zéro'}], 'quality_issues': [{'line': 25, 'severity': 'medium', 'description': 'La fon...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4d7af61e-7c99-418a-8a55-be98747be493",
+        "timestamp": "2026-02-01T22:10:55.279858",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\last.py\n\nCODE:\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float...",
+            "output_response": "{'bugs': [{'line': 13, 'severity': 'high', 'description': 'The error messages for TypeError and ValueError are the same, which can lead to confusion when debugging.', 'suggestion': 'Use distinct error messages for TypeError and ValueError.'}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': \"The function name 'area_of_square' is clear, but it could be improved by following PEP 8 naming conventions.\", 'suggestion': \"Consider renaming the function to 'calculate_square_area'.\"}, {'...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "fea451af-9e14-40a4-8f54-6b83567f4e22",
+        "timestamp": "2026-02-01T22:10:58.362869",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_calculator.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.absp...",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'The test_divide_by_zero function does not check if the input is a number', 'suggestion': 'Add a check to ensure the inputs are numbers before performing division'}, {'line': 21, 'severity': 'high', 'description': 'The test_calculate_average_empty_list function does not check if the input is a list', 'suggestion': 'Add a check to ensure the input is a list before calculating the average'}, {'line': 27, 'severity': 'high', 'description': '...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "d14ab4b8-18d6-49ec-9051-623b65c3680b",
+        "timestamp": "2026-02-01T22:11:00.964157",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_file.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os...",
+            "output_response": "{'bugs': [{'line': 23, 'severity': 'high', 'description': 'Potential division by zero error in calculate_average function', 'suggestion': 'Add a check to handle the case when the input list is empty'}, {'line': 30, 'severity': 'medium', 'description': 'Potential TypeError in get_user_status function', 'suggestion': 'Add a check to handle the case when the input is not a string'}, {'line': 37, 'severity': 'low', 'description': 'Potential IndexError in process_items function', 'suggestion': 'Add a...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "06aa5247-9016-45e1-8acb-5cde8cf53663",
+        "timestamp": "2026-02-01T22:11:03.334533",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_last.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os.path....",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'low', 'description': 'Potential issue with floating point precision in test_area_of_square_float_input', 'suggestion': 'Consider using a delta when comparing floating point numbers'}], 'quality_issues': [{'line': 5, 'severity': 'low', 'description': 'Modifying sys.path can have unintended consequences', 'suggestion': 'Consider using a virtual environment or relative imports instead'}, {'line': 10, 'severity': 'low', 'description': 'Importing a module from a re...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "57e7a364-7aa2-4ecc-a396-d0c5fd561ab6",
+        "timestamp": "2026-02-01T22:11:05.708872",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n    for n in numbers\n        total += n  # Bug: Missing ...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"\\n    Divide two numbers.\\n\\n    Args:\\n        a (float): The dividend.\\n        b (float): The divisor.\\n\\n    Returns:\\n        float: The quotient.\\n\\n    Raises:\\n        ZeroDivisionError: If the divisor is zero.\\n    \"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\"Cannot divide by zero!\")\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"\\n    Calculate the average of a list of numbers.\\n\\n    Args:\\n        numbers (list):...",
+            "changes_made": [
+                "Added zero check in divide function",
+                "Replaced mutable default argument in calculate_average function",
+                "Added check for empty list in calculate_average function",
+                "Replaced eval with a safer alternative in process_data function",
+                "Added error handling for division by zero"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4bc452a3-eb69-4fb4-ba79-538e2c07b953",
+        "timestamp": "2026-02-01T22:11:09.748347",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_file.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_file.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    # Bug 1: Pas de vérification division par zéro\n    return a / b\n\n\ndef calculate_average(numbers=[]):\n    \"\"\"Calcule la moyenne d'une ...",
+            "output_response": "{'fixed_code': 'def divide_numbers(a, b):\\n    \"\"\"Divise deux nombres.\"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\"Division par zéro\")\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"Calcule la moyenne d\\'une liste de nombres.\"\"\"\\n    if numbers is None:\\n        numbers = []\\n    if not numbers:\\n        return 0\\n    \\n    total = sum(numbers)\\n    return total / len(numbers)\\n\\n\\ndef get_user_status(username):\\n    \"\"\"Retourne le statut d\\'un utilisateur.\"\"\"\\n    ...",
+            "changes_made": [
+                "Added zero check in divide_numbers",
+                "Changed mutable default argument in calculate_average to None",
+                "Added else condition in get_user_status to handle non-admin users",
+                "Added check for empty list in process_items",
+                "Renamed unsafe_eval to safe_eval and added exception handling"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_file.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bd81136d-9fb3-4df7-85b9-3a14efeaf4c4",
+        "timestamp": "2026-02-01T22:11:13.010259",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\last.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\last.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n```\n\nAUDIT REPORT:\n- Bugs found: 2\n- Quality issues: 2\n- Style issues: 2\n\nDETAILED ISSUES:\n\n🐛 BUGS (HIGH PRIORITY):\n  Line 1: Import error: 'math' module has no attribute 'squarert'\n  Suggestio...",
+            "output_response": "{'fixed_code': 'def area_of_square(side):\\n    \"\"\"\\n    Calculate the area of a square given its side length.\\n\\n    Args:\\n        side (float): The length of the side of the square.\\n\\n    Returns:\\n        float: The area of the square.\\n    \"\"\"\\n    if not isinstance(side, (int, float)):\\n        raise TypeError(\"Side length must be a number\")\\n    if side < 0:\\n        raise ValueError(\"Side length cannot be negative\")\\n    return side ** 2\\n\\nprint(area_of_square(5))', 'changes_made': [\"Re...",
+            "changes_made": [
+                "Replaced 'squarert' with no import since it was not used",
+                "Replaced 'sidee' with 'side' to fix attribute error",
+                "Added input validation for non-numeric and negative input",
+                "Replaced 'side * side' with 'side ** 2' for better readability",
+                "Added a docstring to describe the function's purpose and parameters"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\last.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3f24d2f0-995d-43c3-8d3a-e8bc82f25207",
+        "timestamp": "2026-02-01T22:11:16.853298",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\test_file.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\test_file.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n\"\"\"\nModule utilitaire - VERSION BUGGÉE\nContient 4 bugs de logique et sécurité\n\"\"\"\n\n\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    # Bug 1: Variable non définie si username n'est pas admin\n    if username == \"admin\":\n        role = \"administrator\"\n    \n    retu...",
+            "output_response": "{'fixed_code': 'def get_user_role(username):\\n    \"\"\"Retourne le rôle d\\'un utilisateur.\"\"\"\\n    if username == \"admin\":\\n        role = \"administrator\"\\n    else:\\n        role = \"user\"\\n    return role\\n\\n\\ndef process_list(items):\\n    \"\"\"Traite une liste d\\'items.\"\"\"\\n    if not items:\\n        return \"Liste vide\"\\n    first = items[0]\\n    last = items[-1]\\n    return f\"First: {first}, Last: {last}\"\\n\\n\\ndef calculate_expression(expr):\\n    \"\"\"Calcule une expression mathématique.\"\"\"\\n    # ...",
+            "changes_made": [
+                "Added default role for non-admin users",
+                "Added check for empty list in process_list",
+                "Replaced eval with a safer method to evaluate mathematical expressions",
+                "Inverted logic for checking age"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\test_file.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "62708fcd-10c1-4fc1-a2a0-1b6959337681",
+        "timestamp": "2026-02-01T22:11:18.078738",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_calculator.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float): The divisor.\n\n    Returns:\n        float: The quotient.\n\n    Raises:\n        ZeroDivisionError: If the divisor is zero.\n    \"\"\"\n    if b == 0...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_calculator import divide, calculate_average, process_data\\n\\n\\ndef test_divide_valid_numbers():\\n    assert divide(10, 2) == 5\\n\\ndef test_divide_by_zero():\\n    with pytest.raises(ZeroDivisionError):\\n        divide(10, 0)\\n\\ndef test_calculate_average_valid_list():\\n    assert calculate_average([1, 2, 3, 4, 5]) == 3\\...",
+            "test_count": 6,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "657a4803-eeee-4abc-b19a-576a56725da2",
+        "timestamp": "2026-02-01T22:11:19.771849",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_calculator.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 6 items\n\nsandbox/fixed/test_judge/test_buggy_calculator.py::test_divide_valid_numbers PASSED [ 16%]\nsandbox/fixed/test_",
+            "passed": 6,
+            "failed": 0,
+            "errors": 0,
+            "total": 6
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "37a83c13-9860-4e0c-a520-516aa5720476",
+        "timestamp": "2026-02-01T22:11:21.215911",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_file.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError(\"Division par zéro\")\n    return a / b\n\n\ndef calculate_average(numbers=None):\n    \"\"\"Calcule la moyenne d'une liste de nombres.\"\"\"\n    if numbers is None:\n  ...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_file import divide_numbers, calculate_average, get_user_status, process_items, safe_eval\\n\\n\\ndef test_divide_numbers():\\n    assert divide_numbers(10, 2) == 5\\n\\ndef test_divide_numbers_by_zero():\\n    with pytest.raises(ZeroDivisionError):\\n        divide_numbers(10, 0)\\n\\ndef test_calculate_average():\\n    assert ca...",
+            "test_count": 11,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "400f442c-d41f-4e47-90d1-89393369c595",
+        "timestamp": "2026-02-01T22:11:22.796847",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_file.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 11 items\n\nsandbox/fixed/test_judge/test_buggy_file.py::test_divide_numbers PASSED  [  9%]\nsandbox/fixed/test_judge/test",
+            "passed": 11,
+            "failed": 0,
+            "errors": 0,
+            "total": 11
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f7a44001-89d9-4587-90f9-175546e01fb6",
+        "timestamp": "2026-02-01T22:11:23.649526",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\last.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float): The length of the side of the square.\n\n    Returns:\n        float: The area of the square.\n    \"\"\"\n    if not isinstance(side, (int, float)):...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom last import area_of_square\\n\\n\\ndef test_area_of_square_positive_side():\\n    assert area_of_square(5) == 25\\n\\ndef test_area_of_square_zero_side():\\n    assert area_of_square(0) == 0\\n\\ndef test_area_of_square_negative_side_error():\\n    with pytest.raises(ValueError):\\n        area_of_square(-5)\\n\\ndef test_area_of_square_...",
+            "test_count": 5,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e7aa6cd7-ebb3-4907-ac64-7772871ab0cc",
+        "timestamp": "2026-02-01T22:11:25.411492",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_last.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 5 items\n\nsandbox/fixed/test_judge/test_last.py::test_area_of_square_positive_side PASSED [ 20%]\nsandbox/fixed/test_judg",
+            "passed": 5,
+            "failed": 0,
+            "errors": 0,
+            "total": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bab3408e-5680-4dcd-9f59-b5e3e0fefb03",
+        "timestamp": "2026-02-01T22:11:26.783028",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\test_file.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\test_file.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    if username == \"admin\":\n        role = \"administrator\"\n    else:\n        role = \"user\"\n    return role\n\n\ndef process_list(items):\n    \"\"\"Traite une liste d'items.\"\"\"\n    if not items:...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom test_file import get_user_role, process_list, calculate_expression, check_age\\n\\n\\ndef test_get_user_role_admin():\\n    assert get_user_role('admin') == 'administrator'\\n\\ndef test_get_user_role_user():\\n    assert get_user_role('user') == 'user'\\n\\ndef test_process_list_empty():\\n    assert process_list([]) == 'Liste vide'\\...",
+            "test_count": 13,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7ace9877-b0fa-4de0-a8fb-5435f7fe1718",
+        "timestamp": "2026-02-01T22:11:28.581220",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\test_file.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_test_file.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_test_file.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 14 items\n\nsandbox/fixed/test_judge/test_test_file.py::test_get_user_role_admin PASSED [  7%]\nsandbox/fixed/test_judge/t",
+            "passed": 14,
+            "failed": 0,
+            "errors": 0,
+            "total": 14
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "6c9e929d-5965-4ef8-848a-24029cb2dd6f",
+        "timestamp": "2026-02-01T22:11:28.607889",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 133.46s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 4,
+            "files_fixed": 4,
+            "files_validated": 4,
+            "duration": 133.46389317512512
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "cdd7b961-5ce5-47b6-aa8d-9e9f07ce4625",
+        "timestamp": "2026-02-01T22:22:51.751826",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as the default argument and initialize the list inside the function'}, {'line': 11, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 9, 'severity': 'critical...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "759af9e5-4149-4260-bd5a-65842d44abf5",
+        "timestamp": "2026-02-01T22:22:55.076144",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_file.py\n\nCODE:\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):...",
+            "output_response": "{'bugs': [{'line': 7, 'severity': 'high', 'description': 'Division possible par zéro', 'suggestion': \"Ajouter une vérification pour éviter la division par zéro, par exemple: if b == 0: raise ZeroDivisionError('Division par zéro')\"}, {'line': 13, 'severity': 'medium', 'description': 'Argument mutable par défaut', 'suggestion': \"Utiliser None comme valeur par défaut et initialiser la liste à l'intérieur de la fonction, par exemple: def calculate_average(numbers=None): if numbers is None: numbers =...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "6c72c628-0994-4e6b-9a23-fa93f6b6edd7",
+        "timestamp": "2026-02-01T22:22:57.682337",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\last.py\n\nCODE:\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n...",
+            "output_response": "{'bugs': [{'line': 1, 'severity': 'high', 'description': \"Import error: 'math' module has no attribute 'squarert'\", 'suggestion': \"Replace 'squarert' with 'sqrt' or remove the import if not used\"}, {'line': 3, 'severity': 'high', 'description': \"Attribute error: 'side' has no attribute 'sidee'\", 'suggestion': \"Replace 'sidee' with 'side' to fix the attribute error\"}], 'quality_issues': [{'line': 2, 'severity': 'medium', 'description': \"Function 'area_of_square' does not handle non-numeric input\"...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b19df4c5-a023-4f9a-a7fc-f8d1da3cf9ad",
+        "timestamp": "2026-02-01T22:23:00.828770",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\test_file.py\n\nCODE:\n\"\"\"\nModule utilitaire - VERSION BUGGÉE\nContient 4 bugs de logique et sécurité\n\"\"\"\n\n\ndef get_user_role(username):\n    \"\"\"Ret...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': \"Variable 'role' is not defined if 'username' is not 'admin', which will raise a NameError.\", 'suggestion': \"Define 'role' with a default value or handle the case when 'username' is not 'admin'.\"}, {'line': 16, 'severity': 'medium', 'description': \"No check is performed to see if the list 'items' is empty, which will raise an IndexError.\", 'suggestion': \"Add a check to ensure 'items' is not empty before accessing its elements.\"}, {'line':...",
+            "issues_found": 4
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b2cb84b7-f0db-435f-bffa-7e065f274dc3",
+        "timestamp": "2026-02-01T22:23:03.943269",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_advanced.py\n\nCODE:\nimport os\nimport threading\nfrom typing import List, Dict\n\n\ndef calculate_ratio(a: float, b: float) -> float:\n   ...",
+            "output_response": "{'bugs': [{'line': 123, 'severity': 'high', 'description': 'The function increment_counter does not actually increment a counter that can be accessed outside the function.', 'suggestion': 'Consider using a global variable or a class attribute to store the counter.'}, {'line': 145, 'severity': 'medium', 'description': \"The function get_user_age does not handle the case where 'age' is not in the user_dict.\", 'suggestion': \"Consider adding a default value or raising an exception when 'age' is not f...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3d0fd6a8-3e0d-4f05-8b37-eff1ada0c6eb",
+        "timestamp": "2026-02-01T22:23:06.666494",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float...",
+            "output_response": "{'bugs': [{'line': 40, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure y is not zero before calling divide(x, y)'}, {'line': 24, 'severity': 'medium', 'description': 'Using eval can pose a security risk if data is not sanitized', 'suggestion': 'Use a safer alternative, such as ast.literal_eval, to parse the data'}], 'quality_issues': [{'line': 24, 'severity': 'low', 'description': 'The process_data function does not validate its input', 'su...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "3250f537-d2d6-4811-b7cb-92000a5b2da1",
+        "timestamp": "2026-02-01T22:23:09.268830",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_file.py\n\nCODE:\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError(\"Division pa...",
+            "output_response": "{'bugs': [{'line': 16, 'severity': 'high', 'description': 'Division possible par zéro dans la fonction calculate_average', 'suggestion': 'Ajouter une vérification pour éviter la division par zéro'}, {'line': 49, 'severity': 'high', 'description': \"Division possible par zéro dans la fonction calculate_average lors de l'appel de la fonction sum\", 'suggestion': 'Ajouter une vérification pour éviter la division par zéro'}], 'quality_issues': [{'line': 25, 'severity': 'medium', 'description': \"La fon...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "88d0de28-4b62-4574-9dd9-dedebc17848c",
+        "timestamp": "2026-02-01T22:23:11.605677",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\last.py\n\nCODE:\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'low', 'description': 'The function does not handle the case where the input is a complex number.', 'suggestion': 'Add a check to ensure the input is a real number.'}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': \"The function name 'area_of_square' could be more descriptive.\", 'suggestion': \"Consider renaming the function to 'calculate_square_area'.\"}, {'line': 5, 'severity': 'low', 'description': 'The docstring could be more detailed.', 's...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "aae63845-c790-4e4e-b910-cb027ced6798",
+        "timestamp": "2026-02-01T22:23:14.713485",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_file.py\n\nCODE:\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    if username == \"admin\":\n        role = ...",
+            "output_response": "{'bugs': [{'line': 24, 'severity': 'high', 'description': \"The calculate_expression function does not handle the case where the operator is not in the allowed_functions dictionary and the expression is not in the format 'num1 op num2'.\", 'suggestion': 'Add a try-except block to handle the ValueError exception and provide a meaningful error message.'}, {'line': 31, 'severity': 'medium', 'description': 'The check_age function does not handle the case where the age is not an integer.', 'suggestion'...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2e80448b-c8ff-4903-a4c6-34a27a998767",
+        "timestamp": "2026-02-01T22:23:17.445534",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_calculator.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.absp...",
+            "output_response": "{'bugs': [{'line': 17, 'severity': 'high', 'description': 'The test case for test_calculate_average_empty_list does not check for the correct exception type. It should check for ValueError instead of ZeroDivisionError.', 'suggestion': 'Change the exception type in the test case to ValueError'}, {'line': 23, 'severity': 'high', 'description': 'The test case for test_process_data_invalid_expression does not check for the correct exception type. It should check for SyntaxError instead of ValueError...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5349cdd2-e056-4e00-9766-79649b129398",
+        "timestamp": "2026-02-01T22:23:20.305715",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_file.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os...",
+            "output_response": "{'bugs': [{'line': 23, 'severity': 'high', 'description': 'Potential division by zero error in calculate_average function', 'suggestion': 'Add a check to handle the case when the input list is empty'}, {'line': 30, 'severity': 'medium', 'description': 'get_user_status function does not handle unknown user roles', 'suggestion': 'Add a default case to handle unknown user roles'}, {'line': 37, 'severity': 'low', 'description': 'process_items function does not handle the case when the input list has...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e526ecaf-d1c0-44a0-801c-e8416c9af71e",
+        "timestamp": "2026-02-01T22:23:22.755651",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_last.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os.path....",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'low', 'description': 'The function area_of_square does not handle the case where the input is a complex number.', 'suggestion': 'Add a check to raise a TypeError when the input is a complex number.'}], 'quality_issues': [{'line': 0, 'severity': 'low', 'description': 'The file does not contain a docstring that describes its purpose.', 'suggestion': 'Add a docstring at the top of the file to describe its purpose.'}, {'line': 5, 'severity': 'low', 'description': ...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "63e4ec1c-c3f6-4e4e-a946-e51e75cb69bb",
+        "timestamp": "2026-02-01T22:23:25.263966",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_test_file.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os....",
+            "output_response": "{'bugs': [{'line': 33, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to handle division by zero'}, {'line': 36, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to handle division by zero'}], 'quality_issues': [{'line': 10, 'severity': 'medium', 'description': 'Magic strings are used in the code', 'suggestion': 'Consider defining constants for magic strings'}, {'line': 15, 'severity': 'medium', 'descript...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7db8baa7-433b-4a27-b9c3-48f3dcd17678",
+        "timestamp": "2026-02-01T22:23:27.841370",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n    for n in numbers\n        total += n  # Bug: Missing ...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"\\n    Divide two numbers.\\n\\n    Args:\\n        a (float): The dividend.\\n        b (float): The divisor.\\n\\n    Returns:\\n        float: The quotient.\\n\\n    Raises:\\n        ZeroDivisionError: If the divisor is zero.\\n    \"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\"Cannot divide by zero\")\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"\\n    Calculate the average of a list of numbers.\\n\\n    Args:\\n        numbers (list): ...",
+            "changes_made": [
+                "Added zero check in the divide function",
+                "Refactored the calculate_average function to handle empty input",
+                "Refactored the calculate_average function to use None as the default argument",
+                "Added a colon at the end of the for loop declaration in the calculate_average function",
+                "Replaced the eval function in the process_data function with a safer method",
+                "Added docstrings to all functions",
+                "Improved code formatting to follow PEP8"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "d09b5935-81fe-4c7c-b5ed-1c852ff17e16",
+        "timestamp": "2026-02-01T22:23:31.183326",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_file.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_file.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    # Bug 1: Pas de vérification division par zéro\n    return a / b\n\n\ndef calculate_average(numbers=[]):\n    \"\"\"Calcule la moyenne d'une ...",
+            "output_response": "{'fixed_code': 'def divide_numbers(a, b):\\n    \"\"\"Divise deux nombres.\"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\\'Division par zéro\\')\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"Calcule la moyenne d\\'une liste de nombres.\"\"\"\\n    if numbers is None:\\n        numbers = []\\n    if not numbers:\\n        return 0\\n    total = sum(numbers)\\n    return total / len(numbers)\\n\\n\\ndef get_user_status(username):\\n    \"\"\"Retourne le statut d\\'un utilisateur.\"\"\"\\n    if u...",
+            "changes_made": [
+                "Added zero check in divide_numbers",
+                "Changed calculate_average to use None as default argument",
+                "Added else condition in get_user_status",
+                "Added check for empty list in process_items",
+                "Replaced eval with safe_eval"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_file.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "23015f2f-1415-4228-9673-123a5b7a75a3",
+        "timestamp": "2026-02-01T22:23:34.116173",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\last.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\last.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n```\n\nAUDIT REPORT:\n- Bugs found: 2\n- Quality issues: 2\n- Style issues: 2\n\nDETAILED ISSUES:\n\n🐛 BUGS (HIGH PRIORITY):\n  Line 1: Import error: 'math' module has no attribute 'squarert'\n  Suggestio...",
+            "output_response": "{'fixed_code': 'def area_of_square(side):\\n    \"\"\"\\n    Calculate the area of a square given its side length.\\n\\n    Args:\\n        side (float): The length of the side of the square.\\n\\n    Returns:\\n        float: The area of the square.\\n    \"\"\"\\n    if not isinstance(side, (int, float)):\\n        raise TypeError(\"Input must be a number\")\\n    if side < 0:\\n        raise ValueError(\"Side length cannot be negative\")\\n    return side ** 2\\n\\nprint(area_of_square(5))', 'changes_made': ['Fixed im...",
+            "changes_made": [
+                "Fixed import error",
+                "Fixed attribute error",
+                "Added input validation",
+                "Added error handling for non-numeric input",
+                "Added error handling for negative input",
+                "Refactored calculation to use exponentiation operator"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\last.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7ba89772-8ce6-4e25-b4e8-a2a54f2dbd1a",
+        "timestamp": "2026-02-01T22:23:37.457237",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\test_file.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\test_file.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n\"\"\"\nModule utilitaire - VERSION BUGGÉE\nContient 4 bugs de logique et sécurité\n\"\"\"\n\n\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    # Bug 1: Variable non définie si username n'est pas admin\n    if username == \"admin\":\n        role = \"administrator\"\n    \n    retu...",
+            "output_response": "{'fixed_code': 'def get_user_role(username):\\n    \"\"\"Retourne le rôle d\\'un utilisateur.\"\"\"\\n    if not isinstance(username, str):\\n        raise TypeError(\"Username must be a string\")\\n    if username == \"admin\":\\n        role = \"administrator\"\\n    else:\\n        role = \"user\"\\n    return role\\n\\n\\ndef process_list(items):\\n    \"\"\"Traite une liste d\\'items.\"\"\"\\n    if not items:\\n        return \"List is empty\"\\n    first = items[0]\\n    last = items[-1]\\n    return f\"First: {first}, Last: {las...",
+            "changes_made": [
+                "Added a check to ensure 'username' is a string in 'get_user_role'",
+                "Defined 'role' with a default value in 'get_user_role'",
+                "Added a check to ensure 'items' is not empty in 'process_list'",
+                "Replaced 'eval()' with a safer method to evaluate mathematical expressions in 'calculate_expression'",
+                "Inverted the logic for checking age in 'check_age'"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\test_file.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "401c3ab6-2527-4165-bb37-0aad9be63bc8",
+        "timestamp": "2026-02-01T22:23:38.359227",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_calculator.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float): The divisor.\n\n    Returns:\n        float: The quotient.\n\n    Raises:\n        ZeroDivisionError: If the divisor is zero.\n    \"\"\"\n    if b == 0...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_calculator import divide, calculate_average, process_data\\n\\n\\ndef test_divide_valid_input():\\n    assert divide(10, 2) == 5\\n\\ndef test_divide_zero_divisor():\\n    with pytest.raises(ZeroDivisionError):\\n        divide(10, 0)\\n\\ndef test_calculate_average_valid_input():\\n    assert calculate_average([1, 2, 3, 4, 5]) =...",
+            "test_count": 6,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "930d79d7-27ed-48f5-977a-72825dff35b4",
+        "timestamp": "2026-02-01T22:23:40.395765",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_calculator.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 6 items\n\nsandbox/fixed/test_judge/test_buggy_calculator.py::test_divide_valid_input PASSED [ 16%]\nsandbox/fixed/test_ju",
+            "passed": 6,
+            "failed": 0,
+            "errors": 0,
+            "total": 6
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "d16656b7-259b-45a3-bb53-fc81f3fd08b7",
+        "timestamp": "2026-02-01T22:23:41.618850",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_file.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division par zéro')\n    return a / b\n\n\ndef calculate_average(numbers=None):\n    \"\"\"Calcule la moyenne d'une liste de nombres.\"\"\"\n    if numbers is None:\n  ...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_file import divide_numbers, calculate_average, get_user_status, process_items, safe_eval\\n\\n\\ndef test_divide_numbers():\\n    assert divide_numbers(10, 2) == 5\\n\\ndef test_divide_numbers_zero_division():\\n    with pytest.raises(ZeroDivisionError):\\n        divide_numbers(10, 0)\\n\\ndef test_calculate_average():\\n    ass...",
+            "test_count": 11,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f98a29b4-45a4-4ba6-a7dd-8c9a7a47ec0f",
+        "timestamp": "2026-02-01T22:23:43.761408",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_file.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 11 items\n\nsandbox/fixed/test_judge/test_buggy_file.py::test_divide_numbers PASSED  [  9%]\nsandbox/fixed/test_judge/test",
+            "passed": 11,
+            "failed": 0,
+            "errors": 0,
+            "total": 11
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "68b866d0-e453-4a26-8b81-3bdffb13514f",
+        "timestamp": "2026-02-01T22:23:44.508627",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\last.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float): The length of the side of the square.\n\n    Returns:\n        float: The area of the square.\n    \"\"\"\n    if not isinstance(side, (int, float)):...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom last import area_of_square\\n\\n\\ndef test_area_of_square_positive():\\n    assert area_of_square(5) == 25\\n\\ndef test_area_of_square_zero():\\n    assert area_of_square(0) == 0\\n\\ndef test_area_of_square_negative_input():\\n    with pytest.raises(ValueError):\\n        area_of_square(-5)\\n\\ndef test_area_of_square_non_numeric_inp...",
+            "test_count": 5,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "de024cab-102e-4bd9-8a15-4eedbbe88c77",
+        "timestamp": "2026-02-01T22:23:46.599377",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_last.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 5 items\n\nsandbox/fixed/test_judge/test_last.py::test_area_of_square_positive PASSED [ 20%]\nsandbox/fixed/test_judge/tes",
+            "passed": 5,
+            "failed": 0,
+            "errors": 0,
+            "total": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "93141cea-bbda-472e-840f-d8ddfd41f634",
+        "timestamp": "2026-02-01T22:23:47.659297",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\test_file.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\test_file.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    if not isinstance(username, str):\n        raise TypeError(\"Username must be a string\")\n    if username == \"admin\":\n        role = \"administrator\"\n    else:\n        role = \"user\"\n    r...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom test_file import get_user_role, process_list, calculate_expression, check_age\\n\\n\\ndef test_get_user_role_admin():\\n    assert get_user_role('admin') == 'administrator'\\n\\ndef test_get_user_role_user():\\n    assert get_user_role('user') == 'user'\\n\\ndef test_get_user_role_invalid_input():\\n    with pytest.raises(TypeError):\\...",
+            "test_count": 9,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "d83f4009-0adb-4c33-bcc2-6e2b7da602bf",
+        "timestamp": "2026-02-01T22:23:50.109021",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\test_file.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_test_file.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_test_file.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 9 items\n\nsandbox/fixed/test_judge/test_test_file.py::test_get_user_role_admin PASSED [ 11%]\nsandbox/fixed/test_judge/te",
+            "passed": 7,
+            "failed": 2,
+            "errors": 0,
+            "total": 9
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "8ab16b55-93b4-4efc-be5d-bf4e271fe7ff",
+        "timestamp": "2026-02-01T22:23:50.226082",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 60.46s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 4,
+            "files_fixed": 4,
+            "files_validated": 3,
+            "duration": 60.460092544555664
+        },
+        "status": "SUCCESS"
     }
 ]

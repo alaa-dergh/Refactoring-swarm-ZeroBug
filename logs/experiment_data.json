@@ -7689,5 +7689,948 @@
             "error": "❌ Erreur de Logging (Agent: Fixer) : Les champs ['input_prompt', 'output_response'] sont manquants dans le dictionnaire 'details'. Ils sont OBLIGATOIRES pour valider le TP."
         },
         "status": "FAILURE"
+    },
+    {
+        "id": "ec81a861-96ec-47d9-b625-f539fcf832f2",
+        "timestamp": "2026-02-02T00:37:51.843038",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No...",
+            "output_response": "{'bugs': [{'line': 5, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 7, 'severity': 'high', 'description': 'Mutable default argument', 'suggestion': 'Use None as the default argument and initialize the list inside the function'}, {'line': 11, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero'}, {'line': 9, 'severity': 'critical...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "cf0a30df-4190-4bf9-a772-b34061ada93e",
+        "timestamp": "2026-02-02T00:37:55.026365",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_file.py\n\nCODE:\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):...",
+            "output_response": "{'bugs': [{'line': 7, 'severity': 'high', 'description': 'Division possible par zéro', 'suggestion': \"Ajouter une vérification pour éviter la division par zéro, par exemple: if b == 0: raise ZeroDivisionError('Division par zéro')\"}, {'line': 13, 'severity': 'medium', 'description': 'Argument mutable par défaut', 'suggestion': \"Utiliser None comme valeur par défaut et initialiser la liste à l'intérieur de la fonction, par exemple: def calculate_average(numbers=None): if numbers is None: numbers =...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "d0978e6a-30e6-4555-8551-1d7264c6ae28",
+        "timestamp": "2026-02-02T00:37:57.414713",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\last.py\n\nCODE:\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n...",
+            "output_response": "{'bugs': [{'line': 1, 'severity': 'high', 'description': \"Import error: 'math' module has no attribute 'squarert'\", 'suggestion': \"Replace 'squarert' with 'sqrt' or remove the import if not used\"}, {'line': 3, 'severity': 'high', 'description': \"Attribute error: 'side' has no attribute 'sidee'\", 'suggestion': \"Replace 'sidee' with 'side' to fix the attribute error\"}], 'quality_issues': [{'line': 2, 'severity': 'medium', 'description': \"Function 'area_of_square' does not handle non-numeric input\"...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5f65fb67-dfe7-488f-829a-12fc7deb70fe",
+        "timestamp": "2026-02-02T00:38:00.282637",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\test_file.py\n\nCODE:\n\"\"\"\nModule utilitaire - VERSION BUGGÉE\nContient 4 bugs de logique et sécurité\n\"\"\"\n\n\ndef get_user_role(username):\n    \"\"\"Ret...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': \"Variable 'role' is not defined if 'username' is not 'admin', which will raise a NameError.\", 'suggestion': \"Define 'role' with a default value or handle the case when 'username' is not 'admin'.\"}, {'line': 16, 'severity': 'medium', 'description': \"No check is performed to see if the list 'items' is empty, which will raise an IndexError.\", 'suggestion': \"Add a check to ensure 'items' is not empty before accessing its elements.\"}, {'line':...",
+            "issues_found": 4
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "792344d2-275a-4d7c-a769-7d9977e28f10",
+        "timestamp": "2026-02-02T00:38:03.275345",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_advanced.py\n\nCODE:\nimport os\nimport threading\nfrom typing import List, Dict\n\n\ndef calculate_ratio(a: float, b: float) -> float:\n   ...",
+            "output_response": "{'bugs': [{'line': 123, 'severity': 'high', 'description': 'The function increment_counter does not actually increment a counter that can be accessed outside the function.', 'suggestion': 'Consider using a global variable or a class attribute to store the counter.'}, {'line': 145, 'severity': 'medium', 'description': \"The function get_user_age does not handle the case where 'age' is not in the user_dict.\", 'suggestion': \"Consider adding a default value or raising an exception when 'age' is not f...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "eb57f5ad-3427-4c67-83a5-03e84c0bf9f4",
+        "timestamp": "2026-02-02T00:38:05.900419",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float...",
+            "output_response": "{'bugs': [{'line': 40, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before calling the divide function'}, {'line': 24, 'severity': 'medium', 'description': 'Using eval() can pose a security risk if the input data is not trusted', 'suggestion': 'Use a safer evaluation method, such as using a parsing library or writing a custom parser'}], 'quality_issues': [{'line': 17, 'severity': 'low', 'description': 'The calcula...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "24d55387-106c-4fd9-9746-b88ffd2e6c00",
+        "timestamp": "2026-02-02T00:38:08.505223",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_file.py\n\nCODE:\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division pa...",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'Division possible par zéro dans la fonction calculate_average', 'suggestion': 'Ajouter une vérification pour éviter la division par zéro'}, {'line': 48, 'severity': 'high', 'description': 'Division possible par zéro dans la fonction calculate_average lors du test', 'suggestion': 'Ajouter une vérification pour éviter la division par zéro'}], 'quality_issues': [{'line': 25, 'severity': 'medium', 'description': \"La fonction get_user_status ...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bb883e94-dae6-420c-ac14-5f76dba442fe",
+        "timestamp": "2026-02-02T00:38:34.876434",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\last.py\n\nCODE:\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'low', 'description': 'The function does not handle the case where the input is a complex number.', 'suggestion': 'Add a check to ensure the input is a real number.'}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': \"The function name 'area_of_square' could be more descriptive.\", 'suggestion': \"Consider renaming the function to 'calculate_square_area'.\"}, {'line': 5, 'severity': 'low', 'description': \"The docstring could provide more informati...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "8b39a199-5e2f-4eb0-a0fc-6f2f1a593a90",
+        "timestamp": "2026-02-02T00:38:37.201287",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99998, Requested 407. Please try again in 5m49.919999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "47982ee3-c9d9-46f1-950f-c96e67d00e95",
+        "timestamp": "2026-02-02T00:38:38.510083",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99996, Requested 318. Please try again in 4m31.296s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "beec627c-a88d-4916-a307-f89ccd8e55a1",
+        "timestamp": "2026-02-02T00:38:39.829210",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99995, Requested 430. Please try again in 6m7.2s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "9bbb8d33-2feb-4b07-85b9-beebee1e6438",
+        "timestamp": "2026-02-02T00:38:41.301296",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99993, Requested 277. Please try again in 3m53.28s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f00a3c28-2b73-4d15-a3d0-c2c3481afbfc",
+        "timestamp": "2026-02-02T00:38:42.617634",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_test_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 364. Please try again in 5m6.72s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4d513c76-ce08-43ad-bd05-dd7ad4a10066",
+        "timestamp": "2026-02-02T00:38:48.490716",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99985, Requested 872. Please try again in 12m20.448s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99985, Requested 872. Please try again in 12m20.448s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "4cca8aaa-dc09-46d4-a1af-52f3ab534c53",
+        "timestamp": "2026-02-02T00:38:55.498684",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_file.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99977, Requested 1228. Please try again in 17m21.119999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99977, Requested 1228. Please try again in 17m21.119999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "b53f29aa-b688-4014-b66f-7b502b5b82e0",
+        "timestamp": "2026-02-02T00:39:03.315500",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\last.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99968, Requested 683. Please try again in 9m22.464s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99968, Requested 683. Please try again in 9m22.464s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "0caacd1f-e529-48d1-8be1-57f20060b683",
+        "timestamp": "2026-02-02T00:39:10.741941",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\test_file.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99959, Requested 1136. Please try again in 15m46.079999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99959, Requested 1136. Please try again in 15m46.079999999s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "1a70dd1c-7dd3-4c1d-bfb1-9f05d4f76199",
+        "timestamp": "2026-02-02T00:39:10.785846",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 81.57s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 4,
+            "files_fixed": 0,
+            "files_validated": 0,
+            "duration": 81.5672116279602
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b87bbfd4-125d-4a37-8f7d-7385fd7c5bf2",
+        "timestamp": "2026-02-02T00:41:14.544281",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99816, Requested 304. Please try again in 1m43.68s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f25fe991-7820-44c7-821e-19c8b439bdd7",
+        "timestamp": "2026-02-02T00:41:15.898847",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99814, Requested 547. Please try again in 5m11.904s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 4
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "99bd7dde-310e-482b-b6b3-72f645c5afe4",
+        "timestamp": "2026-02-02T00:41:18.595080",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\last.py\n\nCODE:\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n...",
+            "output_response": "{'bugs': [{'line': 1, 'severity': 'high', 'description': \"Import error: 'math' module has no attribute 'squarert'\", 'suggestion': \"Replace 'squarert' with 'sqrt' or remove the import if not used\"}, {'line': 3, 'severity': 'high', 'description': \"Attribute error: 'side' has no attribute 'sidee'\", 'suggestion': \"Replace 'sidee' with 'side' to fix the attribute error\"}], 'quality_issues': [{'line': 2, 'severity': 'medium', 'description': \"Function 'area_of_square' does not handle non-numeric input\"...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "99901068-7b57-4d93-be22-2579bd4605f5",
+        "timestamp": "2026-02-02T00:41:19.863786",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\test_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99999, Requested 438. Please try again in 6m17.568s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "63cf2e17-9ba1-4ba5-9791-db5f06df1c2a",
+        "timestamp": "2026-02-02T00:41:21.355702",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99997, Requested 1075. Please try again in 15m26.208s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "79173027-cb5e-4b4e-8f9c-eda656bf83ad",
+        "timestamp": "2026-02-02T00:41:22.651296",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99995, Requested 479. Please try again in 6m49.536s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5dfd3c93-7c4c-472e-a22f-19ec974435de",
+        "timestamp": "2026-02-02T00:41:24.002133",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99994, Requested 495. Please try again in 7m2.496s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7dc67626-a7fb-4fe6-bcff-b79751fc1300",
+        "timestamp": "2026-02-02T00:41:25.314790",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\last.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99992, Requested 226. Please try again in 3m8.352s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "dcbf42de-66a9-4d6c-b514-2f980784ad31",
+        "timestamp": "2026-02-02T00:41:26.634975",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99991, Requested 407. Please try again in 5m43.872s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "77f8d84f-903a-41c3-bbaf-b62715f33d56",
+        "timestamp": "2026-02-02T00:41:28.001385",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99989, Requested 318. Please try again in 4m25.248s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f608810c-2e88-4a2f-87cb-84e311997ba1",
+        "timestamp": "2026-02-02T00:41:29.297839",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99988, Requested 430. Please try again in 6m1.152s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "70ef207d-2957-41f2-895d-d285a8cc340f",
+        "timestamp": "2026-02-02T00:41:30.685669",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99986, Requested 277. Please try again in 3m47.232s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b548717f-fd00-444b-b4f0-b23ff0a53578",
+        "timestamp": "2026-02-02T00:41:31.945713",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_test_file.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99985, Requested 364. Please try again in 5m1.536s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "55792337-a16a-4441-a35e-4a20989e6071",
+        "timestamp": "2026-02-02T00:41:37.725498",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99978, Requested 668. Please try again in 9m18.144s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99978, Requested 668. Please try again in 9m18.144s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "542d5a20-25aa-461f-a6aa-db384d3e98e7",
+        "timestamp": "2026-02-02T00:41:44.649157",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_file.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99970, Requested 933. Please try again in 13m0.192s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99970, Requested 933. Please try again in 13m0.192s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "fb1e2c69-b044-49a3-9866-2397ee0d482d",
+        "timestamp": "2026-02-02T00:41:51.134318",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\last.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99963, Requested 688. Please try again in 9m22.464s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99963, Requested 688. Please try again in 9m22.464s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "293b6f97-0677-4b0d-80f9-f23e5247032d",
+        "timestamp": "2026-02-02T00:41:57.857431",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\test_file.py",
+            "input_prompt": "Multiple attempts failed",
+            "output_response": "Erreur à l'itération 3: Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99955, Requested 772. Please try again in 10m28.128s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "error": "Erreur Groq: Error code: 429 - {'error': {'message': 'Rate limit reached for model `llama-3.3-70b-versatile` in organization `org_01kgb6damxedg9e2755r8f8qxa` service tier `on_demand` on tokens per day (TPD): Limit 100000, Used 99955, Requested 772. Please try again in 10m28.128s. Need more tokens? Upgrade to Dev Tier today at https://console.groq.com/settings/billing', 'type': 'tokens', 'code': 'rate_limit_exceeded'}}",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "3d2b0174-fc39-4728-9eb0-104bbc6356dd",
+        "timestamp": "2026-02-02T00:41:57.925204",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 43.90s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 4,
+            "files_fixed": 0,
+            "files_validated": 0,
+            "duration": 43.895715951919556
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "0d6559f2-25e3-4669-b329-37f9b339c7f9",
+        "timestamp": "2026-02-02T18:49:03.759767",
+        "agent": "Auditor",
+        "model": "fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM failed: Erreur Groq: Request timed out.",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "13e09200-e511-4a03-a715-3139d0dd115b",
+        "timestamp": "2026-02-02T18:49:23.351573",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_file.py\n\nCODE:\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):...",
+            "output_response": "{'bugs': [{'line': 7, 'severity': 'high', 'description': 'Division possible par zéro', 'suggestion': \"Ajouter une vérification pour éviter la division par zéro, par exemple : if b == 0: raise ZeroDivisionError('Division par zéro')\"}, {'line': 13, 'severity': 'medium', 'description': 'Argument mutable par défaut', 'suggestion': \"Utiliser None comme valeur par défaut et initialiser la liste à l'intérieur de la fonction, par exemple : def calculate_average(numbers=None): if numbers is None: numbers...",
+            "issues_found": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b1526974-a574-444d-a7e1-1c9feb8f98ed",
+        "timestamp": "2026-02-02T18:49:36.486748",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\last.py\n\nCODE:\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n...",
+            "output_response": "{'bugs': [{'line': 1, 'severity': 'high', 'description': \"Import error: 'math' module has no attribute 'squarert'\", 'suggestion': \"Replace 'squarert' with 'sqrt' or remove the import if not used\"}, {'line': 3, 'severity': 'high', 'description': \"Attribute error: 'side' has no attribute 'sidee'\", 'suggestion': \"Replace 'sidee' with 'side' to fix the attribute error\"}], 'quality_issues': [{'line': 2, 'severity': 'medium', 'description': \"Function 'area_of_square' does not handle non-numeric input\"...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b5223fdf-3149-426b-bee1-e14161033063",
+        "timestamp": "2026-02-02T18:49:43.939873",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\test_file.py\n\nCODE:\n\"\"\"\nModule utilitaire - VERSION BUGGÉE\nContient 4 bugs de logique et sécurité\n\"\"\"\n\n\ndef get_user_role(username):\n    \"\"\"Ret...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'high', 'description': \"Variable 'role' is not defined if 'username' is not 'admin', which will raise a NameError.\", 'suggestion': \"Define 'role' with a default value or handle the case when 'username' is not 'admin'.\"}, {'line': 16, 'severity': 'medium', 'description': \"No check is performed to see if the list 'items' is empty, which will raise an IndexError.\", 'suggestion': \"Add a check to ensure 'items' is not empty before accessing its elements.\"}, {'line':...",
+            "issues_found": 4
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b2eb48d9-555f-4a0c-a963-f90458025cf1",
+        "timestamp": "2026-02-02T18:49:49.828450",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_advanced.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_advanced.py\n\nCODE:\nimport os\nimport threading\nfrom typing import List, Dict\n\n\ndef calculate_ratio(a: float, b: float) -> float:\n   ...",
+            "output_response": "{'bugs': [{'line': 123, 'severity': 'high', 'description': 'The function increment_counter does not actually increment a counter that can be accessed outside the function.', 'suggestion': 'Consider using a global variable or a class attribute to store the counter.'}, {'line': 145, 'severity': 'medium', 'description': \"The function get_user_age does not handle the case where 'age' is not in the user_dict.\", 'suggestion': \"Consider adding a default value or raising an exception when 'age' is not f...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bfeb5894-35a0-47df-a7ab-a05feda86403",
+        "timestamp": "2026-02-02T18:49:55.294639",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_calculator.py\n\nCODE:\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float...",
+            "output_response": "{'bugs': [{'line': 40, 'severity': 'high', 'description': 'Division by zero is possible', 'suggestion': 'Add a check to ensure the divisor is not zero before calling the divide function'}, {'line': 24, 'severity': 'medium', 'description': 'Using eval() can pose a security risk if the input data is not trusted', 'suggestion': 'Use a safer method to evaluate the arithmetic expression, such as using a parsing library or writing a custom parser'}], 'quality_issues': [{'line': 17, 'severity': 'low', ...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "db41dc00-9b8e-4df8-a18f-9020386c997c",
+        "timestamp": "2026-02-02T18:49:58.959988",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\buggy_file.py\n\nCODE:\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division pa...",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'Division possible par zéro dans la fonction calculate_average', 'suggestion': 'Ajouter une vérification pour éviter la division par zéro'}, {'line': 48, 'severity': 'high', 'description': \"Division possible par zéro dans la fonction calculate_average lors de l'appel de la fonction\", 'suggestion': \"Vérifier que la liste de nombres n'est pas vide avant de calculer la moyenne\"}], 'quality_issues': [{'line': 25, 'severity': 'medium', 'descri...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4601666c-52f2-4081-8f39-4b2dc3b6d035",
+        "timestamp": "2026-02-02T18:50:03.928498",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\last.py\n\nCODE:\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float...",
+            "output_response": "{'bugs': [{'line': 10, 'severity': 'low', 'description': 'The function does not handle the case where the input is a complex number.', 'suggestion': 'Add a check to ensure the input is a real number.'}], 'quality_issues': [{'line': 1, 'severity': 'low', 'description': \"The function name 'area_of_square' could be more descriptive.\", 'suggestion': \"Consider renaming the function to 'calculate_square_area'.\"}, {'line': 5, 'severity': 'low', 'description': \"The docstring could include more informati...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "9d52bad6-fd2e-4035-98dd-106551de3273",
+        "timestamp": "2026-02-02T18:50:07.757049",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_file.py\n\nCODE:\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    if not isinstance(username, str):\n     ...",
+            "output_response": "{'bugs': [{'line': 24, 'severity': 'high', 'description': 'The calculate_expression function does not validate the input expression. This could lead to code injection vulnerabilities if used with untrusted input.', 'suggestion': 'Validate the input expression to prevent code injection vulnerabilities.'}, {'line': 31, 'severity': 'medium', 'description': 'The check_age function does not handle non-integer inputs. This could lead to unexpected behavior if used with non-integer inputs.', 'suggestio...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7be8c215-7093-4acb-8e9d-0728fb1a136c",
+        "timestamp": "2026-02-02T18:50:14.022270",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_calculator.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.absp...",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'The test case does not cover the scenario where the input list contains non-numeric values.', 'suggestion': 'Add a test case to check for non-numeric values in the input list.'}, {'line': 21, 'severity': 'high', 'description': 'The test case does not cover the scenario where the input string contains invalid mathematical operations.', 'suggestion': 'Add a test case to check for invalid mathematical operations in the input string.'}], 'qu...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "09c4040e-193a-47e6-b1fe-bd8739eefa3e",
+        "timestamp": "2026-02-02T18:50:16.982403",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_buggy_file.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os...",
+            "output_response": "{'bugs': [{'line': 23, 'severity': 'high', 'description': 'Potential division by zero error in calculate_average function', 'suggestion': 'Add a check for empty list before calculating average'}, {'line': 30, 'severity': 'medium', 'description': 'None input not handled properly in calculate_average function', 'suggestion': 'Add a check for None input and raise a meaningful error'}, {'line': 41, 'severity': 'low', 'description': 'safe_eval function does not handle all possible invalid expressions...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "655ab00b-c729-42a6-a337-da18d75b09db",
+        "timestamp": "2026-02-02T18:50:30.577193",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_last.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os.path....",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': 'The function area_of_square does not handle non-numeric input correctly. It should raise a TypeError for non-numeric input.', 'suggestion': 'Add a type check at the beginning of the function to raise a TypeError for non-numeric input.'}, {'line': 20, 'severity': 'high', 'description': 'The function area_of_square does not handle negative input correctly. It should raise a ValueError for negative input.', 'suggestion': 'Add a check at the...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "fa77e877-010a-432e-86e5-b35f73a6576e",
+        "timestamp": "2026-02-02T18:50:43.664370",
+        "agent": "Auditor",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_test_file.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_test_file.py\n\nCODE:\nimport pytest\nimport sys\nimport os\n\n# Add project root to path\nsys.path.insert(0, os.path.abspath(os....",
+            "output_response": "{'bugs': [{'line': 15, 'severity': 'high', 'description': \"The test case for test_get_user_role_invalid_input is expecting a TypeError, but it's not clear if the function get_user_role is actually raising this error.\", 'suggestion': 'Verify that the function get_user_role is correctly raising a TypeError for invalid input.'}, {'line': 25, 'severity': 'medium', 'description': \"The test case for test_calculate_expression_invalid is checking if the result is an instance of str, but it's not clear w...",
+            "issues_found": 2
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "c0e41242-a546-436f-b4e9-a813a72a8c52",
+        "timestamp": "2026-02-02T18:51:02.489098",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_calculator.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No check for division by zero!\n\ndef calculate_average(numbers=[]):  # Bug: Mutable default argument!\n    total = 0\n    for n in numbers\n        total += n  # Bug: Missing ...",
+            "output_response": "{'fixed_code': 'def divide(a, b):\\n    \"\"\"\\n    Divide two numbers.\\n\\n    Args:\\n        a (float): The dividend.\\n        b (float): The divisor.\\n\\n    Returns:\\n        float: The quotient.\\n\\n    Raises:\\n        ZeroDivisionError: If the divisor is zero.\\n    \"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\"Cannot divide by zero!\")\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"\\n    Calculate the average of a list of numbers.\\n\\n    Args:\\n        numbers (list):...",
+            "changes_made": [
+                "Added zero check in divide function",
+                "Replaced mutable default argument in calculate_average function",
+                "Added check for empty list in calculate_average function",
+                "Replaced eval with a safer alternative in process_data function"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\buggy_calculator.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5478a3d4-be8e-4347-98b8-7070e3ca376e",
+        "timestamp": "2026-02-02T18:52:27.921742",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_file.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\buggy_file.py\nITERATION: 2/3\n\nORIGINAL CODE:\n```python\n\"\"\"\nModule de calculs mathématiques - VERSION BUGGÉE\nContient exactement 5 bugs à corriger\n\"\"\"\n\n\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    # Bug 1: Pas de vérification division par zéro\n    return a / b\n\n\ndef calculate_average(numbers=[]):\n    \"\"\"Calcule la moyenne d'une ...",
+            "output_response": "{'fixed_code': 'def divide_numbers(a, b):\\n    \"\"\"Divise deux nombres.\"\"\"\\n    if b == 0:\\n        raise ZeroDivisionError(\\'Division par zéro\\')\\n    return a / b\\n\\n\\ndef calculate_average(numbers=None):\\n    \"\"\"Calcule la moyenne d\\'une liste de nombres.\"\"\"\\n    if numbers is None:\\n        numbers = []\\n    if not numbers:\\n        return 0\\n    total = sum(numbers)\\n    return total / len(numbers)\\n\\n\\ndef get_user_status(username):\\n    \"\"\"Retourne le statut d\\'un utilisateur.\"\"\"\\n    if u...",
+            "changes_made": [
+                "Added zero check in divide_numbers",
+                "Changed calculate_average to use None as default and initialize list inside function",
+                "Added else condition in get_user_status to return a default value",
+                "Added check for empty list in process_items",
+                "Replaced eval with a safer evaluation method in safe_eval"
+            ],
+            "confidence": 0.95,
+            "iteration": 2,
+            "output_path": "sandbox\\fixed\\buggy_file.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f1e6c8b2-f448-4492-a94c-beb084a1eeb5",
+        "timestamp": "2026-02-02T18:52:36.855285",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\last.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\last.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\nfrom math import squarert\n\ndef area_of_square(side):\n    return side * sidee\n\nprint(area_of_square(5))\n\n```\n\nAUDIT REPORT:\n- Bugs found: 2\n- Quality issues: 2\n- Style issues: 2\n\nDETAILED ISSUES:\n\n🐛 BUGS (HIGH PRIORITY):\n  Line 1: Import error: 'math' module has no attribute 'squarert'\n  Suggestio...",
+            "output_response": "{'fixed_code': 'def area_of_square(side):\\n    \"\"\"\\n    Calculate the area of a square given its side length.\\n\\n    Args:\\n        side (float): The length of the side of the square.\\n\\n    Returns:\\n        float: The area of the square.\\n    \"\"\"\\n    if not isinstance(side, (int, float)):\\n        raise TypeError(\"Side length must be a number\")\\n    if side < 0:\\n        raise ValueError(\"Side length cannot be negative\")\\n    return side ** 2\\n\\nprint(area_of_square(5))', 'changes_made': ['Fi...",
+            "changes_made": [
+                "Fixed import error",
+                "Fixed attribute error",
+                "Added input validation",
+                "Added docstring",
+                "Improved readability with exponentiation operator"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\last.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "81e951e5-81b7-42c4-87f1-4ebd884f6e9e",
+        "timestamp": "2026-02-02T18:52:40.970027",
+        "agent": "Fixer",
+        "model": "llama-3.3-70b-versatile",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\test_file.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\test_file.py\nITERATION: 1/3\n\nORIGINAL CODE:\n```python\n\"\"\"\nModule utilitaire - VERSION BUGGÉE\nContient 4 bugs de logique et sécurité\n\"\"\"\n\n\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    # Bug 1: Variable non définie si username n'est pas admin\n    if username == \"admin\":\n        role = \"administrator\"\n    \n    retu...",
+            "output_response": "{'fixed_code': 'def get_user_role(username):\\n    \"\"\"Retourne le rôle d\\'un utilisateur.\"\"\"\\n    if not isinstance(username, str):\\n        raise TypeError(\"Username must be a string\")\\n    if username == \"admin\":\\n        role = \"administrator\"\\n    else:\\n        role = \"user\"\\n    return role\\n\\n\\ndef process_list(items):\\n    \"\"\"Traite une liste d\\'items.\"\"\"\\n    if not items:\\n        return \"List is empty\"\\n    first = items[0]\\n    last = items[-1]\\n    return f\"First: {first}, Last: {las...",
+            "changes_made": [
+                "Added a check for username type in get_user_role",
+                "Defined role with a default value in get_user_role",
+                "Added a check to ensure items is not empty in process_list",
+                "Implemented a safer method to evaluate mathematical expressions in calculate_expression",
+                "Inverted the logic to return False for invalid ages and True for valid ages in check_age"
+            ],
+            "confidence": 0.95,
+            "iteration": 1,
+            "output_path": "sandbox\\fixed\\test_file.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "6db0d036-cd62-442e-b2ef-d32966cd9926",
+        "timestamp": "2026-02-02T18:52:42.218655",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_calculator.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide(a, b):\n    \"\"\"\n    Divide two numbers.\n\n    Args:\n        a (float): The dividend.\n        b (float): The divisor.\n\n    Returns:\n        float: The quotient.\n\n    Raises:\n        ZeroDivisionError: If the divisor is zero.\n    \"\"\"\n    if b == 0...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_calculator import divide, calculate_average, process_data\\n\\n\\ndef test_divide_valid_numbers():\\n    assert divide(10, 2) == 5\\n\\ndef test_divide_by_zero():\\n    with pytest.raises(ZeroDivisionError):\\n        divide(10, 0)\\n\\ndef test_calculate_average_valid_list():\\n    assert calculate_average([1, 2, 3, 4, 5]) == 3\\...",
+            "test_count": 6,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f0be1b2c-b8c4-4afc-ab6c-ac978a82ddf3",
+        "timestamp": "2026-02-02T18:52:45.483952",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_calculator.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_calculator.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 6 items\n\nsandbox/fixed/test_judge/test_buggy_calculator.py::test_divide_valid_numbers PASSED [ 16%]\nsandbox/fixed/test_",
+            "passed": 6,
+            "failed": 0,
+            "errors": 0,
+            "total": 6
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e4f2fdb0-34eb-40bf-a777-0ce0ae4081ad",
+        "timestamp": "2026-02-02T18:52:46.586714",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\buggy_file.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef divide_numbers(a, b):\n    \"\"\"Divise deux nombres.\"\"\"\n    if b == 0:\n        raise ZeroDivisionError('Division par zéro')\n    return a / b\n\n\ndef calculate_average(numbers=None):\n    \"\"\"Calcule la moyenne d'une liste de nombres.\"\"\"\n    if numbers is None:\n  ...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom buggy_file import divide_numbers, calculate_average, get_user_status, process_items, safe_eval\\n\\n\\ndef test_divide_numbers():\\n    assert divide_numbers(10, 2) == 5\\n\\ndef test_divide_numbers_by_zero():\\n    with pytest.raises(ZeroDivisionError):\\n        divide_numbers(10, 0)\\n\\ndef test_calculate_average():\\n    assert ca...",
+            "test_count": 11,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "56fb6382-2296-401b-8d9b-19c2c524833c",
+        "timestamp": "2026-02-02T18:52:48.478472",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\buggy_file.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_buggy_file.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_buggy_file.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 11 items\n\nsandbox/fixed/test_judge/test_buggy_file.py::test_divide_numbers PASSED  [  9%]\nsandbox/fixed/test_judge/test",
+            "passed": 11,
+            "failed": 0,
+            "errors": 0,
+            "total": 11
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f5ed3396-ec8d-48bf-a9ee-4140227ab697",
+        "timestamp": "2026-02-02T18:52:49.525246",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\last.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef area_of_square(side):\n    \"\"\"\n    Calculate the area of a square given its side length.\n\n    Args:\n        side (float): The length of the side of the square.\n\n    Returns:\n        float: The area of the square.\n    \"\"\"\n    if not isinstance(side, (int, float)):...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom last import area_of_square\\n\\n\\ndef test_area_of_square_positive_side():\\n    assert area_of_square(5) == 25\\n\\ndef test_area_of_square_zero_side():\\n    assert area_of_square(0) == 0\\n\\ndef test_area_of_square_negative_side_error():\\n    with pytest.raises(ValueError):\\n        area_of_square(-5)\\n\\ndef test_area_of_square_...",
+            "test_count": 5,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "610a7596-4477-40a4-8923-4cc9c5540b83",
+        "timestamp": "2026-02-02T18:52:51.113380",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\last.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_last.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_last.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 5 items\n\nsandbox/fixed/test_judge/test_last.py::test_area_of_square_positive_side PASSED [ 20%]\nsandbox/fixed/test_judg",
+            "passed": 5,
+            "failed": 0,
+            "errors": 0,
+            "total": 5
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "fcc45326-8b3f-4605-aa4a-1b601f4a7e40",
+        "timestamp": "2026-02-02T18:52:52.905264",
+        "agent": "Judge",
+        "model": "llama-3.3-70b-versatile",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\test_file.py",
+            "input_prompt": "You are a senior Python testing expert specialized in TDD (Test-Driven Development).\n\nYour mission: Generate comprehensive unit tests for the following Python code.\n\nFILE: sandbox\\fixed\\test_file.py\nITERATION: 1/2\n\nCODE TO TEST:\n```python\ndef get_user_role(username):\n    \"\"\"Retourne le rôle d'un utilisateur.\"\"\"\n    if not isinstance(username, str):\n        raise TypeError(\"Username must be a string\")\n    if username == \"admin\":\n        role = \"administrator\"\n    else:\n        role = \"user\"\n    r...",
+            "output_response": "{'test_code': \"import pytest\\nimport sys\\nimport os\\n\\n# Add project root to path\\nsys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))\\n\\nfrom test_file import get_user_role, process_list, calculate_expression, check_age\\n\\n\\ndef test_get_user_role_admin():\\n    assert get_user_role('admin') == 'administrator'\\n\\ndef test_get_user_role_user():\\n    assert get_user_role('user') == 'user'\\n\\ndef test_get_user_role_invalid_input():\\n    with pytest.raises(TypeError):\\...",
+            "test_count": 13,
+            "iteration": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2c1d1b6e-99e9-44f3-a0c8-c040a73fd089",
+        "timestamp": "2026-02-02T18:52:54.600917",
+        "agent": "Judge",
+        "model": "pytest",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_tested": "sandbox\\fixed\\test_file.py",
+            "test_file": "sandbox\\fixed\\test_judge\\test_test_file.py",
+            "input_prompt": "pytest sandbox\\fixed\\test_judge\\test_test_file.py -v --tb=short",
+            "output_response": "============================= test session starts =============================\nplatform win32 -- Python 3.10.10, pytest-9.0.2, pluggy-1.6.0 -- C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ISSER TECH\\Desktop\\IGL\\Refactoring-swarm-ZeroBug\nplugins: anyio-4.12.1, langsmith-0.6.7\ncollecting ... collected 13 items\n\nsandbox/fixed/test_judge/test_test_file.py::test_get_user_role_admin PASSED [  7%]\nsandbox/fixed/test_judge/t",
+            "passed": 13,
+            "failed": 0,
+            "errors": 0,
+            "total": 13
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "0c8a04a7-1198-413a-8c77-f8481b55efcb",
+        "timestamp": "2026-02-02T18:52:54.644674",
+        "agent": "Orchestrator",
+        "model": "N/A",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "input_prompt": "Run pipeline on sandbox",
+            "output_response": "Pipeline completed in 273.61s",
+            "input_dir": "sandbox",
+            "output_dir": "sandbox\\fixed",
+            "files_analyzed": 4,
+            "files_fixed": 4,
+            "files_validated": 4,
+            "duration": 273.6107280254364
+        },
+        "status": "SUCCESS"
     }
 ]

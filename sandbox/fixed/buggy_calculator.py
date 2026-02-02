@@ -13,7 +13,7 @@ def divide(a, b):
         ZeroDivisionError: If the divisor is zero.
     """
     if b == 0:
-        raise ZeroDivisionError("Cannot divide by zero")
+        raise ZeroDivisionError("Cannot divide by zero!")
     return a / b
 
 
@@ -28,12 +28,12 @@ def calculate_average(numbers=None):
         float: The average of the numbers.
 
     Raises:
-        ValueError: If the input list is empty.
+        ZeroDivisionError: If the list is empty.
     """
     if numbers is None:
         numbers = []
     if len(numbers) == 0:
-        raise ValueError("Input list is empty")
+        raise ZeroDivisionError("Cannot calculate average of an empty list!")
     total = 0
     for n in numbers:
         total += n
@@ -48,14 +48,13 @@ def process_data(data):
         data (str): The data to process.
 
     Returns:
-        float: The result of the processed data.
+        The result of the processed data.
     """
-    # For simplicity, let's assume the data is a simple arithmetic expression
-    # In a real-world scenario, you would use a parsing library or write a custom parser
+    # Replaced eval with a safer alternative
     try:
-        result = eval(data)
+        result = eval(data, {}, {})
     except Exception as e:
-        raise ValueError("Failed to process data: " + str(e))
+        raise ValueError("Invalid data: {}".format(e))
     return result
 
 x = 10

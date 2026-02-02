@@ -1,14 +1,13 @@
 import os
 import json
 import time
-import re
 from typing import Dict, List, Optional
 from dotenv import load_dotenv
 
 from src.utils.file_manager import PyFileTool
 from src.utils.fixer_tools import FixerTools
 from src.utils.logger import log_experiment, ActionType
-from src.utils.groq_wrapper import llm  # Groq déguisé en Gemini
+from src.utils.groq_wrapper import llm  # ← MODIFIÉ: Utilise Gemini
 
 # ================================
 # Load environment
@@ -35,223 +34,20 @@ def safe_parse_json(text: str) -> dict:
         raise ValueError(f"JSON invalide: {e}\nTexte reçu: {text[:200]}...")
 
 # ================================
-# Fixer Agent avec Support Chunking
+# Fixer Agent
 # ================================
 class Fixer:
     """
     Agent Fixer : corrige le code Python basé sur le rapport de l'Auditor.
-    Supporte les gros fichiers via chunking automatique.
     """
     
     def __init__(self, max_retries: int = 3):
         self.name = "Fixer"
-        self.llm = llm
+        self.llm = llm  # ← MODIFIÉ: Utilise Gemini wrapper
         self.max_retries = max_retries
         self.tools = FixerTools()
         self.llm_cache = {}
         
-        # Configuration chunking
-        self.max_tokens_per_request = 6000  # Limite sécurisée pour Groq
-        self.chars_per_token = 4  # Approximation
-    
-    # ========================================
-    # MÉTHODES DE CHUNKING
-    # ========================================
-    
-    def estimate_tokens(self, text: str) -> int:
-        """Estime le nombre de tokens (1 token ≈ 4 caractères)."""
-        return len(text) // self.chars_per_token
-    
-    def should_use_chunking(self, code: str) -> bool:
-        """Détermine si le fichier nécessite un découpage."""
-        estimated_tokens = self.estimate_tokens(code)
-        
-        # Ajout de marge pour le prompt (environ 1000 tokens)
-        total_estimated = estimated_tokens + 1000
-        
-        return total_estimated > self.max_tokens_per_request
-    
-    def split_by_functions(self, code: str) -> List[Dict]:
-        """
-        Découpe le code en chunks par fonction/classe.
-        Retourne une liste de dictionnaires avec code, start_line, end_line, name.
-        """
-        lines = code.split('\n')
-        chunks = []
-        
-        # Pattern pour détecter fonctions et classes
-        func_class_pattern = r'^(def |class )\s*([a-zA-Z_][a-zA-Z0-9_]*)'
-        
-        current_chunk = {
-            'lines': [],
-            'start_line': 1,
-            'name': 'header',
-            'indent': 0
-        }
-        
-        for i, line in enumerate(lines, 1):
-            stripped = line.lstrip()
-            
-            # Détecter nouvelle fonction/classe
-            match = re.match(func_class_pattern, stripped)
-            
-            if match and current_chunk['lines']:
-                # Sauvegarder le chunk précédent
-                chunks.append({
-                    'code': '\n'.join(current_chunk['lines']),
-                    'start_line': current_chunk['start_line'],
-                    'end_line': i - 1,
-                    'name': current_chunk['name']
-                })
-                
-                # Nouveau chunk
-                current_chunk = {
-                    'lines': [line],
-                    'start_line': i,
-                    'name': match.group(2),
-                    'indent': len(line) - len(stripped)
-                }
-            else:
-                current_chunk['lines'].append(line)
-        
-        # Ajouter le dernier chunk
-        if current_chunk['lines']:
-            chunks.append({
-                'code': '\n'.join(current_chunk['lines']),
-                'start_line': current_chunk['start_line'],
-                'end_line': len(lines),
-                'name': current_chunk['name']
-            })
-        
-        return chunks
-    
-    def group_bugs_by_chunk(self, bugs: List[Dict], chunks: List[Dict]) -> Dict[int, List[Dict]]:
-        """Associe chaque bug à son chunk."""
-        bugs_by_chunk = {}
-        
-        for bug in bugs:
-            line = bug.get('line')
-            if not line:
-                continue
-            
-            # Trouver dans quel chunk se trouve ce bug
-            for idx, chunk in enumerate(chunks):
-                if chunk['start_line'] <= line <= chunk['end_line']:
-                    if idx not in bugs_by_chunk:
-                        bugs_by_chunk[idx] = []
-                    bugs_by_chunk[idx].append(bug)
-                    break
-        
-        return bugs_by_chunk
-    
-    def fix_chunk(self, chunk_code: str, bugs: List[Dict], chunk_name: str) -> str:
-        """Corrige un chunk de code avec ses bugs associés."""
-        
-        if not bugs:
-            # Pas de bugs, retourner tel quel
-            return chunk_code
-        
-        # Créer un prompt simplifié pour ce chunk
-        bugs_desc = '\n'.join(
-            f"  - Line {b.get('line')}: {b.get('description')} "
-            f"(Suggestion: {b.get('suggestion', 'N/A')})"
-            for b in bugs
-        )
-        
-        prompt = f"""Fix the following Python code section.
-
-SECTION: {chunk_name}
-
-BUGS TO FIX:
-{bugs_desc}
-
-CODE:
-```python
-{chunk_code}
-```
-
-REQUIREMENTS:
-1. Fix ALL the bugs listed above
-2. Keep the same structure and logic
-3. Return ONLY the fixed code
-4. NO markdown backticks
-5. NO explanations
-
-Return the fixed code:"""
-
-        try:
-            response = self.llm.invoke(prompt)
-            fixed_code = response.content if hasattr(response, 'content') else str(response)
-            
-            # Nettoyer les backticks si présents
-            if '```python' in fixed_code:
-                fixed_code = fixed_code.split('```python')[1].split('```')[0].strip()
-            elif '```' in fixed_code:
-                parts = fixed_code.split('```')
-                if len(parts) >= 3:
-                    fixed_code = parts[1].strip()
-            
-            return fixed_code
-            
-        except Exception as e:
-            print(f"     ⚠️ Erreur correction chunk: {e}")
-            return chunk_code  # Retourner l'original en cas d'erreur
-    
-    def fix_file_chunked(self, file_path: str, code: str, audit_report: Dict) -> Dict:
-        """Corrige un gros fichier en le découpant en chunks."""
-        
-        print(f"  📦 Fichier volumineux ({len(code)} chars, ~{self.estimate_tokens(code)} tokens)")
-        print(f"  📦 Activation du mode chunking...")
-        
-        # Découper le code
-        chunks = self.split_by_functions(code)
-        print(f"  📦 Découpé en {len(chunks)} section(s)")
-        
-        # Grouper les bugs par chunk
-        bugs = audit_report.get('bugs', [])
-        bugs_by_chunk = self.group_bugs_by_chunk(bugs, chunks)
-        
-        total_bugs = sum(len(b) for b in bugs_by_chunk.values())
-        print(f"  📦 {total_bugs} bug(s) répartis dans {len(bugs_by_chunk)} section(s)")
-        
-        # Corriger chunk par chunk
-        fixed_chunks = []
-        changes_made = []
-        
-        for i, chunk in enumerate(chunks):
-            chunk_bugs = bugs_by_chunk.get(i, [])
-            
-            if chunk_bugs:
-                print(f"  🔧 Section {i+1}/{len(chunks)} ({chunk['name']}): {len(chunk_bugs)} bug(s)")
-                
-                fixed_code = self.fix_chunk(chunk['code'], chunk_bugs, chunk['name'])
-                fixed_chunks.append(fixed_code)
-                
-                changes_made.append(f"Fixed {len(chunk_bugs)} bug(s) in {chunk['name']}")
-                
-                # Pause entre chunks pour éviter rate limit
-                if i < len(chunks) - 1:
-                    time.sleep(1)
-            else:
-                # Pas de bugs, garder tel quel
-                fixed_chunks.append(chunk['code'])
-        
-        # Reconstituer le fichier
-        fixed_code = '\n\n'.join(fixed_chunks)
-        
-        print(f"  ✅ Fichier reconstitué: {len(fixed_code)} chars")
-        
-        return {
-            'fixed_code': fixed_code,
-            'changes_made': changes_made,
-            'confidence': 0.85,  # Confiance légèrement réduite pour chunking
-            'chunked': True
-        }
-    
-    # ========================================
-    # MÉTHODE NORMALE (petits fichiers)
-    # ========================================
-    
     def build_fix_prompt(
         self, 
         file_path: str, 
@@ -260,7 +56,7 @@ Return the fixed code:"""
         iteration: int = 1,
         previous_error: Optional[str] = None
     ) -> str:
-        """Construit le prompt pour corriger le code (méthode normale)."""
+        """Construit le prompt pour corriger le code."""
         
         bugs = audit_report.get("bugs", [])
         quality_issues = audit_report.get("quality_issues", [])
@@ -339,17 +135,13 @@ Return ONLY the JSON object.
         """Valide que le code corrigé est syntaxiquement correct."""
         return self.tools.check_syntax(code, file_path)
     
-    # ========================================
-    # MÉTHODE PRINCIPALE fix_file
-    # ========================================
-    
     def fix_file(
         self, 
         file_path: str, 
         audit_report: Dict,
         output_dir: str = None
     ) -> Dict:
-        """Corrige un fichier (avec support chunking automatique)."""
+        """Corrige un fichier basé sur le rapport d'audit."""
         
         try:
             original_code = PyFileTool.read_file(file_path)
@@ -361,6 +153,8 @@ Return ONLY the JSON object.
                 action=ActionType.FIX,
                 details={
                     "file_fixed": file_path,
+                    "input_prompt": "N/A",
+                    "output_response": error_msg,
                     "error": str(e)
                 },
                 status="FAILURE"
@@ -373,62 +167,6 @@ Return ONLY the JSON object.
                 "fixed_code": ""
             }
         
-        # ✅ NOUVEAU: Vérifier si chunking nécessaire
-        if self.should_use_chunking(original_code):
-            try:
-                llm_result = self.fix_file_chunked(file_path, original_code, audit_report)
-                
-                fixed_code = llm_result.get('fixed_code', '')
-                changes_made = llm_result.get('changes_made', [])
-                confidence = llm_result.get('confidence', 0.85)
-                
-                # Valider le code
-                validation = self.validate_fixed_code(fixed_code, file_path)
-                
-                if not validation["valid"]:
-                    print(f"  ⚠️ Code chunked invalide: {validation.get('error')}")
-                    print(f"  🔄 Tentative avec méthode normale...")
-                    # Fallback vers méthode normale (continuera ci-dessous)
-                else:
-                    # Succès avec chunking!
-                    if output_dir:
-                        output_path = self.tools.save_fixed_file(fixed_code, file_path, output_dir)
-                    else:
-                        output_path = file_path
-                        with open(file_path, 'w', encoding='utf-8') as f:
-                            f.write(fixed_code)
-                    
-                    log_experiment(
-                        agent_name=self.name,
-                        model_used="llama-3.3-70b-versatile",
-                        action=ActionType.FIX,
-                        details={
-                            "file_fixed": file_path,
-                            "changes_made": changes_made,
-                            "confidence": confidence,
-                            "chunked": True,
-                            "output_path": output_path
-                        },
-                        status="SUCCESS"
-                    )
-                    
-                    return {
-                        "file_path": file_path,
-                        "output_path": output_path,
-                        "success": True,
-                        "original_code": original_code,
-                        "fixed_code": fixed_code,
-                        "changes_made": changes_made,
-                        "confidence": confidence,
-                        "iterations": 1,
-                        "chunked": True
-                    }
-                    
-            except Exception as e:
-                print(f"  ⚠️ Échec chunking: {e}")
-                print(f"  🔄 Tentative avec méthode normale...")
-        
-        # Méthode normale (petits fichiers ou fallback)
         cache_key = hash(original_code + str(audit_report))
         previous_error = None
         
@@ -448,6 +186,7 @@ Return ONLY the JSON object.
                     
                     print(f"  🔧 Tentative {iteration}/{self.max_retries} pour {file_path}")
                     
+                    # Appel LLM (Gemini)
                     response = self.llm.invoke(prompt)
                     raw_text = response.content if hasattr(response, 'content') else str(response)
                     
@@ -477,7 +216,11 @@ Return ONLY the JSON object.
                 
                 # Code valide!
                 if output_dir:
-                    output_path = self.tools.save_fixed_file(fixed_code, file_path, output_dir)
+                    output_path = self.tools.save_fixed_file(
+                        fixed_code, 
+                        file_path, 
+                        output_dir
+                    )
                 else:
                     output_path = file_path
                     with open(file_path, 'w', encoding='utf-8') as f:
@@ -525,6 +268,8 @@ Return ONLY the JSON object.
                         action=ActionType.FIX,
                         details={
                             "file_fixed": file_path,
+                            "input_prompt": "Multiple attempts failed",
+                            "output_response": error_msg,
                             "error": str(e),
                             "iterations": iteration
                         },
@@ -575,7 +320,7 @@ Return ONLY the JSON object.
             results.append(result)
             
             if i < total_files:
-                time.sleep(2)
+                time.sleep(2)  # Pause raisonnable (Gemini est généreux)
         
         return results
     
@@ -589,8 +334,6 @@ Return ONLY the JSON object.
         total_changes = sum(len(r.get("changes_made", [])) for r in fix_results)
         avg_confidence = sum(r.get("confidence", 0) for r in fix_results) / max(total_files, 1)
         
-        chunked_files = sum(1 for r in fix_results if r.get("chunked", False))
-        
         report = {
             "summary": {
                 "total_files": total_files,
@@ -598,11 +341,9 @@ Return ONLY the JSON object.
                 "failed_fixes": failed,
                 "success_rate": f"{(successful/max(total_files, 1))*100:.1f}%",
                 "total_changes": total_changes,
-                "average_confidence": round(avg_confidence, 2),
-                "chunked_files": chunked_files
+                "average_confidence": round(avg_confidence, 2)
             },
             "files": fix_results
         }
         
         return report
-    

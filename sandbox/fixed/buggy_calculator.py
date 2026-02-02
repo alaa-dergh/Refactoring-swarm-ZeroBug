@@ -13,7 +13,7 @@ def divide(a, b):
         ZeroDivisionError: If the divisor is zero.
     """
     if b == 0:
-        raise ZeroDivisionError("Cannot divide by zero!")
+        raise ZeroDivisionError("Cannot divide by zero")
     return a / b
 
 
@@ -28,12 +28,12 @@ def calculate_average(numbers=None):
         float: The average of the numbers.
 
     Raises:
-        ZeroDivisionError: If the list is empty.
+        ValueError: If the input list is empty.
     """
     if numbers is None:
         numbers = []
     if len(numbers) == 0:
-        raise ZeroDivisionError("Cannot calculate average of an empty list!")
+        raise ValueError("Cannot calculate average of empty list")
     total = 0
     for n in numbers:
         total += n
@@ -42,20 +42,34 @@ def calculate_average(numbers=None):
 
 def process_data(data):
     """
-    Process the given data.
+    Process data using a safer method of evaluation.
 
     Args:
         data (str): The data to process.
 
     Returns:
-        The result of the processed data.
+        float: The result of the evaluation.
     """
-    # Replaced eval with a safer alternative
+    # For simplicity, we will use a simple whitelist of allowed functions
+    allowed_functions = {
+        "add": lambda x, y: x + y,
+        "subtract": lambda x, y: x - y,
+        "multiply": lambda x, y: x * y,
+        "divide": lambda x, y: x / y if y != 0 else float("inf")
+    }
+    parts = data.split()
+    if len(parts) != 3:
+        raise ValueError("Invalid data format")
+    num1, func, num2 = parts
     try:
-        result = eval(data, {}, {})
-    except Exception as e:
-        raise ValueError("Invalid data: {}".format(e))
-    return result
+        num1 = float(num1)
+        num2 = float(num2)
+    except ValueError:
+        raise ValueError("Invalid number format")
+    if func in allowed_functions:
+        return allowed_functions[func](num1, num2)
+    else:
+        raise ValueError("Invalid function")
 
 x = 10
 y = 0

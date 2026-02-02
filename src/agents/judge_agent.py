@@ -515,7 +515,7 @@ def test_{func}_basic():
         """Génère un rapport de synthèse des évaluations."""
         
         total_files = len(eval_results)
-        successful = sum(1 for r in eval_results if r.get("success", False))
+        successful = sum(1 for r in eval_results if r.get("passed", 0) > 0)
         failed = total_files - successful
         
         total_tests = sum(r.get("total", 0) for r in eval_results)

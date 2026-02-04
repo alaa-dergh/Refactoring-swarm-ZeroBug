@@ -2,21 +2,19 @@ import os
 import json
 import time
 from typing import Dict, List, Optional
+from datetime import datetime, timedelta
 from dotenv import load_dotenv
-
+import requests
 from src.utils.file_manager import PyFileTool
 from src.utils.fixer_tools import FixerTools
 from src.utils.logger import log_experiment, ActionType
-from src.utils.groq_wrapper import llm  # ← MODIFIÉ: Utilise Gemini
+from src.utils.groq_wrapper import llm
 
-# ================================
-# Load environment
-# ================================
 load_dotenv()
 
-# ================================
-# JSON parser robuste
-# ================================
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+
 def safe_parse_json(text: str) -> dict:
     """Parse JSON même avec markdown backticks."""
     try:
@@ -28,40 +26,50 @@ def safe_parse_json(text: str) -> dict:
             start = text.find("```") + 3
             end = text.find("```", start)
             text = text[start:end].strip()
-        
         return json.loads(text)
     except Exception as e:
         raise ValueError(f"JSON invalide: {e}\nTexte reçu: {text[:200]}...")
 
-# ================================
-# Fixer Agent
-# ================================
+def call_openrouter(prompt: str) -> str:
+    """Appelle OpenRouter comme fallback LLM."""
+    if not OPENROUTER_API_KEY:
+        raise ValueError("OPENROUTER_API_KEY not set in environment")
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+        "HTTP-Referer": "https://github.com/yourusername/refactoring-swarm",
+        "X-Title": "Refactoring Swarm",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "model": "meta-llama/llama-3.1-70b-instruct",
+        "messages": [{"role": "user", "content": prompt}],
+        "temperature": 0.7,
+        "max_tokens": 2048
+    }
+    try:
+        response = requests.post(OPENROUTER_API_URL, headers=headers, json=payload, timeout=30)
+        response.raise_for_status()
+        data = response.json()
+        return data["choices"][0]["message"]["content"]
+    except Exception as e:
+        raise ValueError(f"OpenRouter API error: {e}")
+
 class Fixer:
-    """
-    Agent Fixer : corrige le code Python basé sur le rapport de l'Auditor.
-    """
+    """Agent Fixer : corrige le code Python basé sur le rapport de l'Auditor."""
     
     def __init__(self, max_retries: int = 3):
         self.name = "Fixer"
-        self.llm = llm  # ← MODIFIÉ: Utilise Gemini wrapper
+        self.llm = llm
         self.max_retries = max_retries
         self.tools = FixerTools()
         self.llm_cache = {}
+        self.rate_limit_reset = None
         
-    def build_fix_prompt(
-        self, 
-        file_path: str, 
-        code: str, 
-        audit_report: Dict,
-        iteration: int = 1,
-        previous_error: Optional[str] = None
-    ) -> str:
-        """Construit le prompt pour corriger le code."""
-        
-        bugs = audit_report.get("bugs", [])
-        quality_issues = audit_report.get("quality_issues", [])
-        style_issues = audit_report.get("style_issues", [])
-        refactoring_plan = audit_report.get("refactoring_plan", [])
+    def build_fix_prompt(self, file_path: str, code: str, audit_report: Dict, iteration: int = 1, previous_error: Optional[str] = None) -> str:
+        """Construit le prompt pour corriger le code (tokens optimisés)."""
+        bugs = audit_report.get("bugs", [])[:3]
+        quality_issues = audit_report.get("quality_issues", [])[:2]
+        refactoring_plan = audit_report.get("refactoring_plan", [])[:3]
         
         prompt = f"""You are a senior Python developer specialized in code refactoring.
 
@@ -78,11 +86,10 @@ ORIGINAL CODE:
 AUDIT REPORT:
 - Bugs found: {len(bugs)}
 - Quality issues: {len(quality_issues)}
-- Style issues: {len(style_issues)}
+- Style issues: {len(audit_report.get("style_issues", []))}
 
 DETAILED ISSUES:
 """
-        
         if bugs:
             prompt += "\n🐛 BUGS (HIGH PRIORITY):\n"
             for bug in bugs:
@@ -91,7 +98,7 @@ DETAILED ISSUES:
         
         if quality_issues:
             prompt += "\n⚠️ QUALITY ISSUES:\n"
-            for issue in quality_issues[:5]:
+            for issue in quality_issues:
                 prompt += f"  Line {issue.get('line', '?')}: {issue.get('description', 'N/A')}\n"
         
         if refactoring_plan:
@@ -107,34 +114,44 @@ DETAILED ISSUES:
 
 REQUIREMENTS:
 
-1. Return ONLY valid JSON with this structure:
+Return ONLY valid JSON with this structure:
 {
   "fixed_code": "def example():\\n    return 42",
   "changes_made": ["Added zero check"],
   "confidence": 0.95
 }
-
 CRITICAL: Use \\n for newlines, \\t for tabs in the fixed_code string.
 
-2. The fixed_code must be:
-   - Syntactically valid Python
-   - All bugs fixed
-   - All critical issues resolved
-   - Well-formatted (PEP8)
-   - With proper docstrings
+The fixed_code must be:
+- Syntactically valid Python
+- All bugs fixed
+- All critical issues resolved
+- Well-formatted (PEP8)
+- With proper docstrings
 
-3. DO NOT include markdown backticks in the JSON response
-4. DO NOT add explanations outside the JSON
-
+DO NOT include markdown backticks in the JSON response.
+DO NOT add explanations outside the JSON.
 Return ONLY the JSON object.
 """
         
-        return prompt
-    
+        return prompt.strip()
+
     def validate_fixed_code(self, code: str, file_path: str) -> Dict:
         """Valide que le code corrigé est syntaxiquement correct."""
         return self.tools.check_syntax(code, file_path)
-    
+
+    def apply_basic_fixes(self, code: str) -> str:
+        """Minimal fallback modifications."""
+        if not isinstance(code, str):
+            return ""
+        c = code.replace("\r\n", "\n").replace("\r", "\n")
+        c = c.replace("\t", "    ")
+        c = c.replace("\x00", "")
+        lines = c.split("\n")
+        cleaned = [ln.rstrip() for ln in lines]
+        out = "\n".join(cleaned).rstrip() + "\n"
+        return out
+
     def fix_file(
         self, 
         file_path: str, 
@@ -169,12 +186,18 @@ Return ONLY the JSON object.
         
         cache_key = hash(original_code + str(audit_report))
         previous_error = None
+        last_exception = None
+        prompt = "(not generated)"
+        use_openrouter = False
         
         for iteration in range(1, self.max_retries + 1):
             try:
+                # Support cached entries that include both prompt and result
                 if cache_key in self.llm_cache and iteration == 1:
                     print(f"  ⚡ Cache hit pour {file_path}")
-                    llm_result = self.llm_cache[cache_key]
+                    cache_entry = self.llm_cache[cache_key]
+                    prompt = cache_entry.get("prompt", "(cached_result)")
+                    llm_result = cache_entry.get("result", {})
                 else:
                     prompt = self.build_fix_prompt(
                         file_path, 
@@ -186,14 +209,22 @@ Return ONLY the JSON object.
                     
                     print(f"  🔧 Tentative {iteration}/{self.max_retries} pour {file_path}")
                     
-                    # Appel LLM (Gemini)
-                    response = self.llm.invoke(prompt)
-                    raw_text = response.content if hasattr(response, 'content') else str(response)
+                    if use_openrouter:
+                        print(f"  🔌 Utilisation d'OpenRouter (fallback)")
+                        raw_text = call_openrouter(prompt)
+                    else:
+                        response = self.llm.invoke(prompt)
+                        raw_text = response.content if hasattr(response, 'content') else str(response)
                     
                     llm_result = safe_parse_json(raw_text)
                     
                     if iteration == 1:
-                        self.llm_cache[cache_key] = llm_result
+                        # Store both prompt and result so future cache hits include the prompt
+                        self.llm_cache[cache_key] = {"prompt": prompt, "result": llm_result}
+                
+                # Ensure llm_result is a dict even if cache produced None
+                if not isinstance(llm_result, dict):
+                    raise ValueError("Le LLM n'a pas retourné un JSON valide")
                 
                 fixed_code = llm_result.get("fixed_code", "")
                 changes_made = llm_result.get("changes_made", [])
@@ -226,14 +257,18 @@ Return ONLY the JSON object.
                     with open(file_path, 'w', encoding='utf-8') as f:
                         f.write(fixed_code)
                 
+                safe_input_prompt = prompt if isinstance(prompt, str) else "(generated prompt)"
+                safe_output_response = str(llm_result) if llm_result is not None else ""
+                model_used = "openrouter" if use_openrouter else "llama-3.3-70b-versatile"
+                
                 log_experiment(
                     agent_name=self.name,
-                    model_used="llama-3.3-70b-versatile",
+                    model_used=model_used,
                     action=ActionType.FIX,
                     details={
                         "file_fixed": file_path,
-                        "input_prompt": prompt[:500] + "...",
-                        "output_response": str(llm_result)[:500] + "...",
+                        "input_prompt": safe_input_prompt[:500] + ("..." if len(safe_input_prompt) > 500 else ""),
+                        "output_response": safe_output_response[:500] + ("..." if len(safe_output_response) > 500 else ""),
                         "changes_made": changes_made,
                         "confidence": confidence,
                         "iteration": iteration,
@@ -254,22 +289,63 @@ Return ONLY the JSON object.
                 }
                 
             except Exception as e:
-                error_msg = f"Erreur à l'itération {iteration}: {e}"
-                print(f"  ⚠️ {error_msg}")
+                last_exception = e
+                err_str = str(e)
+                print(f"  ⚠️ Erreur à l'itération {iteration}: {err_str}")
+                
+                if not use_openrouter and iteration == 2:
+                    print(f"  🔌 Basculement vers OpenRouter")
+                    use_openrouter = True
+                    previous_error = err_str
+                    time.sleep(2)
+                    continue
                 
                 if iteration < self.max_retries:
-                    previous_error = str(e)
+                    previous_error = err_str
                     time.sleep(2)
                     continue
                 else:
+                    fallback_code = self.apply_basic_fixes(original_code)
+                    validation = self.validate_fixed_code(fallback_code, file_path)
+                    if validation.get("valid", False):
+                        if output_dir:
+                            output_path = self.tools.save_fixed_file(fallback_code, file_path, output_dir)
+                        else:
+                            with open(file_path, 'w', encoding='utf-8') as f:
+                                f.write(fallback_code)
+                            output_path = file_path
+                        
+                        log_experiment(
+                            agent_name=self.name,
+                            model_used="fallback",
+                            action=ActionType.FIX,
+                            details={
+                                "file_fixed": file_path,
+                                "input_prompt": prompt if isinstance(prompt, str) else "(generated prompt)",
+                                "output_response": "Basic fallback fixes applied",
+                                "error": err_str
+                            },
+                            status="SUCCESS"
+                        )
+                        
+                        return {
+                            "file_path": file_path,
+                            "output_path": output_path,
+                            "success": True,
+                            "original_code": original_code,
+                            "fixed_code": fallback_code,
+                            "changes_made": ["basic_fallback_fixed"],
+                            "confidence": 0.0
+                        }
+                    
                     log_experiment(
                         agent_name=self.name,
-                        model_used="llama-3.3-70b-versatile",
+                        model_used="fallback",
                         action=ActionType.FIX,
                         details={
                             "file_fixed": file_path,
-                            "input_prompt": "Multiple attempts failed",
-                            "output_response": error_msg,
+                            "input_prompt": "Multiple attempts and fallback failed",
+                            "output_response": err_str,
                             "error": str(e),
                             "iterations": iteration
                         },
@@ -279,7 +355,7 @@ Return ONLY the JSON object.
                     return {
                         "file_path": file_path,
                         "success": False,
-                        "error": error_msg,
+                        "error": err_str,
                         "original_code": original_code,
                         "fixed_code": "",
                         "iterations": iteration
@@ -292,7 +368,7 @@ Return ONLY the JSON object.
             "original_code": original_code,
             "fixed_code": ""
         }
-    
+
     def fix_directory(
         self, 
         audit_results: List[Dict],
@@ -323,7 +399,7 @@ Return ONLY the JSON object.
                 time.sleep(2)  # Pause raisonnable (Gemini est généreux)
         
         return results
-    
+
     def generate_fix_report(self, fix_results: List[Dict]) -> Dict:
         """Génère un rapport de synthèse des corrections."""
         
@@ -346,4 +422,5 @@ Return ONLY the JSON object.
             "files": fix_results
         }
         
+
         return report

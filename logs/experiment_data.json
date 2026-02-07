@@ -29340,5 +29340,530 @@
             "issues_found": 0
         },
         "status": "SUCCESS"
+    },
+    {
+        "id": "681676d5-9796-4df4-a473-44f74188c8b3",
+        "timestamp": "2026-02-07T03:31:39.047424",
+        "agent": "Auditor",
+        "model": "AI",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\bad1.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\bad1.py\n\nCODE:\nimport time, os, sys\n\nX = 0\ndataDATA = []\n\ndef doStuff(a,b,c):\n    global X\n    if a == True:\n        X = X + 1\n    else:\n      ...",
+            "output_response": "{'bugs': [{'line': 19, 'severity': 'high', 'description': \"Syntax error due to missing indented block after 'else' statement\", 'suggestion': \"Add an indented block after the 'else' statement to handle the case when b is not greater than 10\"}], 'quality_issues': [{'line': 1, 'severity': 'medium', 'description': 'Importing multiple modules on the same line is not recommended', 'suggestion': 'Import each module on a separate line for better readability'}, {'line': 3, 'severity': 'low', 'description...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "34dc1ef1-3b77-40dd-8f32-5d30f15e4e47",
+        "timestamp": "2026-02-07T03:31:43.183176",
+        "agent": "Auditor",
+        "model": "AI",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\badinv.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\badinv.py\n\nCODE:\n\ninventory = []\n\ndef add_item(name, quantity, price):\n    inventory.append({\"name\": name, \"quantity\": quantity, \"price\": price...",
+            "output_response": "{'bugs': [{'line': 14, 'severity': 'high', 'description': 'Removing an item from the inventory while iterating over it can cause unexpected behavior.', 'suggestion': 'Use a list comprehension to filter out the item instead of removing it directly.'}, {'line': 31, 'severity': 'medium', 'description': 'The file is not closed properly in case of an exception.', 'suggestion': 'Use a with statement to ensure the file is closed properly.'}, {'line': 38, 'severity': 'medium', 'description': 'The file i...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4bb040a8-9bc7-44b2-baeb-da018c0b4954",
+        "timestamp": "2026-02-07T03:32:19.435608",
+        "agent": "Auditor",
+        "model": "AI",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\base2.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\base2.py\n\nCODE:\n\n...",
+            "output_response": "{'bugs': [{'line': 0, 'severity': 'high', 'description': 'No code provided for analysis', 'suggestion': 'Provide the code in the file for a thorough analysis'}], 'quality_issues': [{'line': 0, 'severity': 'medium', 'description': 'No code provided to check for quality issues', 'suggestion': 'Provide the code to identify potential quality issues'}], 'style_issues': [{'line': 0, 'severity': 'low', 'description': 'No code provided to check for style issues', 'suggestion': 'Provide the code to ident...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f1e5fa50-9764-4e1b-98a7-61ec1eeab89d",
+        "timestamp": "2026-02-07T03:32:30.905709",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "f8dd789e-c8e3-488f-8f71-7c1decd48aa7",
+        "timestamp": "2026-02-07T03:32:31.235633",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\buggy_calculator.py\n\nCODE:\n# File: buggy_calculator.py\n# This file has multiple bugs for testing\n\ndef divide(a, b):\n    return a / b  # Bug: No...",
+            "output_response": "{'file_path': 'sandbox\\\\buggy_calculator.py', 'bugs': [{'line': 5, 'severity': 'HIGH', 'description': 'Division possible par zéro', 'suggestion': 'Ajouter une vérification != 0'}, {'line': 7, 'severity': 'HIGH', 'description': 'Argument mutable par défaut', 'suggestion': 'Utiliser None puis initialiser'}, {'line': 11, 'severity': 'HIGH', 'description': 'Division possible par zéro', 'suggestion': 'Ajouter une vérification != 0'}], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Co...",
+            "issues_found": 3
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2d749d15-93e5-47f2-b42f-5e2b67491ba4",
+        "timestamp": "2026-02-07T03:32:43.251284",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\bad1.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bdeb7a7f-6210-418c-81ab-3c2a10c71057",
+        "timestamp": "2026-02-07T03:32:43.711362",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\bad1.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\bad1.py\n\nCODE:\nimport time\nimport os\nimport sys\n\n# Named constant for better readability\nTHRESHOLD = 10\n\n# Variable name following PEP 8 ...",
+            "output_response": "{'file_path': 'sandbox\\\\fixed\\\\bad1.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "b8760885-96c4-4f0e-a182-b9b9ee050bbf",
+        "timestamp": "2026-02-07T03:32:55.355594",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\badinv.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "e83cd6f6-270c-4f5c-b916-4030bbd0ff52",
+        "timestamp": "2026-02-07T03:32:55.725847",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\badinv.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\badinv.py\n\nCODE:\n\ninventory = []\n\ndef add_item(name, quantity, price):\n    inventory.append({\"name\": name, \"quantity\": quantity, \"price\":...",
+            "output_response": "{'file_path': 'sandbox\\\\fixed\\\\badinv.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "38ccbc99-0b68-43ce-abf5-8a292ae32f61",
+        "timestamp": "2026-02-07T03:33:06.999194",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\base2.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2be41ea5-8bbd-4bfb-a37b-84af76f041e6",
+        "timestamp": "2026-02-07T03:33:07.329850",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\base2.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\base2.py\n\nCODE:\ndef example():\n\t\"\"\"\n\tThis is an example function.\n\t\"\"\"\n\treturn 42\n...",
+            "output_response": "{'file_path': 'sandbox\\\\fixed\\\\base2.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "a9b8dd9f-e5c8-4844-b071-00446eb95980",
+        "timestamp": "2026-02-07T03:33:26.356056",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_bad1.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "2b259356-38e0-47e6-83c7-d1e64e190f41",
+        "timestamp": "2026-02-07T03:33:26.786026",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_bad1.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_bad1.py\n\nCODE:\nimport pytest\nimport sys\nimport os\nimport importlib.util\n\n# Ajouter le dossier du module source au path\nsy...",
+            "output_response": "{'file_path': 'sandbox\\\\fixed\\\\test_judge\\\\test_bad1.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "5267c938-8019-4f6e-9921-ee7d18ccdd98",
+        "timestamp": "2026-02-07T03:33:43.858188",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_badinv.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7602e1c3-bb8c-42c7-8835-cc76843de634",
+        "timestamp": "2026-02-07T03:33:44.286119",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_badinv.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_badinv.py\n\nCODE:\nimport pytest\nimport sys\nimport os\nimport importlib.util\n\n# Ajouter le dossier du module source au path\n...",
+            "output_response": "{'file_path': 'sandbox\\\\fixed\\\\test_judge\\\\test_badinv.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "86ced657-f730-407b-927d-0c1f80228807",
+        "timestamp": "2026-02-07T03:34:23.117557",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_base2.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "75bc25f2-fcb7-4db1-90ee-b3b25f8e6a16",
+        "timestamp": "2026-02-07T03:34:23.480221",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "sandbox\\fixed\\test_judge\\test_base2.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: sandbox\\fixed\\test_judge\\test_base2.py\n\nCODE:\nimport pytest\nimport sys\nimport os\nimport importlib.util\n\n# Ajouter le dossier du module source au path\ns...",
+            "output_response": "{'file_path': 'sandbox\\\\fixed\\\\test_judge\\\\test_base2.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "d430f78f-33ba-4c14-8666-979b3306bbbf",
+        "timestamp": "2026-02-07T03:35:09.821248",
+        "agent": "Fixer",
+        "model": "N/A",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\bad1.py",
+            "input_prompt": "Multiple attempts and fallback failed",
+            "output_response": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "f58afb23-5888-4cde-9e82-e66498b5de0b",
+        "timestamp": "2026-02-07T03:35:50.813022",
+        "agent": "Fixer",
+        "model": "Fallback",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\badinv.py",
+            "input_prompt": "Fallback mode",
+            "output_response": "Basic fallback fixes applied",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "40d74a2c-b9b8-4733-a5e5-0b92eeefdd99",
+        "timestamp": "2026-02-07T03:38:20.156991",
+        "agent": "Fixer",
+        "model": "Groq",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\base2.py",
+            "input_prompt": "You are a senior Python developer specialized in code refactoring.\n\nYour mission: Fix the following Python file based on the audit report.\n\nFILE: sandbox\\base2.py\nITERATION: 3/3\n\nORIGINAL CODE:\n```python\n\n```\n\nAUDIT REPORT:\n- Bugs found: 1\n- Quality issues: 1\n- Style issues: 1\n\nDETAILED ISSUES:\n\n🐛 BUGS (HIGH PRIORITY):\n  Line 0: No code provided for analysis\n  Suggestion: Provide the code in the file for a thorough analysis\n\n\n⚠️ QUALITY ISSUES:\n  Line 0: No code provided to check for quality issues\n\n📋 REFACTORING PLAN:\n  1. {'line': 0, 'severity': 'low', 'description': 'No code provided to create a refactoring plan', 'suggestion': 'Provide the code to create a refactoring plan'}\n\n\n❌ PREVIOUS ATTEMPT FAILED:\nAll OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions\nPlease fix this error in your new version.\n\n\nREQUIREMENTS:\n\nReturn ONLY valid JSON with this structure:\n{\n  \"fixed_code\": \"def example():\\n    return 42\",\n  \"changes_made\": [\"Added zero check\"],\n  \"confidence\": 0.95\n}\nCRITICAL: Use \\n for newlines, \\t for tabs in the fixed_code string.\n\nThe fixed_code must be:\n- Syntactically valid Python\n- All bugs fixed\n- All critical issues resolved\n- Well-formatted (PEP8)\n- With proper docstrings\n\nDO NOT include markdown backticks in the JSON response.\nDO NOT add explanations outside the JSON.\nReturn ONLY the JSON object.",
+            "output_response": "{'fixed_code': 'def example():\\n    \"\"\"\\n    This is an example function.\\n    \\n    Returns:\\n        int: The answer to the ultimate question of life, the universe, and everything.\\n    \"\"\"\\n    return 42', 'changes_made': ['Added example function', 'Added docstring'], 'confidence': 0.95}",
+            "changes_made": [
+                "Added example function",
+                "Added docstring"
+            ],
+            "iteration": 3,
+            "output_path": "NEW\\base2.py"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "9b117111-b7ca-4aa9-be8a-b35fc43f90fb",
+        "timestamp": "2026-02-07T03:39:03.467177",
+        "agent": "Fixer",
+        "model": "N/A",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\buggy_calculator.py",
+            "input_prompt": "Multiple attempts and fallback failed",
+            "output_response": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "iterations": 3
+        },
+        "status": "FAILURE"
+    },
+    {
+        "id": "46e5c90a-e461-4516-ad72-3b0c73bf9b97",
+        "timestamp": "2026-02-07T03:39:38.031555",
+        "agent": "Fixer",
+        "model": "Fallback",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\fixed\\bad1.py",
+            "input_prompt": "Fallback mode",
+            "output_response": "Basic fallback fixes applied",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "94ae1f3d-2bd9-4d96-85b9-53d0a97c6002",
+        "timestamp": "2026-02-07T03:40:47.763648",
+        "agent": "Fixer",
+        "model": "Fallback",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\fixed\\badinv.py",
+            "input_prompt": "Fallback mode",
+            "output_response": "Basic fallback fixes applied",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ad73466c-74b0-4694-93bc-cda76753e62d",
+        "timestamp": "2026-02-07T03:42:03.240156",
+        "agent": "Fixer",
+        "model": "Fallback",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\fixed\\base2.py",
+            "input_prompt": "Fallback mode",
+            "output_response": "Basic fallback fixes applied",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "bb8aa31f-f951-4b62-83ef-c70dee32a995",
+        "timestamp": "2026-02-07T03:44:28.163124",
+        "agent": "Fixer",
+        "model": "Fallback",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\base2.py",
+            "input_prompt": "Fallback mode",
+            "output_response": "Basic fallback fixes applied",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "c5f3de83-5a41-4449-a02c-cf3f8d0e9495",
+        "timestamp": "2026-02-07T03:44:48.581310",
+        "agent": "Fixer",
+        "model": "Fallback",
+        "action": "FIX",
+        "details": {
+            "file_fixed": "sandbox\\base2.py",
+            "input_prompt": "Fallback mode",
+            "output_response": "Basic fallback fixes applied",
+            "error": "All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions"
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "76e88555-1473-41c2-8c12-9ff8c4380d63",
+        "timestamp": "2026-02-07T03:45:58.942893",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\bad1.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "ad60e06d-e506-4047-af59-8855263c709a",
+        "timestamp": "2026-02-07T03:45:59.345333",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\bad1.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: NEW\\bad1.py\n\nCODE:\nimport time\nimport os\nimport sys\n\n# Named constant for better readability\nTHRESHOLD = 10\n\n# Variable name following PEP 8 convention...",
+            "output_response": "{'file_path': 'NEW\\\\bad1.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "0a300abb-f15a-43e2-a389-91f9b8076ebe",
+        "timestamp": "2026-02-07T03:46:31.055616",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\badinv.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "7a9714c5-d9b4-4b33-9984-581f9204a6a6",
+        "timestamp": "2026-02-07T03:46:31.425410",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\badinv.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: NEW\\badinv.py\n\nCODE:\n\ninventory = []\n\ndef add_item(name, quantity, price):\n    inventory.append({\"name\": name, \"quantity\": quantity, \"price\": price})\n ...",
+            "output_response": "{'file_path': 'NEW\\\\badinv.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "da82fdf3-014d-471f-aed4-e16a7c9597ed",
+        "timestamp": "2026-02-07T03:46:35.018243",
+        "agent": "Auditor",
+        "model": "AI",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\base2.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: NEW\\base2.py\n\nCODE:\n\n\n...",
+            "output_response": "{'bugs': [{'line': 0, 'severity': 'high', 'description': 'No code provided in the file', 'suggestion': 'Provide the code for analysis'}], 'quality_issues': [{'line': 0, 'severity': 'medium', 'description': 'No code provided to check for quality issues', 'suggestion': 'Provide the code for analysis'}], 'style_issues': [{'line': 0, 'severity': 'low', 'description': 'No code provided to check for style issues', 'suggestion': 'Provide the code for analysis'}], 'refactoring_plan': [{'line': 0, 'sever...",
+            "issues_found": 1
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "4d195787-d520-455f-acb7-736aae875c15",
+        "timestamp": "2026-02-07T03:46:50.717760",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\test_judge\\test_bad1.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "8e85a183-f6c2-4346-b2ed-462103258a91",
+        "timestamp": "2026-02-07T03:46:51.167550",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\test_judge\\test_bad1.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: NEW\\test_judge\\test_bad1.py\n\nCODE:\nimport pytest\nimport sys\nimport os\nimport importlib.util\n\n# Ajouter le dossier du module source au path\nsys.path.ins...",
+            "output_response": "{'file_path': 'NEW\\\\test_judge\\\\test_bad1.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "66f3223a-1a7d-4a98-b049-0665464c72fe",
+        "timestamp": "2026-02-07T03:47:08.979960",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\test_judge\\test_badinv.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "05e949de-5c24-4e91-b340-c497dd899138",
+        "timestamp": "2026-02-07T03:47:09.376096",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\test_judge\\test_badinv.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: NEW\\test_judge\\test_badinv.py\n\nCODE:\nimport pytest\nimport sys\nimport os\nimport importlib.util\n\n# Ajouter le dossier du module source au path\nsys.path.i...",
+            "output_response": "{'file_path': 'NEW\\\\test_judge\\\\test_badinv.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "48fb33a2-a8cb-41b2-b43b-13fd745d3883",
+        "timestamp": "2026-02-07T03:47:21.471997",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\test_judge\\test_base2.py",
+            "input_prompt": "FALLBACK",
+            "output_response": "LLM + fallback failed: All OpenRouter models failed. Last error: 404 Client Error: Not Found for url: https://openrouter.ai/api/v1/chat/completions",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
+    },
+    {
+        "id": "31c66918-5a0e-42f9-a51b-283ac60acde8",
+        "timestamp": "2026-02-07T03:47:21.817958",
+        "agent": "Auditor",
+        "model": "Fallback",
+        "action": "CODE_ANALYSIS",
+        "details": {
+            "file_analyzed": "NEW\\test_judge\\test_base2.py",
+            "input_prompt": "\nYou are a senior Python code auditor.\n\nAnalyze the following Python file and return ONLY valid JSON with:\n- bugs\n- quality_issues\n- style_issues\n- refactoring_plan\n- score\n\nEach issue must contain: line, severity, description, suggestion.\nImportant: The score must be between 0 and 10 and it indicates the quality and correctness of the code\nFile: NEW\\test_judge\\test_base2.py\n\nCODE:\nimport pytest\nimport sys\nimport os\nimport importlib.util\n\n# Ajouter le dossier du module source au path\nsys.path.in...",
+            "output_response": "{'file_path': 'NEW\\\\test_judge\\\\test_base2.py', 'bugs': [], 'quality_issues': [], 'style_issues': [], 'refactoring_plan': ['Corriger erreurs critiques', 'Appliquer recommandations', 'Nettoyer le code'], 'score': 0.0, 'analysis_type': 'Fallback'}...",
+            "issues_found": 0
+        },
+        "status": "SUCCESS"
     }
 ]

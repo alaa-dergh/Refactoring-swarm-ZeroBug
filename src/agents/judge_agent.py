@@ -236,17 +236,20 @@ CRITICAL:
 
     def generate_fallback_tests(self, code: str, file_path: str) -> Tuple[str, bool]:
         """
-        Génère des tests basiques sans AI pour tout fichier Python.
+        Génère des tests basiques améliorés pour tout fichier Python.
         - Détecte toutes les fonctions publiques
-        - Crée des tests d'existence et des tests basiques d'appel
+        - Crée des tests d'existence et tests basiques d'appel avec arguments factices
         - Evite les imports externes
         - Prépare le module pour pytest dans un fichier temporaire
         """
-        print(f"  🔧 Génération de tests basiques pour {os.path.basename(file_path)}")
+        import re
+        import textwrap
+        print(f"  🔧 Génération de tests basiques améliorés pour {os.path.basename(file_path)}")
 
-        # Détecte toutes les fonctions publiques
-        function_pattern = r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\('
-        functions = [f for f in re.findall(function_pattern, code) if not f.startswith('_')]
+        # Détecte toutes les fonctions publiques et leurs arguments
+        function_pattern = r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\((.*?)\)\s*:'
+        matches = re.findall(function_pattern, code)
+        functions = [(name, args) for name, args in matches if not name.startswith('_')]
         module_name = os.path.splitext(os.path.basename(file_path))[0]
 
         # Template d'import safe
@@ -275,26 +278,40 @@ CRITICAL:
                 "    assert test_module is not None, 'Module should load without errors'\n"
             )
         else:
-            for func in functions:
-                # Test existence et basic call
-                test_code += textwrap.dedent(f"""
-                    def test_{func}_exists():
-                        assert hasattr(test_module, "{func}"), "Function '{func}' should exist"
-                        assert callable(getattr(test_module, "{func}")), "'{func}' must be callable"
+            for func_name, args_str in functions:
+                args = [a.strip().split("=")[0].strip() for a in args_str.split(",") if a.strip()]
+                dummy_args = []
 
-                    def test_{func}_call_basic():
-                        func_to_test = getattr(test_module, "{func}")
+                for arg in args:
+                    # Heuristics for dummy values
+                    if 'num' in arg or 'count' in arg or 'quantity' in arg or 'b' in arg or 'a' in arg:
+                        dummy_args.append("1")
+                    elif 'price' in arg:
+                        dummy_args.append("1.0")
+                    elif 'name' in arg or 'filename' in arg or 'path' in arg:
+                        dummy_args.append("'test'")
+                    else:
+                        dummy_args.append("None")
+
+                call_str = f"func_to_test({', '.join(dummy_args)})"
+
+                # Test existence et basic call avec arguments factices
+                test_code += textwrap.dedent(f"""
+                    def test_{func_name}_exists():
+                        assert hasattr(test_module, "{func_name}"), "Function '{func_name}' should exist"
+                        assert callable(getattr(test_module, "{func_name}")), "'{func_name}' must be callable"
+
+                    def test_{func_name}_call_basic():
+                        func_to_test = getattr(test_module, "{func_name}")
                         try:
-                            result = func_to_test()
+                            result = {call_str}
                             # Si la fonction retourne quelque chose, on check juste qu'elle ne crash pas
                             assert True
-                        except TypeError:
-                            pytest.skip("Function '{func}' requires arguments, skipping basic call")
                         except Exception as e:
-                            pytest.fail(f"Function '{func}' raised an unexpected exception: {{e}}")
+                            pytest.fail(f"Function '{func_name}' raised an unexpected exception: {{e}}")
                 """)
 
-        print(f"  ✅ {len(functions)} fonction(s) détectée(s), tests fallback générés")
+        print(f"  ✅ {len(functions)} fonction(s) détectée(s), tests fallback améliorés générés")
         return test_code, True
 
     def validate_test_file(self, test_code: str, test_file_path: str, source_file_path: str) -> Tuple[bool, str]:

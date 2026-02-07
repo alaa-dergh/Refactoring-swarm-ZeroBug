@@ -4,15 +4,26 @@ import json
 import time
 from typing import List, Dict
 from dotenv import load_dotenv
+import requests
 
 from src.utils.file_manager import PyFileTool
 from src.utils.logger import log_experiment, ActionType
-from src.utils.groq_wrapper import llm # ← MODIFIÉ: Utilise Gemini
+from src.utils.groq_wrapper import llm  # ← MODIFIÉ: Utilise Gemini
 
 # ================================
 # Load API key
 # ================================
 load_dotenv()
+
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
+OPENROUTER_MODELS = [
+    "meta-llama/llama-3.1-70b-instruct",
+    "meta-llama/llama-3.1-8b-instruct",
+    "mistralai/mistral-7b-instruct",
+    "mistralai/mixtral-8x7b-instruct",
+    "google/gemma-7b-it"
+]
 
 # ================================
 # JSON parser robuste
@@ -23,13 +34,17 @@ def safe_parse_json(text: str) -> dict:
             start = text.find("```json") + 7
             end = text.find("```", start)
             text = text[start:end].strip()
+        elif "```python" in text:
+            start = text.find("```python") + 9
+            end = text.find("```", start)
+            text = text[start:end].strip()
         elif "```" in text:
             start = text.find("```") + 3
             end = text.find("```", start)
             text = text[start:end].strip()
         return json.loads(text)
     except Exception as e:
-        raise ValueError(f"JSON invalide: {e}")
+        raise ValueError(f"JSON invalide: {e}\nTexte reçu: {text[:200]}...")
 
 # ================================
 # Code Analyzer (Pylint + Syntax)
@@ -74,12 +89,12 @@ class CodeAnalyzer:
             return {"valid": False, "error": str(e), "line": None}
 
 # ================================
-# Auditor
+# Auditor avec AI / fallback
 # ================================
 class Auditor:
     def __init__(self):
         self.name = "Auditor"
-        self.llm = llm  # ← MODIFIÉ: Utilise Gemini wrapper
+        self.llm = llm
         self.llm_cache = {}
 
     def build_prompt(self, file_path: str, code: str, additional_context="") -> str:
@@ -134,7 +149,7 @@ CODE:
         score = pylint_res.get("score", 0.0) if pylint_res else 0.0
         log_experiment(
             agent_name=self.name,
-            model_used="fallback",
+            model_used="Fallback",
             action=ActionType.ANALYSIS,
             details={
                 "file_analyzed": file_path,
@@ -151,25 +166,50 @@ CODE:
             "style_issues": [],
             "refactoring_plan": ["Corriger erreurs critiques", "Appliquer recommandations", "Nettoyer le code"],
             "score": score,
-            "fallback_reason": reason
+            "analysis_type": "Fallback"
         }
+
+    def call_openrouter_models(self, prompt: str) -> Dict:
+        if not OPENROUTER_API_KEY:
+            raise ValueError("OPENROUTER_API_KEY not set")
+        headers = {"Authorization": f"Bearer {OPENROUTER_API_KEY}", "Content-Type": "application/json"}
+        last_error = None
+        for model_name in OPENROUTER_MODELS:
+            try:
+                payload = {
+                    "model": model_name,
+                    "messages": [{"role": "user", "content": prompt}],
+                    "temperature": 0.7,
+                    "max_tokens": 2500
+                }
+                response = requests.post(OPENROUTER_API_URL, headers=headers, json=payload, timeout=40)
+                response.raise_for_status()
+                data = response.json()
+                content = data["choices"][0]["message"]["content"]
+                if not content or content.strip() == "":
+                    continue
+                return safe_parse_json(content)
+            except Exception as e:
+                last_error = e
+                continue
+        raise ValueError(f"All OpenRouter models failed. Last error: {last_error}")
 
     def analyze_file(self, file_path: str) -> Dict:
         try:
             code = PyFileTool.read_file(file_path)
         except Exception as e:
-            return self.create_fallback_analysis(file_path, f"Lecture du fichier échouée: {e}", "")
+            result = self.create_fallback_analysis(file_path, f"Lecture du fichier échouée: {e}", "")
+            print(f"📝 {os.path.basename(file_path)}... ❌ Fallback")
+            return result
 
         pylint_res = CodeAnalyzer.run_pylint(file_path)
         syntax_res = CodeAnalyzer.check_syntax(file_path)
-
         pattern_issues = self.detect_generic_patterns(code)
         additional_context = ""
         if pattern_issues:
             additional_context += "PATTERN DETECTION:\n"
             for p in pattern_issues:
                 additional_context += f"Line {p['line']}: {p['description']}\n"
-
         if not syntax_res["valid"]:
             additional_context += f"\nSyntax Error Line {syntax_res['line']}: {syntax_res['error']}\n"
 
@@ -182,26 +222,38 @@ CODE:
             "score": pylint_res.get("score", 0.0)
         }
 
-        # Appel LLM (Gemini)
         code_hash = hash(code)
+        used_type = "Fallback"
         if code_hash in self.llm_cache:
             llm_result = self.llm_cache[code_hash]
+            used_type = llm_result.get("analysis_type", "AI")
         else:
             try:
                 response = self.llm.invoke(self.build_prompt(file_path, code, additional_context))
                 raw_text = response.content if hasattr(response, 'content') else str(response)
-                print("RAW LLM RESPONSE:", raw_text[:500], "...")
                 llm_result = safe_parse_json(raw_text)
+                llm_result["analysis_type"] = "AI"
                 self.llm_cache[code_hash] = llm_result
-            except Exception as e:
-                reason = f"LLM failed: {e}"
-                return self.create_fallback_analysis(file_path, reason, code, pylint_res)
+                used_type = "AI"
+            except Exception:
+                try:
+                    llm_result = self.call_openrouter_models(self.build_prompt(file_path, code, additional_context))
+                    llm_result["analysis_type"] = "AI"
+                    self.llm_cache[code_hash] = llm_result
+                    used_type = "AI"
+                except Exception as e:
+                    reason = f"LLM + fallback failed: {e}"
+                    llm_result = self.create_fallback_analysis(file_path, reason, code, pylint_res)
+                    used_type = "Fallback"
 
         report.update(llm_result)
 
+        # --------- PRINT SIMPLIFIÉ POUR L'UTILISATEUR ---------
+        print(f"📝 {os.path.basename(file_path)}... ✅ Analyse ({used_type})" if used_type=="AI" else f"📝 {os.path.basename(file_path)}... ❌ Fallback")
+
         log_experiment(
             agent_name=self.name,
-            model_used="llama-3.3-70b-versatile",
+            model_used=report.get("analysis_type", "Fallback"),
             action=ActionType.ANALYSIS,
             details={
                 "file_analyzed": file_path,
@@ -217,13 +269,15 @@ CODE:
     def analyze_directory(self, dir_path: str) -> List[Dict]:
         files = PyFileTool.list_python_files(dir_path)
         results = []
-        for f in files:
-            results.append(self.analyze_file(f))
-            time.sleep(1)  # Petite pause (Gemini est généreux)
+        total_files = len(files)
+        for idx, f in enumerate(files, 1):
+            result = self.analyze_file(f)
+            results.append(result)
+            time.sleep(1)
         return results
 
     def generate_report(self, analyses: List[Dict]) -> Dict:
-        report = {
+        return {
             "total_files": len(analyses),
             "files": analyses,
             "summary": {
@@ -232,4 +286,3 @@ CODE:
                 "total_style_issues": sum(len(a.get("style_issues", [])) for a in analyses),
             }
         }
-        return report

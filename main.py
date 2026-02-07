@@ -124,8 +124,11 @@ def run_full_pipeline():
     
     # Exécuter le pipeline
     orchestrator = Orchestrator(max_iterations=10)
-    results = orchestrator.run_full_pipeline(input_dir)  # ✅ Ne pas répéter max_iterations ici
-    
+    results = orchestrator.run_full_pipeline(
+        input_dir=input_dir,
+        output_dir=output_dir,
+        skip_judge=skip_judge
+    )
     # Résumé
     if results.get("success"):
         print("\n✅ Pipeline terminé avec succès!")

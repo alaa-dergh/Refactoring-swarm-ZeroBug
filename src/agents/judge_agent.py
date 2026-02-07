@@ -8,6 +8,8 @@ from typing import Dict, List, Optional, Tuple
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 import textwrap
+import hashlib
+from src.utils.groq_wrapper import llm  # ← MODIFIÉ: Utilise Gemini
 
 from src.utils.file_manager import PyFileTool
 from src.utils.logger import log_experiment, ActionType
@@ -15,14 +17,6 @@ from src.utils.logger import log_experiment, ActionType
 # ------------------ ENV & API KEYS ------------------
 load_dotenv()
 
-# Hugging Face
-HF_MODEL = os.getenv("HF_MODEL", "bigcode/starcoder")
-HF_API_KEY = os.getenv("HUGGINGFACE_API_KEY")
-if not HF_API_KEY:
-    print("⚠️ HUGGINGFACE_API_KEY non défini, Hugging Face désactivé")
-    HF_API_KEY = None
-
-HF_API_URL = f"https://api-inference.huggingface.co/models/{HF_MODEL}" if HF_API_KEY else None
 
 # OpenRouter
 OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
@@ -32,37 +26,12 @@ if not OPENROUTER_API_KEY:
 OPENROUTER_API_URL = "https://openrouter.ai/api/v1/chat/completions"
 OPENROUTER_MODELS = [
     "meta-llama/llama-3.1-70b-instruct",
+    "meta-llama/llama-3.1-70b-instruct",
     "meta-llama/llama-3.1-8b-instruct",
     "mistralai/mistral-7b-instruct",
     "mistralai/mixtral-8x7b-instruct",
     "google/gemma-7b-it"
 ]
-
-# ------------------ Hugging Face API ------------------
-def call_huggingface(prompt: str) -> Tuple[str, str]:
-    """Appel Hugging Face Inference API."""
-    if not HF_API_KEY or not HF_API_URL:
-        raise ValueError("Hugging Face API not configured")
-        
-    headers = {
-        "Authorization": f"Bearer {HF_API_KEY}",
-        "Content-Type": "application/json"
-    }
-    payload = {"inputs": prompt, "parameters": {"max_new_tokens": 1500, "temperature": 0.7}}
-
-    try:
-        response = requests.post(HF_API_URL, headers=headers, json=payload, timeout=40)
-        response.raise_for_status()
-        data = response.json()
-        if isinstance(data, list) and "generated_text" in data[0]:
-            return data[0]["generated_text"], HF_MODEL
-        elif "error" in data:
-            raise ValueError(f"Hugging Face API error: {data['error']}")
-        else:
-            raise ValueError(f"Unexpected HF response: {data}")
-    except Exception as e:
-        raise ValueError(f"Hugging Face call failed: {e}")
-
 
 def safe_parse_json(text: str) -> dict:
     """Parse JSON même avec markdown backticks."""
@@ -208,125 +177,199 @@ CRITICAL:
 """
     
     def generate_unit_tests_with_ai(self, code: str, file_path: str) -> Tuple[str, bool]:
-        """Génère des tests unitaires avec AI (HF ou OpenRouter)."""
-        code_hash = hash(code + file_path)
+        """Génère des tests unitaires avec AI (Groq -> OpenRouter fallback) + validation stricte."""
+        code_hash = hashlib.md5((code + file_path).encode()).hexdigest()
+
         if code_hash in self.test_cache:
             return self.test_cache[code_hash], True
 
-        prompt = self.build_test_generation_prompt(code, file_path)
+        last_error = ""
 
-        last_error = None
         for iteration in range(1, self.max_retries + 1):
+
+            prompt = self.build_test_generation_prompt(code, file_path, iteration)
+
+            if last_error:
+                prompt += f"\n\nPrevious error:\n{last_error}\nFix the issue and regenerate valid JSON."
+
             try:
                 print(f"🤖 AI test generation attempt {iteration}/{self.max_retries}")
 
-                # Try Hugging Face first
+                # Try Groq LLM first
                 try:
-                    raw_text, model_used = call_huggingface(prompt)
-                except Exception as hf_e:
-                    print(f"⚠️ Hugging Face failed: {hf_e}, trying OpenRouter fallback")
+                    if self.llm is None:
+                        raise ValueError("Groq LLM not initialized")
+
+                    resp = self.llm.invoke(prompt)
+                    raw_text = resp.content if hasattr(resp, "content") else str(resp)
+                    model_used = "Groq LLM"
+
+                except Exception as groq_e:
+                    print(f"⚠️ Groq failed: {groq_e}, trying OpenRouter fallback")
                     raw_text, model_used = call_openrouter(prompt)
 
                 llm_result = safe_parse_json(raw_text)
+
                 test_code = llm_result.get("test_code", "")
-                if not test_code:
+                if not test_code.strip():
                     raise ValueError("AI returned empty test_code")
-                compile(test_code, "<test>", "exec")
+
+                # Strict syntax validation
+                compile(test_code, "<generated_test>", "exec")
+
+                # Ensure at least one real test
+                if "def test_" not in test_code:
+                    raise ValueError("No test_ functions generated")
+
                 self.test_cache[code_hash] = test_code
+                print(f"✅ Tests generated successfully with {model_used}")
                 return test_code, True
 
             except Exception as e:
+                last_error = str(e)
                 print(f"⚠️ Attempt {iteration} failed: {e}")
-                last_error = e
                 time.sleep(2)
                 continue
 
-        print(f"❌ All AI attempts failed: {last_error}")
+        print("❌ All AI attempts failed, switching to fallback tests.")
         return self.generate_fallback_tests(code, file_path)
 
     def generate_fallback_tests(self, code: str, file_path: str) -> Tuple[str, bool]:
-        """Génère des tests basiques sans AI (fallback)."""
+        """
+        Génère des tests basiques sans AI pour tout fichier Python.
+        - Détecte toutes les fonctions publiques
+        - Crée des tests d'existence et des tests basiques d'appel
+        - Evite les imports externes
+        - Prépare le module pour pytest dans un fichier temporaire
+        """
         print(f"  🔧 Génération de tests basiques pour {os.path.basename(file_path)}")
 
+        # Détecte toutes les fonctions publiques
         function_pattern = r'def\s+([a-zA-Z_][a-zA-Z0-9_]*)\s*\('
-        functions = re.findall(function_pattern, code)
-        functions = [f for f in functions if not f.startswith('_')]
-
+        functions = [f for f in re.findall(function_pattern, code) if not f.startswith('_')]
         module_name = os.path.splitext(os.path.basename(file_path))[0]
 
+        # Template d'import safe
         test_code = textwrap.dedent(f"""
             import pytest
             import sys
             import os
             import importlib.util
 
-            sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+            # Ajouter le dossier du module source au path
+            sys.path.insert(0, os.path.abspath(os.path.dirname(r'{file_path}')))
 
             def load_module():
                 spec = importlib.util.spec_from_file_location("{module_name}", r"{file_path}")
-                module = importlib.util.module_from_spec(spec)
-                spec.loader.exec_module(module)
-                return module
+                mod = importlib.util.module_from_spec(spec)
+                spec.loader.exec_module(mod)
+                return mod
 
             test_module = load_module()
         """).strip() + "\n\n"
 
         if not functions:
+            # Si aucune fonction détectée, au moins tester l'import
             test_code += (
                 "def test_module_load():\n"
-                "    assert test_module is not None\n"
+                "    assert test_module is not None, 'Module should load without errors'\n"
             )
         else:
             for func in functions:
+                # Test existence et basic call
                 test_code += textwrap.dedent(f"""
                     def test_{func}_exists():
-                        assert hasattr(test_module, "{func}"), "La fonction {func} manque dans le module"
-                        assert callable(getattr(test_module, "{func}")), "{func} doit être une fonction"
+                        assert hasattr(test_module, "{func}"), "Function '{func}' should exist"
+                        assert callable(getattr(test_module, "{func}")), "'{func}' must be callable"
 
-                    def test_{func}_basic():
+                    def test_{func}_call_basic():
                         func_to_test = getattr(test_module, "{func}")
                         try:
                             result = func_to_test()
+                            # Si la fonction retourne quelque chose, on check juste qu'elle ne crash pas
                             assert True
                         except TypeError:
-                            pytest.skip("Fonction {func} nécessite des arguments")
+                            pytest.skip("Function '{func}' requires arguments, skipping basic call")
                         except Exception as e:
-                            pytest.fail(f"Erreur lors de l'appel : {{e}}")
+                            pytest.fail(f"Function '{func}' raised an unexpected exception: {{e}}")
                 """)
 
-        print(f"  ✅ {len(functions)} fonction(s) détectée(s), tests basiques générés")
+        print(f"  ✅ {len(functions)} fonction(s) détectée(s), tests fallback générés")
         return test_code, True
 
     def validate_test_file(self, test_code: str, test_file_path: str, source_file_path: str) -> Tuple[bool, str]:
-        """Pre-check of generated test file: syntax + import."""
+        """
+        Pre-check of generated test file:
+        - Strict syntax validation
+        - Safe import execution
+        - Robust test_ detection
+        - Ignores prints from imported module
+        """
         try:
             compile(test_code, test_file_path, "exec")
         except SyntaxError as e:
-            return False, f"SYNTAX ERROR in generated tests: line {e.lineno}: {e.msg}\n{e.text}"
+            return False, f"SYNTAX ERROR in generated tests: line {e.lineno}: {e.msg}"
+
         try:
             sandbox_dir = os.path.dirname(source_file_path)
-            check_script = (
-                f"import sys, importlib.util\n"
-                f"sys.path.insert(0, r'{sandbox_dir}')\n"
-                f"spec = importlib.util.spec_from_file_location('_test_check', r'{test_file_path}')\n"
-                f"mod = importlib.util.module_from_spec(spec)\n"
-                f"spec.loader.exec_module(mod)\n"
-                f"tests = [n for n in dir(mod) if n.startswith('test_') and callable(getattr(mod, n))]\n"
-                f"print('FOUND_TESTS:' + str(len(tests)))\n"
+
+            check_script = f"""
+import sys
+import importlib.util
+import io
+import contextlib
+
+sys.path.insert(0, r'{sandbox_dir}')
+
+# Silence stdout/stderr during import
+_buffer = io.StringIO()
+with contextlib.redirect_stdout(_buffer), contextlib.redirect_stderr(_buffer):
+    spec = importlib.util.spec_from_file_location('_test_check', r'{test_file_path}')
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+
+tests = [
+    name for name in dir(mod)
+    if name.startswith('test_') and callable(getattr(mod, name))
+]
+
+print(len(tests))
+"""
+
+            r = subprocess.run(
+                [__import__("sys").executable, "-c", check_script],
+                capture_output=True,
+                text=True,
+                timeout=20
             )
-            r = subprocess.run([__import__("sys").executable, "-c", check_script], capture_output=True, text=True, timeout=15)
+
             if r.returncode != 0:
-                return False, f"IMPORT/LOAD ERROR in generated tests:\n{r.stderr}"
-            for line in r.stdout.splitlines():
-                if line.startswith("FOUND_TESTS:"):
-                    if int(line.split(":", 1)[1]) == 0:
-                        return False, "Generated test file has ZERO test_ functions."
-                    return True, ""
-            return False, "Could not determine number of tests in generated file."
-        except subprocess.TimeoutExpired:
-            return False, "Test file validation timed out (possible infinite loop at import)."
-        except Exception:
+                return False, f"IMPORT ERROR in generated tests:\n{r.stderr}"
+
+            # 🔥 Extract LAST valid integer from output
+            lines = [
+                line.strip()
+                for line in r.stdout.splitlines()
+                if line.strip().isdigit()
+            ]
+
+            if not lines:
+                return False, (
+                    "Validation error: no valid test count found.\n"
+                    f"Output was:\n{r.stdout[:300]}"
+                )
+
+            test_count = int(lines[-1])
+
+            if test_count == 0:
+                return False, "Generated test file has ZERO test_ functions."
+
             return True, ""
+
+        except subprocess.TimeoutExpired:
+            return False, "Test file validation timed out."
+        except Exception as e:
+            return False, f"Validation error: {e}"
 
     def parse_pytest_results(self, pytest_output: str) -> Tuple[int, int, bool, bool]:
         """Extract passed, failed and detect collection errors from pytest stdout."""
@@ -383,15 +426,25 @@ CRITICAL:
         """Ask available LLM to analyze failures, fallback to heuristic extraction."""
         truncated = pytest_output[-2000:] if len(pytest_output) > 2000 else pytest_output
         prompt = f"Analyze these pytest results and explain likely root causes and next steps.\n\nPYTEST OUTPUT:\n{truncated}\n\nCODE:\n{fixed_code}\n\nProvide concise actionable suggestions."
+        
         try:
             if self.llm:
-                resp = self.llm.invoke(prompt)
-                content = resp.content if hasattr(resp, "content") else str(resp)
-                return str(content)
-            else:
-                # NOUVEAU: Fallback OpenRouter si pas de Groq LLM
+                try:
+                    resp = self.llm.invoke(prompt)
+                    content = resp.content if hasattr(resp, "content") else str(resp)
+                    return str(content)
+                except Exception as groq_e:
+                    print(f"    ⚠️ Groq failed during analysis: {groq_e}")
+                    # Continue to OpenRouter fallback
+
+            # Fallback OpenRouter (if no Groq or Groq failed)
+            try:
                 content, _ = call_openrouter(prompt)
                 return str(content)
+            except Exception as openrouter_e:
+                print(f"    ⚠️ OpenRouter fallback failed: {openrouter_e}")
+                return self.extract_specific_test_failures(pytest_output)
+
         except Exception as e:
             print(f"    ⚠️ LLM analysis failed: {e}")
             return self.extract_specific_test_failures(pytest_output)
@@ -516,84 +569,67 @@ This file contains Python code that has been successfully validated.
         return test_path
 
     def run_tests(self, test_file_path: str, original_file_path: str) -> Dict:
-        """Exécute les tests avec pytest."""
+        """Exécute les tests avec parsing robuste."""
         print(f"  🚀 Exécution des tests...")
+
         try:
-            project_root = os.getcwd()
             cmd = ["pytest", test_file_path, "-v", "--tb=short"]
-            result = subprocess.run(cmd, capture_output=True, text=True, timeout=60, cwd=project_root)
-            stdout = result.stdout
-            stderr = result.stderr
-            returncode = result.returncode
-            success = returncode == 0
-            passed = stdout.count(" PASSED")
-            failed = stdout.count(" FAILED")
-            errors = stdout.count(" ERROR")
-            skipped = stdout.count(" SKIPPED")
+
+            result = subprocess.run(
+                cmd,
+                capture_output=True,
+                text=True,
+                timeout=60
+            )
+
+            pytest_output = (result.stdout or "") + "\n" + (result.stderr or "")
+
+            passed, failed, has_tests, collection_error = self.parse_pytest_results(pytest_output)
+
+            success = passed > 0 and failed == 0 and has_tests and not collection_error
+
             result_dict = {
                 "success": success,
                 "passed": passed,
                 "failed": failed,
-                "errors": errors,
-                "skipped": skipped,
-                "total": passed + failed + errors,
-                "stdout": stdout,
-                "stderr": stderr,
-                "returncode": returncode
+                "errors": 0 if not collection_error else 1,
+                "skipped": pytest_output.count("SKIPPED"),
+                "total": passed + failed,
+                "stdout": result.stdout,
+                "stderr": result.stderr,
+                "returncode": result.returncode
             }
-            self._safe_log(
-                agent_name=self.name,
-                model_used="pytest",
-                action=ActionType.ANALYSIS,
-                details={
-                    "file_tested": original_file_path,
-                    "input_prompt": f"pytest execution on {test_file_path}",
-                    "output_response": f"Tests executed: {passed} passed, {failed} failed, {errors} errors",
-                    "test_file": test_file_path,
-                    "passed": passed,
-                    "failed": failed,
-                    "errors": errors,
-                    "total": passed + failed + errors
-                },
-                status="SUCCESS" if success else "FAILURE"
-            )
-            if success and passed > 0:
-                print(f"  ✅ Tests réussis: {passed}/{passed + failed + errors}")
+
+            if success:
+                print(f"  ✅ Tests réussis: {passed}/{passed + failed}")
             elif failed > 0:
-                print(f"  ❌ Tests échoués: {failed}/{passed + failed + errors}")
+                print(f"  ❌ Tests échoués: {failed}/{passed + failed}")
             else:
-                print(f"  ⚠️ Aucun test collecté")
+                print(f"  ⚠️ Aucun test collecté ou erreur de collection")
+
             return result_dict
+
         except subprocess.TimeoutExpired:
             print(f"  ⏱️ Timeout lors de l'exécution des tests")
-            self._safe_log(
-                agent_name=self.name,
-                model_used="pytest",
-                action=ActionType.ANALYSIS,
-                details={
-                    "file_tested": original_file_path,
-                    "input_prompt": f"pytest execution on {test_file_path}",
-                    "output_response": "Test execution timeout",
-                    "error": "Timeout"
-                },
-                status="FAILURE"
-            )
-            return {"success": False, "error": "Timeout", "passed": 0, "failed": 0, "errors": 1, "total": 0}
+            return {
+                "success": False,
+                "error": "Timeout",
+                "passed": 0,
+                "failed": 1,
+                "errors": 1,
+                "total": 1
+            }
+
         except Exception as e:
             print(f"  ❌ Erreur lors de l'exécution des tests: {e}")
-            self._safe_log(
-                agent_name=self.name,
-                model_used="pytest",
-                action=ActionType.ANALYSIS,
-                details={
-                    "file_tested": original_file_path,
-                    "input_prompt": f"pytest execution on {test_file_path}",
-                    "output_response": f"Test execution error: {str(e)[:500]}",
-                    "error": str(e)
-                },
-                status="FAILURE"
-            )
-            return {"success": False, "error": str(e), "passed": 0, "failed": 0, "errors": 1, "total": 0}
+            return {
+                "success": False,
+                "error": str(e),
+                "passed": 0,
+                "failed": 1,
+                "errors": 1,
+                "total": 1
+            }
 
     def evaluate_file(self, file_path: str) -> Dict:
         """Évalue un fichier : génère et exécute les tests."""
@@ -606,11 +642,7 @@ This file contains Python code that has been successfully validated.
                 with open(file_path, 'r', encoding='latin-1') as f:
                     code = f.read()
 
-            if self.llm:
-                test_code, success = self.generate_unit_tests_with_ai(code, file_path)
-            else:
-                test_code, success = self.generate_fallback_tests(code, file_path)
-
+            test_code, success = self.generate_unit_tests_with_ai(code, file_path)
             if not success:
                 self._safe_log(
                     agent_name=self.name,

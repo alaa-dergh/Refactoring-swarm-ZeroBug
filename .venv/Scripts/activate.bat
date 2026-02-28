@@ -8,7 +8,7 @@ if defined _OLD_CODEPAGE (
     "%SystemRoot%\System32\chcp.com" 65001 > nul
 )
 
-set VIRTUAL_ENV=C:\Users\lenovo\Desktop\project\Refactoring-swarm-ZeroBug\.venv
+set VIRTUAL_ENV=C:\Users\ABC\Desktop\Igl-pro\refactoring-swarm-template\.venv
 
 if not defined PROMPT set PROMPT=$P$G
 

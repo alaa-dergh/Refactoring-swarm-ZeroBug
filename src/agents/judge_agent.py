@@ -208,7 +208,7 @@ CRITICAL:
 """
     
     def generate_unit_tests_with_ai(self, code: str, file_path: str) -> Tuple[str, bool]:
-        """Génère des tests unitaires avec AI (HF ou OpenRouter)."""
+        """Génère des tests unitaires avec AI - Groq en priorité, puis HF, puis OpenRouter."""
         code_hash = hash(code + file_path)
         if code_hash in self.test_cache:
             return self.test_cache[code_hash], True
@@ -220,12 +220,22 @@ CRITICAL:
             try:
                 print(f"🤖 AI test generation attempt {iteration}/{self.max_retries}")
 
-                # Try Hugging Face first
+                # ✅ FIX: Try Groq first (free & fast), then HF, then OpenRouter
                 try:
-                    raw_text, model_used = call_huggingface(prompt)
-                except Exception as hf_e:
-                    print(f"⚠️ Hugging Face failed: {hf_e}, trying OpenRouter fallback")
-                    raw_text, model_used = call_openrouter(prompt)
+                    if self.llm:
+                        print(f"  🤖 Using Groq LLM (primary)")
+                        resp = self.llm.invoke(prompt)
+                        raw_text = resp.content if hasattr(resp, "content") else str(resp)
+                        model_used = "groq"
+                    else:
+                        raise ValueError("No Groq LLM available")
+                except Exception as groq_e:
+                    print(f"  ⚠️ Groq failed: {groq_e}, trying Hugging Face")
+                    try:
+                        raw_text, model_used = call_huggingface(prompt)
+                    except Exception as hf_e:
+                        print(f"  ⚠️ Hugging Face failed: {hf_e}, trying OpenRouter fallback")
+                        raw_text, model_used = call_openrouter(prompt)
 
                 llm_result = safe_parse_json(raw_text)
                 test_code = llm_result.get("test_code", "")
@@ -389,7 +399,6 @@ CRITICAL:
                 content = resp.content if hasattr(resp, "content") else str(resp)
                 return str(content)
             else:
-                # NOUVEAU: Fallback OpenRouter si pas de Groq LLM
                 content, _ = call_openrouter(prompt)
                 return str(content)
         except Exception as e:
@@ -397,10 +406,7 @@ CRITICAL:
             return self.extract_specific_test_failures(pytest_output)
 
     def generate_enhanced_documentation(self, code: str, file_path: str) -> str:
-        """
-        NOUVEAU: Génère une documentation Markdown améliorée avec structure complète.
-        Utilise OpenRouter si Groq LLM n'est pas disponible.
-        """
+        """Génère une documentation Markdown améliorée avec structure complète."""
         base_name = os.path.splitext(os.path.basename(file_path))[0]
         
         prompt = f"""Generate comprehensive markdown documentation for this Python code.
@@ -473,16 +479,13 @@ Return ONLY the markdown documentation (no code blocks around it):"""
                 resp = self.llm.invoke(prompt)
                 documentation = resp.content if hasattr(resp, "content") else str(resp)
             else:
-                # Fallback OpenRouter
                 documentation, _ = call_openrouter(prompt)
             
-            # Cleanup
             documentation = documentation.replace('```markdown', '').replace('```', '').strip()
             return documentation
             
         except Exception as e:
             print(f"    ⚠️ Enhanced doc generation failed: {e}, using fallback")
-            # Fallback basique
             return f"""# {base_name.title().replace('_', ' ')} - Documentation
 
 **Status**: Production Ready - All Tests Passed  
@@ -628,7 +631,6 @@ This file contains Python code that has been successfully validated.
 
             test_path = self.save_test_file(test_code, file_path)
 
-            # Validate test file BEFORE running pytest
             test_valid, test_error = self.validate_test_file(test_code, test_path, file_path)
             if not test_valid:
                 print(f"  ⚠️ Test file validation failed: {test_error[:200]}")
@@ -677,7 +679,6 @@ This file contains Python code that has been successfully validated.
                     base_name = os.path.splitext(os.path.basename(file_path))[0]
                     doc_filename = os.path.join(os.path.dirname(file_path), f"{base_name}_documentation.md")
                     
-                    # NOUVEAU: Utilise la génération améliorée
                     doc = self.generate_enhanced_documentation(code, file_path)
                     
                     with open(doc_filename, "w", encoding="utf-8") as f:

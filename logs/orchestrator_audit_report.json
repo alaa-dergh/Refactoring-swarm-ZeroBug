@@ -1,0 +1,307 @@
+{
+  "total_files": 2,
+  "files": [
+    {
+      "file_path": "sandbox\\buggy-long-file.py",
+      "bugs": [
+        {
+          "line": 9,
+          "severity": "high",
+          "description": "Mutable default argument for 'categories' in Product.__init__",
+          "suggestion": "Replace with 'categories=None' and initialize as 'self.categories = categories if categories is not None else []'"
+        },
+        {
+          "line": 17,
+          "severity": "critical",
+          "description": "Missing colon in function definition",
+          "suggestion": "Add colon after function parameters: 'def add_review(self, rating, comment):'"
+        },
+        {
+          "line": 26,
+          "severity": "critical",
+          "description": "Missing closing parenthesis in list append",
+          "suggestion": "Add closing parenthesis: 'self.reviews.append(review)'"
+        },
+        {
+          "line": 30,
+          "severity": "high",
+          "description": "Potential division by zero in get_average_rating",
+          "suggestion": "Check for empty reviews before division: 'if not self.reviews: return 0'"
+        },
+        {
+          "line": 43,
+          "severity": "high",
+          "description": "Missing colon in if statement",
+          "suggestion": "Add colon after condition: 'if self.stock < 0:'"
+        },
+        {
+          "line": 70,
+          "severity": "medium",
+          "description": "Direct stock modification bypassing update_stock method",
+          "suggestion": "Use product.update_stock(-quantity) instead of direct assignment"
+        },
+        {
+          "line": 90,
+          "severity": "high",
+          "description": "Missing colon in if statement",
+          "suggestion": "Add colon after condition: 'if coupon_code == \"\":'"
+        },
+        {
+          "line": 114,
+          "severity": "high",
+          "description": "Mutable default argument for 'shipping_address'",
+          "suggestion": "Replace with 'shipping_address=None' and initialize as 'self.shipping_address = shipping_address if shipping_address is not None else {}'"
+        },
+        {
+          "line": 124,
+          "severity": "high",
+          "description": "Missing colon in if statement",
+          "suggestion": "Add colon after condition: 'if product.stock < quantity:'"
+        },
+        {
+          "line": 133,
+          "severity": "critical",
+          "description": "Dangerous use of eval() with user input",
+          "suggestion": "Remove eval and use direct value: 'calculated_amount = amount'"
+        },
+        {
+          "line": 140,
+          "severity": "critical",
+          "description": "Missing colon in function definition and missing parenthesis",
+          "suggestion": "Add colon after parameters and closing parenthesis: 'def calculate_shipping(self, weight, distance): ... distance * distance_rate)'"
+        },
+        {
+          "line": 184,
+          "severity": "high",
+          "description": "Mutable default argument for 'addresses'",
+          "suggestion": "Replace with 'addresses=None' and initialize as 'self.addresses = addresses if addresses is not None else []'"
+        },
+        {
+          "line": 229,
+          "severity": "medium",
+          "description": "Unnecessary division by 1",
+          "suggestion": "Return total directly: 'return total'"
+        },
+        {
+          "line": 250,
+          "severity": "high",
+          "description": "Missing colon in for loop",
+          "suggestion": "Add colon after loop declaration: 'for product in self.products.values():'"
+        },
+        {
+          "line": 293,
+          "severity": "medium",
+          "description": "Unnecessary division by 1",
+          "suggestion": "Return total_value directly: 'return total_value'"
+        },
+        {
+          "line": 295,
+          "severity": "high",
+          "description": "Mutable default argument for 'filters'",
+          "suggestion": "Replace with 'filters=None' and initialize as 'filters = filters if filters is not None else {}'"
+        },
+        {
+          "line": 303,
+          "severity": "high",
+          "description": "Missing colon in if statement",
+          "suggestion": "Add colon after condition: 'if product.price < filters['min_price']:'"
+        },
+        {
+          "line": 336,
+          "severity": "medium",
+          "description": "Unnecessary division by 1",
+          "suggestion": "Return 0 directly: 'return 0'"
+        },
+        {
+          "line": 347,
+          "severity": "high",
+          "description": "Missing colon in if statement",
+          "suggestion": "Add colon after condition: 'if start_date <= order.created_at <= end_date:'"
+        },
+        {
+          "line": 361,
+          "severity": "critical",
+          "description": "Division by zero when no filtered orders",
+          "suggestion": "Handle empty orders case: 'report['average_order_value'] = 0'"
+        },
+        {
+          "line": 363,
+          "severity": "high",
+          "description": "Missing colon in if statement",
+          "suggestion": "Add colon after condition: 'if \"@\" not in email or \".\" not in email:'"
+        },
+        {
+          "line": 380,
+          "severity": "medium",
+          "description": "Unnecessary division by 1",
+          "suggestion": "Return tax directly: 'return tax'"
+        }
+      ],
+      "quality_issues": [
+        {
+          "line": 133,
+          "severity": "critical",
+          "description": "Security vulnerability with eval() usage",
+          "suggestion": "Remove eval completely as it's unnecessary and dangerous"
+        },
+        {
+          "line": 70,
+          "severity": "high",
+          "description": "Bypassing encapsulation by directly modifying product.stock",
+          "suggestion": "Use product.update_stock() method to maintain business logic"
+        },
+        {
+          "line": 244,
+          "severity": "high",
+          "description": "Potential KeyError in get_product",
+          "suggestion": "Add existence check or use .get() with default"
+        },
+        {
+          "line": 201,
+          "severity": "medium",
+          "description": "Floating point loyalty points accumulation",
+          "suggestion": "Use integer division: 'points_earned = amount // 10'"
+        },
+        {
+          "line": 347,
+          "severity": "medium",
+          "description": "Basic email validation that fails many valid cases",
+          "suggestion": "Use regex or email-validator library for proper validation"
+        }
+      ],
+      "style_issues": [
+        {
+          "line": 9,
+          "severity": "low",
+          "description": "Inconsistent docstring formatting",
+          "suggestion": "Use consistent triple-quoted strings with proper punctuation"
+        },
+        {
+          "line": 70,
+          "severity": "low",
+          "description": "Long line (over 79 characters)",
+          "suggestion": "Break line after 'product.stock = product.stock - quantity'"
+        },
+        {
+          "line": 133,
+          "severity": "low",
+          "description": "Unnecessary f-string without variables",
+          "suggestion": "Remove f-string wrapper: 'calculated_amount = amount'"
+        },
+        {
+          "line": 201,
+          "severity": "low",
+          "description": "Inconsistent operator spacing",
+          "suggestion": "Add spaces around operator: 'self.loyalty_points += points_earned'"
+        },
+        {
+          "line": 250,
+          "severity": "low",
+          "description": "Missing whitespace around operator",
+          "suggestion": "Add space: 'for product in self.products.values():'"
+        }
+      ],
+      "refactoring_plan": {
+        "steps": [
+          "Fix all syntax errors (missing colons, parentheses)",
+          "Replace all mutable default arguments with None pattern",
+          "Add proper error handling for KeyError in inventory methods",
+          "Implement safe division with zero checks throughout",
+          "Remove all security risks (eval usage)",
+          "Refactor stock management to use update_stock method consistently",
+          "Convert loyalty points to integer calculations",
+          "Implement proper email validation with regex",
+          "Add type hints throughout the codebase",
+          "Implement proper exception classes instead of generic Exception",
+          "Add unit tests for all critical functionality",
+          "Implement logging instead of print statements",
+          "Create base class for common e-commerce functionality",
+          "Add database persistence layer instead of in-memory storage"
+        ]
+      },
+      "score": 4.2
+    },
+    {
+      "file_path": "sandbox\\buggy_calculator.py",
+      "bugs": [
+        {
+          "line": 5,
+          "severity": "high",
+          "description": "Division by zero possible when 'b' is zero.",
+          "suggestion": "Add a check for 'b != 0' and handle the ZeroDivisionError appropriately."
+        },
+        {
+          "line": 7,
+          "severity": "medium",
+          "description": "Mutable default argument 'numbers=[]' may lead to unexpected behavior.",
+          "suggestion": "Use 'None' as default and initialize a new list inside the function."
+        },
+        {
+          "line": 9,
+          "severity": "high",
+          "description": "Syntax error: Missing colon in 'for' loop definition.",
+          "suggestion": "Add a colon after 'for n in numbers'."
+        },
+        {
+          "line": 11,
+          "severity": "high",
+          "description": "Division by zero possible if 'numbers' is empty.",
+          "suggestion": "Check if 'numbers' is empty before division and handle appropriately."
+        },
+        {
+          "line": 13,
+          "severity": "high",
+          "description": "Dangerous use of 'eval()' with raw input data.",
+          "suggestion": "Avoid 'eval()'; use safer alternatives like 'ast.literal_eval()' or specific parsers."
+        },
+        {
+          "line": 17,
+          "severity": "high",
+          "description": "Direct call to 'divide(x, y)' with y=0 will cause runtime error.",
+          "suggestion": "Add error handling or ensure 'y' is never zero before calling."
+        }
+      ],
+      "quality_issues": [
+        {
+          "line": 7,
+          "severity": "medium",
+          "description": "Mutable default argument leads to shared state across function calls.",
+          "suggestion": "Refactor to use 'None' and initialize a new list inside the function."
+        },
+        {
+          "line": 13,
+          "severity": "high",
+          "description": "Unsafe use of 'eval()' exposes code to arbitrary code execution vulnerabilities.",
+          "suggestion": "Remove 'eval()' and implement input validation/sanitization."
+        }
+      ],
+      "style_issues": [
+        {
+          "line": 9,
+          "severity": "high",
+          "description": "Syntax error breaks code execution.",
+          "suggestion": "Add missing colon to fix loop definition."
+        },
+        {
+          "line": "global",
+          "severity": "low",
+          "description": "Lack of error handling for edge cases (e.g., empty lists, zero division).",
+          "suggestion": "Add try/except blocks and input validation."
+        }
+      ],
+      "refactoring_plan": [
+        "Fix 'divide()' to handle division by zero with checks or try/except.",
+        "Refactor 'calculate_average()' to use 'None' as default argument and fix loop syntax.",
+        "Add guard clause in 'calculate_average()' for empty input list.",
+        "Replace 'eval()' in 'process_data()' with safer parsing logic.",
+        "Add error handling around the 'divide(x, y)' call in global scope."
+      ],
+      "score": 2
+    }
+  ],
+  "summary": {
+    "total_bugs": 28,
+    "total_quality_issues": 7,
+    "total_style_issues": 7
+  }
+}

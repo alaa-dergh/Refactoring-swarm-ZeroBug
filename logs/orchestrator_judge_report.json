@@ -1,0 +1,39 @@
+{
+  "summary": {
+    "total_files": 2,
+    "files_with_passing_tests": 1,
+    "files_with_failing_tests": 1,
+    "success_rate": "50.0%",
+    "total_tests": 39,
+    "tests_passed": 38,
+    "tests_failed": 1,
+    "tests_errors": 0,
+    "test_success_rate": "97.4%",
+    "ai_used_count": 2,
+    "fallback_used_count": 0
+  },
+  "files": [
+    {
+      "file_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\fixed\\buggy-long-file.py",
+      "test_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\fixed\\test_judge\\test_buggy-long-file.py",
+      "success": false,
+      "passed": 29,
+      "failed": 1,
+      "errors": 0,
+      "total": 30,
+      "ai_used": true,
+      "test_output": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\fixed\nplugins: anyio-4.12.1\ncollecting ... collected 30 items\n\ntest_judge/test_buggy-long-file.py::test_product_creation PASSED         [  3%]\ntest_judge/test_buggy-long-file.py::t"
+    },
+    {
+      "file_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\fixed\\buggy_calculator.py",
+      "test_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\fixed\\test_judge\\test_buggy_calculator.py",
+      "success": true,
+      "passed": 9,
+      "failed": 0,
+      "errors": 0,
+      "total": 9,
+      "ai_used": true,
+      "test_output": "============================= test session starts =============================\nplatform win32 -- Python 3.11.9, pytest-7.4.4, pluggy-1.6.0 -- C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\venv\\Scripts\\python.exe\ncachedir: .pytest_cache\nrootdir: C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\fixed\nplugins: anyio-4.12.1\ncollecting ... collected 9 items\n\ntest_judge/test_buggy_calculator.py::test_divide_normal PASSED           [ 11%]\ntest_judge/test_buggy_calculator.py::t"
+    }
+  ]
+}

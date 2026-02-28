@@ -1,0 +1,12 @@
+{
+  "input_dir": "sandbox",
+  "output_dir": "sandbox\\fixed",
+  "start_time": "2026-02-28T13:43:18.695270",
+  "iterations": [],
+  "success": false,
+  "error": null,
+  "final_iteration": 0,
+  "end_time": "2026-02-28T13:43:54.360453",
+  "total_duration": 35.67,
+  "all_tests_passing": false
+}

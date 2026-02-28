@@ -1,0 +1,95 @@
+{
+  "total_files": 4,
+  "files": [
+    {
+      "file_path": "sandbox\\buggy_calculator.py",
+      "bugs": [
+        {
+          "line": 5,
+          "severity": "HIGH",
+          "description": "Division possible par zéro",
+          "suggestion": "Ajouter une vérification != 0"
+        },
+        {
+          "line": 7,
+          "severity": "HIGH",
+          "description": "Argument mutable par défaut",
+          "suggestion": "Utiliser None puis initialiser"
+        },
+        {
+          "line": 11,
+          "severity": "HIGH",
+          "description": "Division possible par zéro",
+          "suggestion": "Ajouter une vérification != 0"
+        }
+      ],
+      "quality_issues": [],
+      "style_issues": [],
+      "refactoring_plan": [
+        "Corriger erreurs critiques",
+        "Appliquer recommandations",
+        "Nettoyer le code"
+      ],
+      "score": 0.0,
+      "fallback_reason": "LLM failed: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}"
+    },
+    {
+      "file_path": "sandbox\\buggy_list_ops.py",
+      "bugs": [
+        {
+          "line": 10,
+          "severity": "HIGH",
+          "description": "Argument mutable par défaut",
+          "suggestion": "Utiliser None puis initialiser"
+        }
+      ],
+      "quality_issues": [],
+      "style_issues": [],
+      "refactoring_plan": [
+        "Corriger erreurs critiques",
+        "Appliquer recommandations",
+        "Nettoyer le code"
+      ],
+      "score": 0.0,
+      "fallback_reason": "LLM failed: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}"
+    },
+    {
+      "file_path": "sandbox\\buggy_string_utils.py",
+      "bugs": [],
+      "quality_issues": [],
+      "style_issues": [],
+      "refactoring_plan": [
+        "Corriger erreurs critiques",
+        "Appliquer recommandations",
+        "Nettoyer le code"
+      ],
+      "score": 0.0,
+      "fallback_reason": "LLM failed: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}"
+    },
+    {
+      "file_path": "sandbox\\fixed\\buggy_calculator.py",
+      "bugs": [
+        {
+          "line": 17,
+          "severity": "HIGH",
+          "description": "Division possible par zéro",
+          "suggestion": "Ajouter une vérification != 0"
+        }
+      ],
+      "quality_issues": [],
+      "style_issues": [],
+      "refactoring_plan": [
+        "Corriger erreurs critiques",
+        "Appliquer recommandations",
+        "Nettoyer le code"
+      ],
+      "score": 0.0,
+      "fallback_reason": "LLM failed: Error code: 402 - {'error': {'message': 'Insufficient credits. This account never purchased credits. Make sure your key is on the correct account or org, and if so, purchase more at https://openrouter.ai/settings/credits', 'code': 402}}"
+    }
+  ],
+  "summary": {
+    "total_bugs": 5,
+    "total_quality_issues": 0,
+    "total_style_issues": 0
+  }
+}

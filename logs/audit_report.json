@@ -1,0 +1,225 @@
+{
+  "total_files": 3,
+  "files": [
+    {
+      "file_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_calculator.py",
+      "bugs": [
+        {
+          "line": 5,
+          "severity": "high",
+          "description": "Division by zero is possible",
+          "suggestion": "Add a check to ensure the divisor is not zero before performing the division"
+        },
+        {
+          "line": 7,
+          "severity": "high",
+          "description": "Mutable default argument",
+          "suggestion": "Use an immutable default argument, such as None, and initialize the list inside the function"
+        },
+        {
+          "line": 9,
+          "severity": "critical",
+          "description": "Syntax error: missing colon",
+          "suggestion": "Add a colon at the end of the for loop declaration"
+        },
+        {
+          "line": 11,
+          "severity": "high",
+          "description": "Division by zero is possible",
+          "suggestion": "Add a check to ensure the divisor is not zero before performing the division"
+        },
+        {
+          "line": 13,
+          "severity": "critical",
+          "description": "Dangerous use of eval",
+          "suggestion": "Use a safer method to evaluate the data, such as using a parsing library or a whitelist of allowed functions"
+        }
+      ],
+      "quality_issues": [
+        {
+          "line": 3,
+          "severity": "medium",
+          "description": "Function does not handle potential exceptions",
+          "suggestion": "Add try-except blocks to handle potential exceptions, such as ZeroDivisionError"
+        },
+        {
+          "line": 7,
+          "severity": "medium",
+          "description": "Function does not check for empty input",
+          "suggestion": "Add a check to ensure the input list is not empty before calculating the average"
+        }
+      ],
+      "style_issues": [
+        {
+          "line": 1,
+          "severity": "low",
+          "description": "File does not follow PEP 8 naming conventions",
+          "suggestion": "Rename the file to follow PEP 8 naming conventions, such as 'buggy_calculator.py' -> 'calculator.py'"
+        },
+        {
+          "line": 3,
+          "severity": "low",
+          "description": "Function name does not follow PEP 8 naming conventions",
+          "suggestion": "Rename the function to follow PEP 8 naming conventions, such as 'divide' -> 'calculate_division'"
+        }
+      ],
+      "refactoring_plan": [
+        {
+          "description": "Refactor the divide function to handle division by zero",
+          "steps": [
+            "Add a check to ensure the divisor is not zero",
+            "Raise a ZeroDivisionError if the divisor is zero"
+          ]
+        },
+        {
+          "description": "Refactor the calculate_average function to handle empty input",
+          "steps": [
+            "Add a check to ensure the input list is not empty",
+            "Raise a ValueError if the input list is empty"
+          ]
+        },
+        {
+          "description": "Refactor the process_data function to use a safer method",
+          "steps": [
+            "Replace eval with a safer method, such as using a parsing library",
+            "Add input validation to ensure the data is safe to process"
+          ]
+        }
+      ],
+      "score": 2
+    },
+    {
+      "file_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_list_ops.py",
+      "bugs": [
+        {
+          "line": 6,
+          "severity": "high",
+          "description": "Missing colon after if statement",
+          "suggestion": "Add a colon at the end of the if statement"
+        },
+        {
+          "line": 10,
+          "severity": "high",
+          "description": "Mutable default argument",
+          "suggestion": "Use None as default argument and initialize the list inside the function"
+        },
+        {
+          "line": 13,
+          "severity": "high",
+          "description": "No bounds checking for list index",
+          "suggestion": "Add a check to ensure the index is within the bounds of the list"
+        }
+      ],
+      "quality_issues": [
+        {
+          "line": 3,
+          "severity": "medium",
+          "description": "Assuming the list is not empty",
+          "suggestion": "Add a check to handle the case where the list is empty"
+        },
+        {
+          "line": 10,
+          "severity": "medium",
+          "description": "Using set to remove duplicates can change the order of elements",
+          "suggestion": "Consider using a different approach to preserve the order of elements"
+        }
+      ],
+      "style_issues": [
+        {
+          "line": 1,
+          "severity": "low",
+          "description": "Missing docstring for function",
+          "suggestion": "Add a docstring to describe the purpose of the function"
+        },
+        {
+          "line": 10,
+          "severity": "low",
+          "description": "Function name could be more descriptive",
+          "suggestion": "Consider renaming the function to better reflect its purpose"
+        }
+      ],
+      "refactoring_plan": [
+        {
+          "description": "Refactor the find_max function to use the built-in max function",
+          "suggestion": "Replace the find_max function with a call to the built-in max function"
+        },
+        {
+          "description": "Refactor the remove_duplicates function to preserve the order of elements",
+          "suggestion": "Use a different approach, such as using a list comprehension with an if condition, to remove duplicates while preserving the order"
+        }
+      ],
+      "score": 4
+    },
+    {
+      "file_path": "C:\\Users\\ABC\\Desktop\\Igl-pro\\refactoring-swarm-template\\sandbox\\buggy_string_utils.py",
+      "bugs": [
+        {
+          "line": 10,
+          "severity": "high",
+          "description": "Missing closing parenthesis in the capitalize_words function",
+          "suggestion": "Add a closing parenthesis after word.capitalize()"
+        },
+        {
+          "line": 13,
+          "severity": "high",
+          "description": "Missing colon after function definition",
+          "suggestion": "Add a colon after the function definition count_vowels(text)"
+        }
+      ],
+      "quality_issues": [
+        {
+          "line": 5,
+          "severity": "low",
+          "description": "The function reverse_string does not handle None or non-string inputs",
+          "suggestion": "Add input validation to handle None or non-string inputs"
+        },
+        {
+          "line": 8,
+          "severity": "low",
+          "description": "The function capitalize_words does not handle None or non-string inputs",
+          "suggestion": "Add input validation to handle None or non-string inputs"
+        },
+        {
+          "line": 14,
+          "severity": "low",
+          "description": "The function count_vowels does not handle None or non-string inputs",
+          "suggestion": "Add input validation to handle None or non-string inputs"
+        }
+      ],
+      "style_issues": [
+        {
+          "line": 5,
+          "severity": "low",
+          "description": "The function name reverse_string is not following PEP 8 naming conventions",
+          "suggestion": "Rename the function to reverse_string_s or use a more descriptive name"
+        },
+        {
+          "line": 8,
+          "severity": "low",
+          "description": "The variable name result is not descriptive",
+          "suggestion": "Rename the variable to capitalized_words or use a more descriptive name"
+        }
+      ],
+      "refactoring_plan": [
+        {
+          "line": 8,
+          "severity": "low",
+          "description": "The function capitalize_words can be refactored to use a list comprehension",
+          "suggestion": "Refactor the function to use a list comprehension: return ' '.join(word.capitalize() for word in text.split())"
+        },
+        {
+          "line": 14,
+          "severity": "low",
+          "description": "The function count_vowels can be refactored to use a generator expression",
+          "suggestion": "Refactor the function to use a generator expression: return sum(1 for char in text if char in vowels)"
+        }
+      ],
+      "score": 4
+    }
+  ],
+  "summary": {
+    "total_bugs": 10,
+    "total_quality_issues": 7,
+    "total_style_issues": 6
+  }
+}

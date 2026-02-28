@@ -1,4 +1,5 @@
 import os
+import threading
 import subprocess
 import json
 import time
@@ -7,12 +8,51 @@ from dotenv import load_dotenv
 
 from src.utils.file_manager import PyFileTool
 from src.utils.logger import log_experiment, ActionType
-from src.utils.groq_wrapper import llm # ← MODIFIÉ: Utilise Gemini
+from langchain_openai import ChatOpenAI
+from langchain_core.outputs import ChatGenerationChunk
+from langchain_core.messages import AIMessageChunk, AIMessage
 
 # ================================
-# Load API key
+# Load API key OpenRouter
 # ================================
 load_dotenv()
+OPENROUTER_API_KEY = os.getenv("OPENROUTER_API_KEY")
+if not OPENROUTER_API_KEY:
+    raise ValueError("❌ OPENROUTER_API_KEY non trouvée dans .env")
+
+# ================================
+# LLM Wrapper non-streaming
+# ================================
+class NonStreamingChatOpenAI(ChatOpenAI):
+    """Wrapper qui force le non-streaming pour compatibilité outils."""
+
+    def _stream(self, messages, stop=None, run_manager=None, **kwargs):
+        kwargs.pop("stream", None)
+        kwargs["stream"] = False
+        result = self._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
+        message = result.generations[0].message
+        chunk = ChatGenerationChunk(
+            message=AIMessageChunk(
+                content=message.content,
+                additional_kwargs=message.additional_kwargs,
+                id=message.id if hasattr(message, 'id') else None,
+            )
+        )
+        yield chunk
+
+    def _generate(self, messages, stop=None, run_manager=None, **kwargs):
+        kwargs.pop("stream", None)
+        kwargs["stream"] = False
+        return super()._generate(messages, stop=stop, run_manager=run_manager, **kwargs)
+
+llm = NonStreamingChatOpenAI(
+    model="meta-llama/llama-3.3-70b-instruct:free",
+    api_key=OPENROUTER_API_KEY,
+    temperature=0,
+    base_url="https://openrouter.ai/api/v1",
+    streaming=False,
+    model_kwargs={},
+)
 
 # ================================
 # JSON parser robuste
@@ -79,8 +119,8 @@ class CodeAnalyzer:
 class Auditor:
     def __init__(self):
         self.name = "Auditor"
-        self.llm = llm  # ← MODIFIÉ: Utilise Gemini wrapper
-        self.llm_cache = {}
+        self.llm = llm
+        self.llm_cache = {}  # ⚡ cache pour éviter quota
 
     def build_prompt(self, file_path: str, code: str, additional_context="") -> str:
         base = f"""
@@ -94,7 +134,7 @@ Analyze the following Python file and return ONLY valid JSON with:
 - score
 
 Each issue must contain: line, severity, description, suggestion.
-Important: The score must be between 0 and 10 and it indicates the quality and correctness of the code
+
 File: {file_path}
 
 CODE:
@@ -182,15 +222,17 @@ CODE:
             "score": pylint_res.get("score", 0.0)
         }
 
-        # Appel LLM (Gemini)
+        # ----------------------------
+        # Appel LLM OpenRouter (direct)
+        # ----------------------------
         code_hash = hash(code)
         if code_hash in self.llm_cache:
             llm_result = self.llm_cache[code_hash]
         else:
             try:
                 response = self.llm.invoke(self.build_prompt(file_path, code, additional_context))
-                raw_text = response.content if hasattr(response, 'content') else str(response)
-                print("RAW LLM RESPONSE:", raw_text[:500], "...")
+                raw_text = " ".join(response.content) if isinstance(response.content, list) else str(response.content)
+                print("RAW LLM RESPONSE:", raw_text[:500], "...")  # DEBUG
                 llm_result = safe_parse_json(raw_text)
                 self.llm_cache[code_hash] = llm_result
             except Exception as e:
@@ -201,7 +243,7 @@ CODE:
 
         log_experiment(
             agent_name=self.name,
-            model_used="llama-3.3-70b-versatile",
+            model_used="OpenRouter",
             action=ActionType.ANALYSIS,
             details={
                 "file_analyzed": file_path,
@@ -219,7 +261,7 @@ CODE:
         results = []
         for f in files:
             results.append(self.analyze_file(f))
-            time.sleep(1)  # Petite pause (Gemini est généreux)
+            time.sleep(3)  # ⚡ pause pour limiter le quota
         return results
 
     def generate_report(self, analyses: List[Dict]) -> Dict:
